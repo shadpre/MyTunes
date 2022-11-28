@@ -11,7 +11,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>group01.Main</mainClass>
+                    <mainClass>group01.mytunes.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
