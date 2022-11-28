@@ -1,4 +1,7 @@
 import group01.mytunes.Main;
+import group01.mytunes.Models.Artist;
+import group01.mytunes.dao.ArtistDatabaseDAO;
+import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,10 +11,11 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDBConnection {
+
+    private IArtistDAO artistDAO;
 
     @BeforeEach
     public void setup() throws IOException {
@@ -30,6 +34,8 @@ public class TestDBConnection {
         var dbPassword = props.getProperty("DB_PASSWORD");
 
         DatabaseConnectionHandler.init(dbIp, dbPort, dbName, dbUsername, dbPassword);
+
+        artistDAO = new ArtistDatabaseDAO();
     }
 
     @Test
@@ -37,6 +43,56 @@ public class TestDBConnection {
         var connection = DatabaseConnectionHandler.getInstance().getConnection();
 
         assertTrue(!connection.isClosed());
+    }
+
+    @Test
+    public void TestGetAllArtists() {
+        var result = artistDAO.getArtists();
+
+        for (Artist artist : result) {
+            System.out.println(artist);
+        }
+    }
+
+    @Test
+    public void TestGetArtistById() {
+        int id = 1;
+
+        Artist result = artistDAO.getArtistById(id);
+
+        System.out.println(result);
+    }
+
+    @Test
+    public void TestInsertArtist() {
+        String name = "Kim Larsen";
+
+        var result = artistDAO.createArtist(name);
+
+        assertTrue(result != null);
+
+        System.out.println("Created artist\n" + result);
+    }
+
+    @Test
+    public void TestDeleteArtist() {
+        int artistToDelete = 2;
+
+        artistDAO.deleteArtist(artistToDelete);
+    }
+
+    @Test
+    public void TestUpdateArtist() {
+        Artist a = artistDAO.getArtists().get(0);
+
+        assertNotNull(a);
+
+        String newName = "Ukendt Kunstner";
+
+        artistDAO.updateArtist(a, newName);
+
+        assertEquals(newName, a.getName());
+
     }
 
 }
