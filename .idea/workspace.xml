@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="187e0db5-c547-47fe-8abc-1c13418d10c5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/group01/mytunes/PlaylistCreate.fxml" afterDir="false" />
+    <list default="true" id="187e0db5-c547-47fe-8abc-1c13418d10c5" name="Changes" comment="GUI V1">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/group01/mytunes/CreateArtist.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/group01/mytunes/CreateCategory.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/group01/mytunes/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/group01/mytunes/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/group01/mytunes/controllers/IndexController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/group01/mytunes/controllers/IndexController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/group01/mytunes/PlaylistCreate.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/group01/mytunes/PlaylistCreate.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/group01/mytunes/SongCreator.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/group01/mytunes/SongCreator.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/group01/mytunes/index.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/group01/mytunes/index.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,8 +112,16 @@
       <updated>1669624822582</updated>
       <workItem from="1669628226955" duration="2064000" />
       <workItem from="1669633299556" duration="261000" />
-      <workItem from="1669633673750" duration="2173000" />
+      <workItem from="1669633673750" duration="3845000" />
     </task>
+    <task id="LOCAL-00001" summary="GUI V1">
+      <created>1669636087035</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669636087035</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,5 +137,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="GUI V1" />
+    <option name="LAST_COMMIT_MESSAGE" value="GUI V1" />
   </component>
 </project>
