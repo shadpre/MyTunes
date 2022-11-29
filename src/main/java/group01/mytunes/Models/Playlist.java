@@ -5,10 +5,10 @@ import java.util.Date;
 public class Playlist {
     private int id;
     private int userId;
-    private int name;
+    private String name;
     private Date date;
 
-    public Playlist(int id, int userId, int name, Date date) {
+    public Playlist(int id, int userId, String name, Date date) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -31,11 +31,11 @@ public class Playlist {
         this.userId = userId;
     }
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(int name) {
+    public void setName(String name) {
         this.name = name;
     }
 
