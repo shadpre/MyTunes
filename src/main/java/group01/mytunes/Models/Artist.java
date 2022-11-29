@@ -24,4 +24,9 @@ public class Artist {
     public void setName(String name) {
         Name = name;
     }
+
+    @Override
+    public String toString() {
+        return "%d %s".formatted(getId(), getName());
+    }
 }
