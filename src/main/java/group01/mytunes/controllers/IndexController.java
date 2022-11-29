@@ -47,14 +47,14 @@ public class IndexController implements Initializable {
 
         listViewPlayLists.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                indexDataModel.setSelectedPlaylist(listViewPlayLists.getSelectionModel().getSelectedItem());
+                indexDataModel.setSelectedPlaylistObservable(listViewPlayLists.getSelectionModel().getSelectedItem());
             }
         });
 
         lblCurrentSelectedPlaylist.textProperty().bind(
-            Bindings.when(indexDataModel.getSelectedPlaylist().isNull())
+            Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
                 .then("No playlist selected")
-                .otherwise(indexDataModel.getSelectedPlaylist().asString())
+                .otherwise(indexDataModel.getSelectedPlaylistObservable().asString())
         );
 
         System.out.println("Controller initialized");

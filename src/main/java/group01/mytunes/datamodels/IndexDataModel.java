@@ -12,24 +12,24 @@ public class IndexDataModel {
 
     private ObservableList<Playlist> playlistsObservable;
 
-    SimpleObjectProperty<Playlist> selectedPlaylist;
+    private SimpleObjectProperty<Playlist> selectedPlaylistObservable;
 
     public IndexDataModel(IPlaylistDAO playlistDAO) {
         this.playlistDAO = playlistDAO;
         playlistsObservable = FXCollections.observableArrayList(playlistDAO.getPlaylists());
-        selectedPlaylist = new SimpleObjectProperty<>(null);
+        selectedPlaylistObservable = new SimpleObjectProperty<>(null);
     }
 
     public ObservableList<Playlist> getPlaylistsObservable() {
         return playlistsObservable;
     }
 
-    public SimpleObjectProperty<Playlist> getSelectedPlaylist() {
-        return selectedPlaylist;
+    public SimpleObjectProperty<Playlist> getSelectedPlaylistObservable() {
+        return selectedPlaylistObservable;
     }
 
-    public void setSelectedPlaylist(Playlist playlist) {
-        selectedPlaylist.setValue(playlist);
+    public void setSelectedPlaylistObservable(Playlist playlist) {
+        selectedPlaylistObservable.setValue(playlist);
     }
 
     /**
