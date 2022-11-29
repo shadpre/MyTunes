@@ -59,6 +59,6 @@ public class Playlist {
 
     @Override
     public String toString() {
-        return "%d %s %s".formatted(getId(), getName(), getDate());
+        return "%s".formatted(getName());
     }
 }

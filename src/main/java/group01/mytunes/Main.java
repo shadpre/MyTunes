@@ -19,7 +19,22 @@ public class Main extends Application {
 
     public static User currentUser = new User(1, "DEFAULT");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        var url = Main.class.getResource("config.properties");
+
+        Properties props = new Properties();
+        try(InputStream input = url.openStream()) {
+            props.load(input);
+        }
+
+        var dbIp = props.getProperty("DB_IP");
+        var dbPort = Integer.parseInt(props.getProperty("DB_PORT"));
+        var dbName= props.getProperty("DB_NAME");
+        var dbUsername = props.getProperty("DB_USERNAME");
+        var dbPassword = props.getProperty("DB_PASSWORD");
+
+        DatabaseConnectionHandler.init(dbIp, dbPort, dbName, dbUsername, dbPassword);
+
         launch(args);
     }
 
@@ -38,19 +53,6 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        var url = getClass().getResource("config.properties");
 
-        Properties props = new Properties();
-        try(InputStream input = url.openStream()) {
-            props.load(input);
-        }
-
-        var dbIp = props.getProperty("DB_IP");
-        var dbPort = Integer.parseInt(props.getProperty("DB_PORT"));
-        var dbName= props.getProperty("DB_NAME");
-        var dbUsername = props.getProperty("DB_USERNAME");
-        var dbPassword = props.getProperty("DB_PASSWORD");
-
-        DatabaseConnectionHandler.init(dbIp, dbPort, dbName, dbUsername, dbPassword);
     }
 }
