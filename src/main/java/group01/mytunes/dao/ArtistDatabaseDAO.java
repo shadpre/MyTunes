@@ -17,7 +17,7 @@ public class ArtistDatabaseDAO implements IArtistDAO {
     @Override
     public List<Artist> getArtists() {
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "SELECT * FROM [Artists]";
+            String query = "exec spGetAllArtists ";
             Statement statement = connection.createStatement();
             var resultSet = statement.executeQuery(query);
             var resultList = new ArrayList<Artist>();
@@ -39,9 +39,12 @@ public class ArtistDatabaseDAO implements IArtistDAO {
         if(id < 0) return null;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "SELECT * FROM [Artists]";
-            Statement statement = connection.createStatement();
-            var result = statement.executeQuery(query);
+            String query = "exec spGetArtistById ?";
+
+            PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, id);
+
+            var result = statement.executeQuery();
 
             if(result.next()) {
                 return new Artist(
@@ -89,7 +92,7 @@ public class ArtistDatabaseDAO implements IArtistDAO {
         if(id < 0) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "DELETE FROM [Artists] WHERE [Id]=?";
+            String query = "exec spDeleteArtist ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, id);
@@ -112,11 +115,12 @@ public class ArtistDatabaseDAO implements IArtistDAO {
         if(newName == null) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "UPDATE [Artists] set [Name]=? WHERE [Id]=?;";
+            String query = "exec spUpdateArtistById ?, ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, newName);
-            statement.setInt(2, artist.getId());
+            statement.setInt(1, artist.getId());
+            statement.setString(2, newName);
+
 
             var affectedRows = statement.executeUpdate();
 
