@@ -28,7 +28,7 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label prefHeight="45.0" prefWidth="192.0" text="Songs in Playliste" GridPane.columnIndex="2">
+            <Label fx:id="lblCurrentSelectedPlaylist" prefHeight="45.0" prefWidth="192.0" text="No playlist selected" GridPane.columnIndex="2">
                <font>
                   <Font size="25.0" />
                </font>

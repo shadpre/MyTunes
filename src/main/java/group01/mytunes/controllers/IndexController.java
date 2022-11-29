@@ -3,6 +3,7 @@ package group01.mytunes.controllers;
 import group01.mytunes.Models.Playlist;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.datamodels.IndexDataModel;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,12 +19,13 @@ import java.util.ResourceBundle;
 
 public class IndexController implements Initializable {
 
-    private IndexDataModel playlistDataModel;
+    private IndexDataModel indexDataModel;
 
     @FXML private ListView listViewPlaylistSongs;
     @FXML private ListView<Playlist> listViewPlayLists;
     @FXML private ListView listViewSongs;
     @FXML private Label labelSongPlaying;
+    @FXML private Label lblCurrentSelectedPlaylist;
     @FXML private TextField txtFieldSearchbar;
     @FXML private Button btnPlaylistEdit;
     @FXML private Button btnPlaylistNew;
@@ -39,21 +41,26 @@ public class IndexController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        this.playlistDataModel = new IndexDataModel(new PlaylistDatabaseDAO());
+        this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO());
 
-        listViewPlayLists.setItems(playlistDataModel.getPlaylists());
+        listViewPlayLists.setItems(indexDataModel.getPlaylistsObservable());
 
         listViewPlayLists.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                System.out.println(listViewPlayLists.getSelectionModel().getSelectedItem());
+                indexDataModel.setSelectedPlaylist(listViewPlayLists.getSelectionModel().getSelectedItem());
             }
         });
+
+        lblCurrentSelectedPlaylist.textProperty().bind(
+            Bindings.when(indexDataModel.getSelectedPlaylist().isNull())
+                .then("No playlist selected")
+                .otherwise(indexDataModel.getSelectedPlaylist().asString())
+        );
 
         System.out.println("Controller initialized");
     }
 
-    private void displayError(Throwable t)
-    {
+    private void displayError(Throwable t) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("!!ERROR!!");
         alert.setHeaderText("Something went wrong, \n ERROR:      " + t.getMessage());
@@ -68,7 +75,7 @@ public class IndexController implements Initializable {
         dialog.setGraphic(null);
 
         Optional<String> result = dialog.showAndWait();
-        result.ifPresent(playlist -> playlistDataModel.addPlaylist(playlist));
+        result.ifPresent(playlist -> indexDataModel.addPlaylist(playlist));
     }
 
     public void editPlaylistHandler(ActionEvent actionEvent) {
@@ -83,13 +90,13 @@ public class IndexController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newName -> {
-            playlistDataModel.editPlaylist(selectedPlaylist, newName);
+            indexDataModel.editPlaylist(selectedPlaylist, newName);
         });
     }
 
     public void deleteSelectedPlaylistHandler(ActionEvent actionEvent) {
         Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem();
-        if(selectedPlaylist != null) playlistDataModel.deletePlaylist(selectedPlaylist);
+        if(selectedPlaylist != null) indexDataModel.deletePlaylist(selectedPlaylist);
     }
 
     public void scrollUpInPlaylist(ActionEvent actionEvent) {
