@@ -11,7 +11,6 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="612.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group01.mytunes.controllers.IndexController">
-    <fx:include fx:id="child" source="PlaylistCreate.fxml"/>
     <children>
       <GridPane layoutX="16.0" layoutY="36.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="619.0">
         <columnConstraints>
@@ -50,9 +49,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="btnPlaylistEdit" mnemonicParsing="false" onAction="#editPlaylistWindowOpen" prefHeight="26.0" prefWidth="91.0" text="Edit Playlist" GridPane.columnIndex="1" />
-            <Button fx:id="btnPlaylistNew" mnemonicParsing="false" onAction="#newPlaylistWindowOpen" prefHeight="26.0" prefWidth="92.0" text="New Playlist" />
-            <Button fx:id="btnPlaylistDelete" mnemonicParsing="false" onAction="#deleteSelectedPlaylist" prefHeight="26.0" prefWidth="91.0" text="Delete Playlist" GridPane.columnIndex="2" />
+            <Button fx:id="btnPlaylistEdit" mnemonicParsing="false" onAction="#editPlaylistHandler" prefHeight="26.0" prefWidth="91.0" text="Edit Playlist" GridPane.columnIndex="1" />
+            <Button fx:id="btnPlaylistNew" mnemonicParsing="false" onAction="#newPlaylistHandler" prefHeight="26.0" prefWidth="92.0" text="New Playlist" />
+            <Button fx:id="btnPlaylistDelete" mnemonicParsing="false" onAction="#deleteSelectedPlaylistHandler" prefHeight="26.0" prefWidth="91.0" text="Delete Playlist" GridPane.columnIndex="2" />
             <Button fx:id="btnPlaylistUp" mnemonicParsing="false" onAction="#scrollUpInPlaylist" text="↑" GridPane.columnIndex="3">
                <font>
                   <Font name="System Bold" size="15.0" />

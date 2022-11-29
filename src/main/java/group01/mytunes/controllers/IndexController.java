@@ -1,5 +1,6 @@
 package group01.mytunes.controllers;
 
+import group01.mytunes.Models.Playlist;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.datamodels.PlaylistDataModel;
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class IndexController implements Initializable {
@@ -19,7 +21,7 @@ public class IndexController implements Initializable {
     private PlaylistDataModel playlistDataModel;
 
     @FXML private ListView listViewPlaylistSongs;
-    @FXML private ListView listViewPlayLists;
+    @FXML private ListView<Playlist> listViewPlayLists;
     @FXML private ListView listViewSongs;
     @FXML private Label labelSongPlaying;
     @FXML private TextField txtFieldSearchbar;
@@ -51,24 +53,36 @@ public class IndexController implements Initializable {
         alert.showAndWait();
     }
 
+    public void newPlaylistHandler(ActionEvent actionEvent) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("New playlist");
+        dialog.setHeaderText("Create a new playlist");
+        dialog.setContentText("Playlist name:");
+        dialog.setGraphic(null);
 
-    public void editPlaylistWindowOpen(ActionEvent actionEvent) {
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(playlist -> playlistDataModel.addPlaylist(playlist));
     }
 
-    public void newPlaylistWindowOpen(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../PlayListCreate.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch(Exception e) {
-            displayError(e);
-            e.printStackTrace();
-        }
+    public void editPlaylistHandler(ActionEvent actionEvent) {
+        Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem();
+        if(selectedPlaylist == null) return;
+
+        TextInputDialog dialog = new TextInputDialog(selectedPlaylist.getName());
+        dialog.setTitle("Edit playlist");
+        dialog.setHeaderText("Edit playlist");
+        dialog.setContentText("New playlist name:");
+        dialog.setGraphic(null);
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newName -> {
+            playlistDataModel.editPlaylist(selectedPlaylist, newName);
+        });
     }
 
-    public void deleteSelectedPlaylist(ActionEvent actionEvent) {
+    public void deleteSelectedPlaylistHandler(ActionEvent actionEvent) {
+        Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem();
+        if(selectedPlaylist != null) playlistDataModel.deletePlaylist(selectedPlaylist);
     }
 
     public void scrollUpInPlaylist(ActionEvent actionEvent) {
