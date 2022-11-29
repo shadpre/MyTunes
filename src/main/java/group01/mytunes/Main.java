@@ -21,7 +21,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("index.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Index.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("PlaylistCreate.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("SongCreator.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateArtist.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateCategory.fxml"));
+
+
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
