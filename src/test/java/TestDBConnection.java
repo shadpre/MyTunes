@@ -123,4 +123,17 @@ public class TestDBConnection {
         playlistDAO.deletePlaylist(id);
     }
 
+    @Test
+    public void TestUpdatePlaylist() {
+        Playlist p = playlistDAO.getPlaylists().get(0);
+
+        assertNotNull(p);
+
+        String newName = "Ukendt Liste";
+
+        playlistDAO.updatePlaylist(p, newName);
+
+        assertEquals(newName, p.getName());
+    }
+
 }

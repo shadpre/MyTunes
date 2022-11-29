@@ -17,6 +17,11 @@ public class Playlist {
         this.playtime = 0;
     }
 
+    public Playlist(int id, int userId, String name, Date date, int playtime) {
+        this(id,userId,name,date);
+        this.playtime = playtime;
+    }
+
     public int getId() {
         return id;
     }

@@ -18,7 +18,7 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
     @Override
     public List<Playlist> getPlaylists() {
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "SELECT * FROM [Playlists] WHERE [UserID]=?";
+            String query = "exec spGetUserPlaylists ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, Main.currentUser.getId());
             var resultSet = statement.executeQuery();
@@ -26,9 +26,11 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
 
             while(resultSet.next()) {
                 resultList.add(new Playlist(resultSet.getInt("Id"),
-                resultSet.getInt("UserID"),
+                //resultSet.getInt("UserID"),
+                Main.currentUser.getId(),
                 resultSet.getString("Name"),
                 resultSet.getDate("Date")));
+                resultSet.getInt("Playtime");
             }
             return resultList;
         } catch (SQLException e) {
@@ -43,7 +45,7 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
         if(Main.currentUser == null) return null;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "INSERT INTO [Playlists] ([UserID], [Name]) VALUES (?, ?)";
+            String query = "exec spNewPlaylist ?, ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, Main.currentUser.getId());
@@ -73,10 +75,11 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
         if(id < 0) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "DELETE FROM [Playlists] WHERE [Id]=?";
+            String query = "exec spDeletePlaylistById ?, ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, id);
+            statement.setInt(2, Main.currentUser.getId());
 
             var affectedRows = statement.executeUpdate();
 
@@ -96,11 +99,13 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
         if(newName == null) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "UPDATE [Playlists] set [Name]=? WHERE [Id]=?;";
+            String query = "spUpdatePlaylistById ?, ?, ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, newName);
-            statement.setInt(2, playlist.getId());
+
+            statement.setInt(1,playlist.getId());
+            statement.setInt(2, Main.currentUser.getId());
+            statement.setString(3, newName);
 
             var affectedRows = statement.executeUpdate();
 
