@@ -2,18 +2,19 @@ package group01.mytunes.datamodels;
 
 import group01.mytunes.Models.Playlist;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.List;
-
-public class PlaylistDataModel {
+public class IndexDataModel {
 
     private IPlaylistDAO playlistDAO;
 
     private ObservableList<Playlist> playlists;
 
-    public PlaylistDataModel(IPlaylistDAO playlistDAO) {
+    public IndexDataModel(IPlaylistDAO playlistDAO) {
         this.playlistDAO = playlistDAO;
         playlists = FXCollections.observableArrayList(playlistDAO.getPlaylists());
     }
@@ -22,6 +23,10 @@ public class PlaylistDataModel {
         return playlists;
     }
 
+    /**
+     * Adds a playlist.
+     * @param name The name of the playlist.
+     */
     public void addPlaylist(String name) {
         var playlist = playlistDAO.createPlaylist(name);
 
@@ -32,8 +37,8 @@ public class PlaylistDataModel {
 
     /**
      * Edits a playlist.
-     * @param playlist The playlist wanted to be edited
-     * @param newName The new name
+     * @param playlist The playlist wanted to be edited.
+     * @param newName The new name.
      * @return True of edited. False if failed.
      */
     public boolean editPlaylist(Playlist playlist, String newName) {
@@ -50,10 +55,13 @@ public class PlaylistDataModel {
         return true;
     }
 
+    /**
+     * Deletes a playlist.
+     * @param playlist The playlist to be deleted.
+     */
     public void deletePlaylist(Playlist playlist) {
         playlistDAO.deletePlaylist(playlist.getId());
 
         playlists.remove(playlist);
     }
-
 }
