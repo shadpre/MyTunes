@@ -17,7 +17,7 @@ import java.util.Properties;
 
 public class Main extends Application {
 
-    public static User currentUser = new User(1, "DEFAULT");
+    public static User currentUser = new User(1, "User 1");
 
     public static void main(String[] args) throws IOException {
         var url = Main.class.getResource("config.properties");
