@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group01.mytunes.controllers.SongCreatorController">
    <children>
       <GridPane layoutX="41.0" layoutY="33.0" prefHeight="291.0" prefWidth="518.0" AnchorPane.leftAnchor="41.0" AnchorPane.rightAnchor="40.60000000000002">
         <columnConstraints>
@@ -73,8 +73,8 @@
             <TextField fx:id="txtFieldTime" promptText="Song Time:   0;00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <ComboBox fx:id="ComboBoxCategory" prefHeight="34.0" prefWidth="159.0" promptText="Cat Drob" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <ComboBox fx:id="comboBoxArtist" prefHeight="34.0" prefWidth="157.0" promptText="Artist Drob" GridPane.columnIndex="1" />
-            <Button fx:id="btnAddArtist" mnemonicParsing="false" prefHeight="35.0" prefWidth="99.0" text="Add Artist" GridPane.columnIndex="3" />
-            <Button fx:id="btnAddCategory" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Add Category" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Button fx:id="btnAddArtist" mnemonicParsing="false" onAction="#openCreateArtistWindow" prefHeight="35.0" prefWidth="99.0" text="Add Artist" GridPane.columnIndex="3" />
+            <Button fx:id="btnAddCategory" mnemonicParsing="false" onAction="#OpenCreateCategoryWindow" prefHeight="35.0" prefWidth="100.0" text="Add Category" GridPane.columnIndex="3" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <GridPane layoutX="490.0" layoutY="324.0" prefHeight="30.0" prefWidth="123.0">
@@ -87,7 +87,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="btnCancel" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#CloseWindowAndCancelChanges" text="Cancel" />
             <Button fx:id="btnSaveSong" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" text="Save" GridPane.columnIndex="2" />
          </children>
       </GridPane>
