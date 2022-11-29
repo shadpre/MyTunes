@@ -48,7 +48,8 @@ CREATE TABLE Playlists(
     [Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[UserID] int foreign key references [Users](Id),
     [Name] NVARCHAR(255) NOT NULL,
-	[Date] datetime
+	[Date] datetime default getutcdate(),
+	[Playtime] Int Not Null default 0
 );
 
 CREATE TABLE Song_playlist_relation(
@@ -58,3 +59,44 @@ CREATE TABLE Song_playlist_relation(
     [Date_Added] DATETIME DEFAULT GETUTCDATE() NOT NULL,
 );
 
+--Stored procedures
+--Artist
+
+go
+drop procedure if exists spNewArtist;
+drop procedure if exists spGetAllArtists;
+drop procedure if exists spGetArtistById;
+drop procedure if exists spDeleteArtist;
+drop procedure if exists spUpdateArtistById;
+go
+
+Create procedure spNewArtist(
+@Name nvarchar(255))
+as
+insert into Artists (name) values(@Name)
+go
+
+create procedure spGetAllArtists
+as
+select * from Artists
+go
+
+create procedure spGetArtistById(
+@Id int)
+as
+select * from Artists where Id = @Id
+go
+
+create procedure spDeleteArtist(
+@Id int)
+as
+delete Artists where Id = @Id
+go
+
+create procedure spUpdateArtistById(
+@Id int,
+@Name nvarchar(255))
+as
+update Artists
+set Name = @Name where Id = @Id
+go
