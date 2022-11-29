@@ -104,7 +104,7 @@
             <Font size="23.0" />
          </font>
       </Button>
-      <Label fx:id="labelSongPlaying" layoutX="557.0" layoutY="41.0" prefHeight="46.0" prefWidth="243.0" text="Playing:  (None)">
+      <Label fx:id="labelSongPlaying" layoutX="558.0" layoutY="24.0" prefHeight="46.0" prefWidth="243.0" text="Playing:  (None)">
          <font>
             <Font size="20.0" />
          </font>
