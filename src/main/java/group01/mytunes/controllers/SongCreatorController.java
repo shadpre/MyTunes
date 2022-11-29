@@ -10,8 +10,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -71,4 +73,27 @@ public class SongCreatorController  implements Initializable {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
     }
+
+    public void chooseFile(ActionEvent actionEvent){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select song");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
+        Stage stage = (Stage) btnChoseFilepath.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            txtFieldPath.setText(String.valueOf(selectedFile));
+        }
+    }
+
+    public void saveSong(ActionEvent actionEvent) {
+        String tittle = txtFieldTittle.getText();
+        String artist = comboBoxArtist.getPromptText();
+        String category = ComboBoxCategory.getPromptText();
+        String time = txtFieldTime.getText();
+        String path = txtFieldPath.getText();
+
+        System.out.println(tittle + artist + category + time + path);
+    }
+
 }
