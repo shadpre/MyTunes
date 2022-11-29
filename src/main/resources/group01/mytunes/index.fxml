@@ -11,7 +11,8 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="612.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group01.mytunes.controllers.IndexController">
-   <children>
+    <fx:include fx:id="child" source="PlaylistCreate.fxml"/>
+    <children>
       <GridPane layoutX="16.0" layoutY="36.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="619.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="292.79998779296875" minWidth="10.0" prefWidth="292.79998779296875" />
