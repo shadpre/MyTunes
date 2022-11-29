@@ -62,7 +62,7 @@ public class ArtistDatabaseDAO implements IArtistDAO {
         if(name.isEmpty()) return null;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "INSERT INTO [Artists] ([Name]) VALUES (?)";
+            String query = "exec spNewArtist ? ";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
