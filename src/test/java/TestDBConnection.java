@@ -1,7 +1,10 @@
 import group01.mytunes.Main;
 import group01.mytunes.Models.Artist;
+import group01.mytunes.Models.Playlist;
 import group01.mytunes.dao.ArtistDatabaseDAO;
+import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.dao.interfaces.IArtistDAO;
+import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDBConnection {
 
     private IArtistDAO artistDAO;
+    private IPlaylistDAO playlistDAO;
 
     @BeforeEach
     public void setup() throws IOException {
@@ -36,6 +40,7 @@ public class TestDBConnection {
         DatabaseConnectionHandler.init(dbIp, dbPort, dbName, dbUsername, dbPassword);
 
         artistDAO = new ArtistDatabaseDAO();
+        playlistDAO = new PlaylistDatabaseDAO();
     }
 
     @Test
@@ -92,7 +97,30 @@ public class TestDBConnection {
         artistDAO.updateArtist(a, newName);
 
         assertEquals(newName, a.getName());
+    }
 
+    @Test
+    public void TestGetAllPlaylists() {
+        var result = playlistDAO.getPlaylists();
+
+        for(Playlist p : result) {
+            System.out.println(p);
+        }
+    }
+
+    @Test
+    public void TestCreatePlaylist() {
+        String name = "Den aller bedste!";
+
+        var res = playlistDAO.createPlaylist(name);
+        System.out.println(res);
+    }
+
+    @Test
+    public void TestDeletePlaylist() {
+        int id = 3;
+
+        playlistDAO.deletePlaylist(id);
     }
 
 }

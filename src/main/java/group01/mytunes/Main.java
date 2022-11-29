@@ -1,5 +1,6 @@
 package group01.mytunes;
 
+import group01.mytunes.Models.User;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,9 @@ import java.util.List;
 import java.util.Properties;
 
 public class Main extends Application {
+
+    public static User currentUser = new User(1, "DEFAULT");
+
     public static void main(String[] args) {
         launch(args);
     }

@@ -1,8 +1,7 @@
 package group01.mytunes.dao;
 
-import group01.mytunes.Models.Artist;
+import group01.mytunes.Main;
 import group01.mytunes.Models.Playlist;
-import group01.mytunes.Models.User;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import group01.mytunes.exceptions.SQLDeleteException;
@@ -19,18 +18,17 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
     @Override
     public List<Playlist> getPlaylists() {
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "SELECT * FROM [Artists]";
-            Statement statement = connection.createStatement();
-            var resultSet = statement.executeQuery(query);
+            String query = "SELECT * FROM [Playlists] WHERE [UserID]=?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, Main.currentUser.getId());
+            var resultSet = statement.executeQuery();
             var resultList = new ArrayList<Playlist>();
 
             while(resultSet.next()) {
-                resultList.add(new Playlist(
-                        resultSet.getInt("Id"),
-                        resultSet.getInt("UserId"),
-                        resultSet.getString("Name"),
-                        resultSet.getDate("Date")
-                ));
+                resultList.add(new Playlist(resultSet.getInt("Id"),
+                resultSet.getInt("UserID"),
+                resultSet.getString("Name"),
+                resultSet.getDate("Date")));
             }
             return resultList;
         } catch (SQLException e) {
@@ -39,16 +37,16 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
     }
 
     @Override
-    public Playlist createPlaylist(String name, User user) {
+    public Playlist createPlaylist(String name) {
         if(name == null) return null;
         if(name.isEmpty()) return null;
-        if(user == null) return null;
+        if(Main.currentUser == null) return null;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
             String query = "INSERT INTO [Playlists] ([UserID], [Name]) VALUES (?, ?)";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, user.getId());
+            statement.setInt(1, Main.currentUser.getId());
             statement.setString(2, name);
 
             statement.executeUpdate();
@@ -56,10 +54,10 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
             var res = statement.getGeneratedKeys();
             if(res.next()) {
                 return new Playlist(
-                        res.getInt("Id"),
-                        res.getInt("UserID"),
-                        res.getString("Name"),
-                        res.getDate("Date")
+                    res.getInt(1),
+                    Main.currentUser.getId(),
+                    name,
+                    null
                 );
             }
 
@@ -93,24 +91,21 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
     }
 
     @Override
-    public void updatePlaylist(Playlist playlist, String newName, User user) {
+    public void updatePlaylist(Playlist playlist, String newName) {
         if(playlist == null) return;
         if(newName == null) return;
-        if(user == null) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "UPDATE [Playlists] set [UserID]=?, [Name]=? WHERE [Id]=?;";
+            String query = "UPDATE [Playlists] set [Name]=? WHERE [Id]=?;";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, user.getId());
-            statement.setString(2, newName);
-            statement.setInt(3, playlist.getId());
+            statement.setString(1, newName);
+            statement.setInt(2, playlist.getId());
 
             var affectedRows = statement.executeUpdate();
 
             if(affectedRows != 1) throw new SQLDeleteException(); // If not worked
 
-            playlist.setUserId(user.getId());
             playlist.setName(newName);
 
         } catch (SQLException e) {

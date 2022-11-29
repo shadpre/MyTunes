@@ -1,7 +1,6 @@
 package group01.mytunes.dao.interfaces;
 
 import group01.mytunes.Models.Playlist;
-import group01.mytunes.Models.User;
 
 import java.util.List;
 
@@ -18,11 +17,10 @@ public interface IPlaylistDAO {
 
     /**
      * Creates a playlist with the given name
-     * @param name The name of the plaulist
-     * @param user The user the playlist should be added to
+     * @param name The name of the playlist
      * @return The newly created playlist
      */
-    Playlist createPlaylist(String name, User user);
+    Playlist createPlaylist(String name);
 
     /**
      * Deletes a playlist
@@ -33,9 +31,8 @@ public interface IPlaylistDAO {
     /**
      * Updates a playlist.
      * @param playlist The playlist to update. This reference will automatically update with the new name.
-     * @param user The user to update (new owner)
      * @param newName The new name of the playlist.
      */
-    void updatePlaylist(Playlist playlist, String newName, User user);
+    void updatePlaylist(Playlist playlist, String newName);
 
 }
