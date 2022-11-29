@@ -1,3 +1,4 @@
+Use MyTunes
 -- Drops all of the talbes in correct order
 DROP TABLE IF EXISTS Song_playlist_relation;
 DROP TABLE IF EXISTS Playlists
@@ -58,6 +59,7 @@ CREATE TABLE Song_playlist_relation(
     [PlaylistId] INT FOREIGN KEY REFERENCES [playlists](id) NOT NULL,
     [Date_Added] DATETIME DEFAULT GETUTCDATE() NOT NULL,
 );
+--Create trigger for Playtime on playlist
 
 --Stored procedures
 --Artist
@@ -76,7 +78,7 @@ as
 insert into Artists (name) values(@Name)
 go
 
-create procedure spGetAllArtists
+create procedure spGetAllArtists 
 as
 select * from Artists
 go
@@ -99,4 +101,41 @@ create procedure spUpdateArtistById(
 as
 update Artists
 set Name = @Name where Id = @Id
+go
+
+--Playlists
+drop procedure if exists spNewPlaylist;
+drop procedure if exists spGetUserPlaylists;
+drop procedure if exists spDeletePlaylistById;
+drop procedure if exists spUpdatePlaylistById;
+drop procedure if exists spGetUserPlaylistById;
+go
+
+create procedure spNewPlaylist(
+@UserID int,
+@Name nvarchar(255))
+as
+insert into Playlists (UserID, Name) values (@UserID,@Name)
+go
+
+create procedure spGetUserPlaylists(
+@UserID int)
+as
+select Id, Name, Date, Playtime from Playlists where UserID = @UserID
+go
+
+create procedure spDeletePlaylistById(
+@Id int,
+@UserID int)
+as
+delete from Playlists where Id = @Id and UserID = @UserID
+go
+
+create procedure spUpdatePlaylistById(
+@Id int,
+@UserId int,
+@Name nvarchar(255))
+as
+update Playlists
+set Name = @Name where Id = @Id and UserID = @UserId
 go
