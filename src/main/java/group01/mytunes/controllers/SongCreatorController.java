@@ -78,12 +78,37 @@ public class SongCreatorController  implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select song");
         fileChooser.getExtensionFilters().add(
+                //new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
                 new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
         Stage stage = (Stage) btnChoseFilepath.getScene().getWindow();
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
             txtFieldPath.setText(String.valueOf(selectedFile));
+            String time = calculateTimer((int) selectedFile.length());
+            txtFieldTime.setText(time);
         }
+    }
+
+    private String calculateTimer(int time){
+        int h = 0;
+        int m = 0;
+        int s = 0;
+
+        while (time > 0) {
+            if (time >= 60) {
+                time -= 60;
+                m++;
+            } else if (m >= 60) {
+                m -= 60;
+                h++;
+            } else {
+                s += time;
+                time -= time;
+            }
+        }
+
+        return h + ":" + m + ":" + s;
+
     }
 
     public void saveSong(ActionEvent actionEvent) {

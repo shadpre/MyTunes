@@ -70,7 +70,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtFieldTime" promptText="Song Time:   0;00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="txtFieldTime" editable="false" promptText="Song Time:   0;00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <ComboBox fx:id="ComboBoxCategory" prefHeight="34.0" prefWidth="159.0" promptText="Cat Drob" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <ComboBox fx:id="comboBoxArtist" prefHeight="34.0" prefWidth="157.0" promptText="Artist Drob" GridPane.columnIndex="1" />
             <Button fx:id="btnAddArtist" mnemonicParsing="false" onAction="#openCreateArtistWindow" prefHeight="35.0" prefWidth="99.0" text="Add Artist" GridPane.columnIndex="3" />
