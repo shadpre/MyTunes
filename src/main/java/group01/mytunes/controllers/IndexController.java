@@ -1,5 +1,7 @@
 package group01.mytunes.controllers;
 
+import group01.mytunes.dao.PlaylistDatabaseDAO;
+import group01.mytunes.datamodels.PlaylistDataModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +15,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class IndexController implements Initializable {
-    @FXML private ListView listViewPlaylistList;
-    @FXML private ListView listViewPlayLIst;
+
+    private PlaylistDataModel playlistDataModel;
+
+    @FXML private ListView listViewPlaylistSongs;
+    @FXML private ListView listViewPlayLists;
     @FXML private ListView listViewSongs;
     @FXML private Label labelSongPlaying;
     @FXML private TextField txtFieldSearchbar;
@@ -31,6 +36,10 @@ public class IndexController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.playlistDataModel = new PlaylistDataModel(new PlaylistDatabaseDAO());
+
+        listViewPlayLists.setItems(playlistDataModel.getPlaylists());
+
         System.out.println("Controller initialized");
     }
 
