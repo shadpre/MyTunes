@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="612.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group01.mytunes.controllers.IndexController">
    <children>
-      <GridPane layoutX="14.0" layoutY="47.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="615.0">
+      <GridPane layoutX="16.0" layoutY="36.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="619.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="292.79998779296875" minWidth="10.0" prefWidth="292.79998779296875" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.40000000000003" minWidth="0.0" prefWidth="20.800012207031273" />
@@ -37,34 +37,34 @@
             <ListView fx:id="listViewPlayLIst" prefHeight="391.0" prefWidth="122.0" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <GridPane layoutX="20.0" layoutY="582.0" prefHeight="38.0" prefWidth="615.0">
+      <GridPane layoutX="25.0" layoutY="551.0" prefHeight="30.0" prefWidth="436.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.4" minWidth="10.0" prefWidth="94.5999755859375" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.00003662109376" minWidth="10.0" prefWidth="95.20001220703124" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.19998779296878" minWidth="10.0" prefWidth="215.19998779296878" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.79998779296875" minWidth="10.0" prefWidth="32.80000000000001" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.8" minWidth="10.0" prefWidth="176.8" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.4" minWidth="10.0" prefWidth="106.66666666666667" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.00003662109376" minWidth="10.0" prefWidth="104.00002034505208" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.19998779296878" minWidth="10.0" prefWidth="135.00000000000003" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.99998982747394" minWidth="4.999979654947879" prefWidth="36.333333333333314" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="222.66664632161462" minWidth="10.0" prefWidth="59.333353678385436" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="btnPlaylistEdit" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Edit Playlist" GridPane.columnIndex="1" />
-            <Button fx:id="btnPlaylistNew" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="New Playlist" />
-            <Button fx:id="btnPlaylistDelete" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Delete Playlist" GridPane.columnIndex="2" />
-            <Button fx:id="btnPlaylistUp" mnemonicParsing="false" text="↑" GridPane.columnIndex="3">
+            <Button fx:id="btnPlaylistEdit" mnemonicParsing="false" onAction="#editPlaylistWindowOpen" prefHeight="26.0" prefWidth="91.0" text="Edit Playlist" GridPane.columnIndex="1" />
+            <Button fx:id="btnPlaylistNew" mnemonicParsing="false" onAction="#newPlaylistWindowOpen" prefHeight="26.0" prefWidth="92.0" text="New Playlist" />
+            <Button fx:id="btnPlaylistDelete" mnemonicParsing="false" onAction="#deleteSelectedPlaylist" prefHeight="26.0" prefWidth="91.0" text="Delete Playlist" GridPane.columnIndex="2" />
+            <Button fx:id="btnPlaylistUp" mnemonicParsing="false" onAction="#scrollUpInPlaylist" text="↑" GridPane.columnIndex="3">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btnPlaylistDown" mnemonicParsing="false" text="↓" GridPane.columnIndex="4">
+            <Button fx:id="btnPlaylistDown" mnemonicParsing="false" onAction="#scrollDownInPlaylist" text="↓" GridPane.columnIndex="4">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Button>
          </children>
       </GridPane>
-      <GridPane layoutX="736.0" layoutY="47.0" prefHeight="522.0" prefWidth="496.0">
+      <GridPane layoutX="739.0" layoutY="25.0" prefHeight="513.0" prefWidth="495.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -78,33 +78,32 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <ListView fx:id="listViewSongs" maxHeight="-Infinity" prefHeight="526.0" prefWidth="496.0" GridPane.rowIndex="1" />
+            <ListView fx:id="listViewSongs" maxHeight="-Infinity" prefHeight="487.0" prefWidth="503.0" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <GridPane layoutX="742.0" layoutY="582.0" prefHeight="38.0" prefWidth="496.0">
+      <GridPane layoutX="946.0" layoutY="551.0" prefHeight="30.0" prefWidth="303.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.4" minWidth="10.0" prefWidth="109.6000244140625" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.00003662109376" minWidth="10.0" prefWidth="105.0000244140625" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.19998779296878" minWidth="9.999975585937506" prefWidth="101.59995117187498" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.99997558593748" minWidth="10.0" prefWidth="88.60000000000002" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.60000000000002" minWidth="10.0" prefWidth="107.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.66668701171875" minWidth="10.0" prefWidth="104.66670735677083" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="274.3333333333333" minWidth="10.0" prefWidth="102.99995930989586" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="9.999975585937506" prefWidth="76.3333740234375" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.33333333333331" minWidth="5.333333333333314" prefWidth="15.333333333333343" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.00008138020831" minWidth="0.0" prefWidth="0.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button fx:id="btnSongEdit" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Edit" GridPane.columnIndex="1" />
-            <Button fx:id="btnSongNew" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="New" />
-            <Button fx:id="btnSongDelete" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Delete" GridPane.columnIndex="2" />
-            <Button fx:id="btnClose" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Close" GridPane.columnIndex="4" />
+            <Button fx:id="btnSongEdit" mnemonicParsing="false" onAction="#editSongWindowOpen" prefHeight="26.0" prefWidth="91.0" text="Edit" GridPane.columnIndex="1" />
+            <Button fx:id="btnSongNew" mnemonicParsing="false" onAction="#makeNewSongWindowOpen" prefHeight="26.0" prefWidth="92.0" text="New" />
+            <Button fx:id="btnSongDelete" mnemonicParsing="false" onAction="#deleteSelectedSong" prefHeight="26.0" prefWidth="91.0" text="Delete" GridPane.columnIndex="2" />
          </children>
       </GridPane>
-      <Button fx:id="btnMoveSongToPlaylist" layoutX="655.0" layoutY="193.0" mnemonicParsing="false" text="←">
+      <Button fx:id="btnMoveSongToPlaylist" layoutX="657.0" layoutY="182.0" mnemonicParsing="false" onAction="#InsertSongToPlaylist" text="←">
          <font>
             <Font size="23.0" />
          </font>
       </Button>
-      <Label fx:id="labelSongPlaying" layoutX="558.0" layoutY="24.0" prefHeight="46.0" prefWidth="243.0" text="Playing:  (None)">
+      <Label fx:id="labelSongPlaying" layoutX="560.0" layoutY="13.0" prefHeight="46.0" prefWidth="243.0" text="Playing:  (None)">
          <font>
             <Font size="20.0" />
          </font>
@@ -125,15 +124,15 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <TextField fx:id="txtFieldSeartchbar" prefHeight="30.0" prefWidth="62.0" promptText="Seartch...." GridPane.columnIndex="1">
+            <TextField fx:id="txtFieldSearchbar" prefHeight="30.0" prefWidth="62.0" promptText="Seartch...." GridPane.columnIndex="1">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button fx:id="btnSearch" mnemonicParsing="false" prefHeight="30.0" prefWidth="32.0" text="🔎" GridPane.columnIndex="3" />
+            <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#searchForSong" prefHeight="30.0" prefWidth="32.0" text="🔎" GridPane.columnIndex="3" />
          </children>
       </GridPane>
-      <Label layoutX="66.0" prefHeight="65.0" prefWidth="192.0" text="!!!MUSIC PLAYER HERE!!!">
+      <Label layoutX="586.0" layoutY="543.0" prefHeight="65.0" prefWidth="192.0" text="!!!MUSIC PLAYER HERE!!!">
          <font>
             <Font size="17.0" />
          </font>
