@@ -32,7 +32,10 @@ public class SingleFileAudioHandler implements IAudioHandler {
                 song.getTitle() + "\n"
         );
 
-        mediaPlayer = null;
+        if(mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer = null;
+        }
 
         byte[] songData = songDAO.getSongById(song.getId()).getData();
 

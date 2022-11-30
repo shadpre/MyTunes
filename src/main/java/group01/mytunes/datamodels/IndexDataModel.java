@@ -2,6 +2,7 @@ package group01.mytunes.datamodels;
 
 import group01.mytunes.Models.Playlist;
 import group01.mytunes.Models.Song;
+import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,6 +14,8 @@ public class IndexDataModel {
     private IPlaylistDAO playlistDAO;
     private ISongDAO songDAO;
 
+    private IArtistDAO artistDAO;
+
     private ObservableList<Playlist> playlistsObservableList;
 
     private ObservableList<Song> songObservableList;
@@ -20,9 +23,11 @@ public class IndexDataModel {
     private SimpleObjectProperty<Playlist> selectedPlaylistObservable;
 
 
-    public IndexDataModel(IPlaylistDAO playlistDAO, ISongDAO songDAO) {
+    public IndexDataModel(IPlaylistDAO playlistDAO, ISongDAO songDAO, IArtistDAO artistDAO) {
         this.playlistDAO = playlistDAO;
         this.songDAO = songDAO;
+        this.artistDAO = artistDAO;
+
         playlistsObservableList = FXCollections.observableArrayList(playlistDAO.getPlaylists());
         songObservableList = FXCollections.observableArrayList(songDAO.getAllSongInfo());
         selectedPlaylistObservable = new SimpleObjectProperty<>(null);
@@ -94,5 +99,18 @@ public class IndexDataModel {
         System.out.println(result.getId());
 
         songObservableList.add(result);
+    }
+
+    public void addArtist(String artistName) {
+        if(artistName == null) return;
+        if(artistName.isEmpty()) return;
+
+        artistDAO.createArtist(artistName);
+    }
+
+    public void editArtist() {
+    }
+
+    public void deleteArtist() {
     }
 }

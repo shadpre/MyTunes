@@ -20,7 +20,8 @@ public class Main extends Application {
         var url = Main.class.getResource("config.properties");
 
         Properties props = new Properties();
-        try(InputStream input = url.openStream()) {
+        if(url != null)
+            try(InputStream input = url.openStream()) {
             props.load(input);
         }
 

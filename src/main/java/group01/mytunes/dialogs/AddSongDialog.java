@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class NewSongDialog extends Dialog<Song> {
+public class AddSongDialog extends Dialog<Song> {
 
     private File selectedSongFile;
 
@@ -42,7 +42,7 @@ public class NewSongDialog extends Dialog<Song> {
     private ObservableList<Artist> artistObservableList;
     private ObservableList<Album> albumObservableList;
 
-    public NewSongDialog(Window owner) {
+    public AddSongDialog(Window owner) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("../AddSongDialog.fxml"));

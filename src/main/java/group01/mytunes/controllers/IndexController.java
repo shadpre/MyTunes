@@ -4,11 +4,12 @@ import group01.mytunes.Models.Playlist;
 import group01.mytunes.Models.Song;
 import group01.mytunes.audio.IAudioHandler;
 import group01.mytunes.audio.SingleFileAudioHandler;
+import group01.mytunes.dao.ArtistDatabaseDAO;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.dao.SongDatabaseDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
-import group01.mytunes.dialogs.NewSongDialog;
+import group01.mytunes.dialogs.AddSongDialog;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,6 +42,12 @@ public class IndexController implements Initializable {
     @FXML private Button btnMoveSongToPlaylist;
     @FXML private Button btnSearch;
 
+    @FXML private MenuItem menuQuit;
+    @FXML private MenuItem menuAddSong;
+
+    @FXML private MenuItem menuAddArtist, menuEditArtist, menuDeleteArtist;
+    @FXML private MenuItem menuAddPlaylist, menuEditPlaylist, menuDeletePlaylist;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -48,7 +55,7 @@ public class IndexController implements Initializable {
 
         audioHandler = new SingleFileAudioHandler(songDAO);
 
-        this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO(), songDAO);
+        this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO(), songDAO, new ArtistDatabaseDAO());
 
         // Playlist list view
         listViewPlayLists.setItems(indexDataModel.getPlaylistsObservableList());
@@ -73,25 +80,35 @@ public class IndexController implements Initializable {
                 .otherwise(indexDataModel.getSelectedPlaylistObservable().asString())
         );
 
+        initMenuBar();
+
         System.out.println("Controller initialized");
     }
 
-    private void displayError(Throwable t) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("!!ERROR!!");
-        alert.setHeaderText("Something went wrong, \n ERROR:      " + t.getMessage());
-        alert.showAndWait();
+    /**
+     * Initializes the buttons in the menu bar.
+     */
+    private void initMenuBar() {
+        menuQuit.setOnAction(event -> System.exit(0));
+
+        menuAddSong.setOnAction(event -> makeNewSongWindowOpen());
+
+        menuAddArtist.setOnAction(event -> {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Add artist");
+            dialog.setHeaderText("Add an artist");
+            dialog.setContentText("Artist name:");
+            dialog.setGraphic(null);
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(artist -> indexDataModel.addArtist(artist));
+        });
+        menuEditArtist.setOnAction(event -> indexDataModel.editArtist());
+        menuDeleteArtist.setOnAction(event -> indexDataModel.deleteArtist());
     }
 
     public void newPlaylistHandler(ActionEvent actionEvent) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("New playlist");
-        dialog.setHeaderText("Create a new playlist");
-        dialog.setContentText("Playlist name:");
-        dialog.setGraphic(null);
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(playlist -> indexDataModel.addPlaylist(playlist));
     }
 
     public void editPlaylistHandler(ActionEvent actionEvent) {
@@ -126,7 +143,7 @@ public class IndexController implements Initializable {
     }
 
     public void makeNewSongWindowOpen() {
-        NewSongDialog dialog = new NewSongDialog(listViewSongs.getScene().getWindow());
+        AddSongDialog dialog = new AddSongDialog(listViewSongs.getScene().getWindow());
         dialog.showAndWait().ifPresent(song -> {
             if(song == null) return;
             indexDataModel.addSong(song);
