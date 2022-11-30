@@ -17,13 +17,12 @@ Create table Users(
 
 CREATE TABLE Artists(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [Name] NVARCHAR(255) NOT NULL,
+    [Name] NVARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Albums(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [Name] NVARCHAR(255) NOT NULL,
-    [ArtistId] INT NOT NULL FOREIGN KEY REFERENCES [artists](id),
+    [Name] NVARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Songs(
@@ -40,9 +39,9 @@ CREATE TABLE Song_artist_relation(
 );
 
 CREATE TABLE Song_album_relation(
-    [id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    [songid] INT FOREIGN KEY REFERENCES [songs](id) NOT NULL,
-    [albumid] INT FOREIGN KEY REFERENCES [albums](id) NOT NULL,
+    [Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    [Songid] INT FOREIGN KEY REFERENCES [songs](id) NOT NULL,
+    [Albumid] INT FOREIGN KEY REFERENCES [albums](id) NOT NULL,
 );
 
 CREATE TABLE Playlists(
@@ -78,7 +77,7 @@ as
 insert into Artists (name) values(@Name)
 go
 
-create procedure spGetAllArtists 
+create procedure spGetAllArtists
 as
 select * from Artists
 go
@@ -142,4 +141,91 @@ create procedure spUpdatePlaylistById(
 as
 update Playlists
 set Name = @Name where Id = @Id and UserID = @UserId
+go
+
+--Album
+
+drop procedure if exists spNewAlbum;
+drop procedure if exists spGetAllAlbums;
+drop procedure if exists spUpdateAlbum;
+drop procedure if exists spDeleteAlbum;
+
+go
+create procedure spNewAlbum(
+@Name nvarchar(255))
+as
+insert into Albums(Name) values (@Name)
+go
+
+create procedure spGetAllAlbums
+as
+select * from Albums
+go
+
+create procedure spUpdateAlbum(
+@Id int,
+@Name nvarchar(255))
+as
+update Albums
+set Name = @Name where Id = @Id
+go
+
+create procedure spDeleteAlbum(
+@Id int)
+as
+delete Albums where Id = @Id
+go
+
+--Songs
+
+drop procedure if exists spNewSong;
+drop procedure if exists spGetAllSongInfo;
+drop procedure if exists spGetSongById;
+drop procedure if exists spUpdateSongTittle;
+drop procedure if exists spUpdateSongData;
+drop procedure if exists spDeleteSong;
+go
+
+create procedure spNewSong(
+@Title nvarchar(255),
+@Playtime int,
+@Data varbinary(Max))
+as
+insert into Songs (Title,Playtime,Data) Values (@Title, @Playtime, @Data)
+go
+
+create procedure spGetAllSongInfo
+as
+select Id, Title, Playtime from Songs
+go
+
+create procedure spGetSongById(
+@Id int)
+as
+select * from Songs where Id = @Id
+go
+
+create procedure spUpdateSongTittle(
+@Id int,
+@Title nvarchar(255))
+as
+update Songs
+set Title = @Title
+where Id = @Id
+go
+
+create procedure spUpdateSongData(
+@Id int,
+@Data varbinary(Max))
+as
+update Songs
+set Data = @Data
+where Id = @Id
+go
+
+create procedure spDeleteSong(
+@Id int)
+as
+delete Songs
+where Id = @Id
 go
