@@ -13,8 +13,8 @@
             <Label text="Artist:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
             <ComboBox fx:id="artistPicker" promptText="Pick an artist" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-            <Label text="Category:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <ComboBox fx:id="categoryPicker" promptText="Pick a category" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <Label text="Albums:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <ComboBox fx:id="albumPicker" promptText="Pick an album" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
             <Label text="File:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
             <Button fx:id="filePickerButton" text="Pick a file" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
@@ -27,7 +27,7 @@
     </content>
 
     <buttonTypes>
-        <ButtonType fx:id="addButton" text="Add artist" buttonData="OK_DONE"/>
+        <ButtonType fx:id="addButton" text="Add song" buttonData="OK_DONE"/>
         <ButtonType text="Cancel" buttonData="CANCEL_CLOSE"/>
     </buttonTypes>
 
