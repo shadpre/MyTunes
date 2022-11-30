@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" prefWidth="500">
+
+    <content>
+        <GridPane hgap="5" vgap="5">
+            <Label text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="titleTextField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Artist:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <ComboBox fx:id="artistPicker" promptText="Pick an artist" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Category:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <ComboBox fx:id="categoryPicker" promptText="Pick a category" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="File:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <Button fx:id="filePickerButton" text="Pick a file" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <columnConstraints>
+                <ColumnConstraints/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+        </GridPane>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:id="addButton" text="Add artist" buttonData="OK_DONE"/>
+        <ButtonType text="Cancel" buttonData="CANCEL_CLOSE"/>
+    </buttonTypes>
+
+</DialogPane>

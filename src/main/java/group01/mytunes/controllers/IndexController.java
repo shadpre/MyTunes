@@ -2,6 +2,7 @@ package group01.mytunes.controllers;
 
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.datamodels.PlaylistDataModel;
+import group01.mytunes.dialogs.NewSongDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import javax.sound.sampled.*;
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -81,16 +86,13 @@ public class IndexController implements Initializable {
     }
 
     public void makeNewSongWindowOpen(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../songCreator.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch(Exception e) {
-            displayError(e);
-            e.printStackTrace();
-        }
+        NewSongDialog dialog = new NewSongDialog(listViewSongs.getScene().getWindow());
+        dialog.showAndWait().ifPresent(song -> {
+            if(song == null) return;
+
+            System.out.println(song.getTitle());
+            System.out.println(song.getData().length);
+        });
     }
 
     public void deleteSelectedSong(ActionEvent actionEvent) {
