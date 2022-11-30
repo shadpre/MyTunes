@@ -2,12 +2,15 @@ import group01.mytunes.Main;
 import group01.mytunes.Models.Album;
 import group01.mytunes.Models.Artist;
 import group01.mytunes.Models.Playlist;
+import group01.mytunes.Models.Song;
 import group01.mytunes.dao.AlbumDatabaseDAO;
 import group01.mytunes.dao.ArtistDatabaseDAO;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
+import group01.mytunes.dao.SongDatabaseDAO;
 import group01.mytunes.dao.interfaces.IAlbumDAO;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
+import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +28,8 @@ public class TestDBConnection {
     private IPlaylistDAO playlistDAO;
 
     private IAlbumDAO albumDAO;
+
+    private ISongDAO songDAO;
 
     @BeforeEach
     public void setup() throws IOException {
@@ -47,6 +52,7 @@ public class TestDBConnection {
         artistDAO = new ArtistDatabaseDAO();
         playlistDAO = new PlaylistDatabaseDAO();
         albumDAO = new AlbumDatabaseDAO();
+        songDAO = new SongDatabaseDAO();
     }
 
     @Test
@@ -154,10 +160,21 @@ public class TestDBConnection {
             System.out.println(album.getId() + " " + album.getName());
         }
     }
-
     @Test
     public void TestUpdateAlbum() {
         var album = albumDAO.getAlbums().get(0);
         albumDAO.updateAlbum(album, "Midt Om Natten");
+    }
+
+    /*
+     * Get all songs
+     */
+    @Test
+    public void TestGetAllSongInfo() {
+        var result = songDAO.getAllSongInfo();
+
+        for(Song s : result) {
+            System.out.println(s);
+        }
     }
 }

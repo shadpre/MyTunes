@@ -44,4 +44,9 @@ public class Song {
     public void setPlaytime(int playtime) {
         this.playtime = playtime;
     }
+
+    @Override
+    public String toString() {
+        return getTitle();
+    }
 }
