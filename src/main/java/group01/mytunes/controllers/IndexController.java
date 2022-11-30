@@ -2,17 +2,14 @@ package group01.mytunes.controllers;
 
 import group01.mytunes.Models.Playlist;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
+import group01.mytunes.dao.SongDatabaseDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.NewSongDialog;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.Optional;
@@ -42,15 +39,17 @@ public class IndexController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO());
+        this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO(), new SongDatabaseDAO());
 
-        listViewPlayLists.setItems(indexDataModel.getPlaylistsObservable());
+        listViewPlayLists.setItems(indexDataModel.getPlaylistsObservableList());
 
         listViewPlayLists.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 indexDataModel.setSelectedPlaylistObservable(listViewPlayLists.getSelectionModel().getSelectedItem());
             }
         });
+
+        listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
 
         lblCurrentSelectedPlaylist.textProperty().bind(
             Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())

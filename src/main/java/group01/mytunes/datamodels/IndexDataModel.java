@@ -1,29 +1,35 @@
 package group01.mytunes.datamodels;
 
 import group01.mytunes.Models.Playlist;
+import group01.mytunes.Models.Song;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
+import group01.mytunes.dao.interfaces.ISongDAO;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.SQLOutput;
-
 public class IndexDataModel {
 
     private IPlaylistDAO playlistDAO;
+    private ISongDAO songDAO;
 
-    private ObservableList<Playlist> playlistsObservable;
+    private ObservableList<Playlist> playlistsObservableList;
+
+    private ObservableList<Song> songObservableList;
 
     private SimpleObjectProperty<Playlist> selectedPlaylistObservable;
 
-    public IndexDataModel(IPlaylistDAO playlistDAO) {
+
+    public IndexDataModel(IPlaylistDAO playlistDAO, ISongDAO songDAO) {
         this.playlistDAO = playlistDAO;
-        playlistsObservable = FXCollections.observableArrayList(playlistDAO.getPlaylists());
+        this.songDAO = songDAO;
+        playlistsObservableList = FXCollections.observableArrayList(playlistDAO.getPlaylists());
+        songObservableList = FXCollections.observableArrayList(songDAO.getAllSongInfo());
         selectedPlaylistObservable = new SimpleObjectProperty<>(null);
     }
 
-    public ObservableList<Playlist> getPlaylistsObservable() {
-        return playlistsObservable;
+    public ObservableList<Playlist> getPlaylistsObservableList() {
+        return playlistsObservableList;
     }
 
     public SimpleObjectProperty<Playlist> getSelectedPlaylistObservable() {
@@ -43,7 +49,7 @@ public class IndexDataModel {
 
         if(playlist == null) return;
 
-        playlistsObservable.add(playlist);
+        playlistsObservableList.add(playlist);
     }
 
     /**
@@ -59,10 +65,10 @@ public class IndexDataModel {
 
         playlistDAO.updatePlaylist(playlist, newName);
 
-        int index = playlistsObservable.indexOf(playlist);
+        int index = playlistsObservableList.indexOf(playlist);
         System.out.println(index);
         playlist.setName(newName);
-        playlistsObservable.set(index, playlist);
+        playlistsObservableList.set(index, playlist);
 
         return true;
     }
@@ -74,6 +80,10 @@ public class IndexDataModel {
     public void deletePlaylist(Playlist playlist) {
         playlistDAO.deletePlaylist(playlist.getId());
 
-        playlistsObservable.remove(playlist);
+        playlistsObservableList.remove(playlist);
+    }
+
+    public ObservableList getSongInfoObservableList() {
+        return songObservableList;
     }
 }
