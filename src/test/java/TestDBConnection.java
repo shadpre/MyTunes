@@ -177,4 +177,11 @@ public class TestDBConnection {
             System.out.println(s);
         }
     }
+
+    @Test
+    public void TestGetSongById() {
+        var song = songDAO.getSongById(1);
+
+        System.out.println("%d %s %d %d".formatted(song.getId(), song.getTitle(), song.getData().length, song.getPlaytime()));
+    }
 }

@@ -19,6 +19,8 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+
 public class NewSongDialog extends Dialog<Song> {
 
     private File selectedSongFile;
@@ -81,8 +83,16 @@ public class NewSongDialog extends Dialog<Song> {
                 if(selectedSongFile == null) return null;
                 if(titleTextField.getText().isEmpty()) return null;
                 if(artistPicker.getItems().isEmpty()) return null;
+                byte[] data;
+                try {
+                    data = Files.readAllBytes(selectedSongFile.getAbsoluteFile().toPath());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
-                return new Song( 1, titleTextField.getText(), new byte[] {(byte) 0x0}, 0);
+                if(data == null) return null;
+
+                return new Song( -1, titleTextField.getText(), data, 0);
             });
 
             setOnShowing(dialogEvent -> Platform.runLater(() -> titleTextField.requestFocus()));

@@ -190,9 +190,12 @@ create procedure spNewSong(
 @Title nvarchar(255),
 @Playtime int,
 @Data varbinary(Max))
-as
-insert into Songs (Title,Playtime,Data) Values (@Title, @Playtime, @Data)
-go
+AS
+BEGIN
+    insert into Songs (Title,Playtime,Data) Values (@Title, @Playtime, @Data)
+    SELECT [Id] FROM [Songs] WHERE [Id]=SCOPE_IDENTITY()
+END
+GO
 
 create procedure spGetAllSongInfo
 as
