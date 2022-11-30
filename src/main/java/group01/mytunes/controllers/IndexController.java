@@ -108,7 +108,14 @@ public class IndexController implements Initializable {
     }
 
     public void newPlaylistHandler(ActionEvent actionEvent) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("New playlist");
+        dialog.setHeaderText("Create a new playlist");
+        dialog.setContentText("Playlist name:");
+        dialog.setGraphic(null);
 
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(playlist -> indexDataModel.addPlaylist(playlist));
     }
 
     public void editPlaylistHandler(ActionEvent actionEvent) {
