@@ -3,6 +3,7 @@ package group01.mytunes.controllers;
 import group01.mytunes.Models.Playlist;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.datamodels.IndexDataModel;
+import group01.mytunes.dialogs.NewSongDialog;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -109,17 +110,14 @@ public class IndexController implements Initializable {
     public void editSongWindowOpen(ActionEvent actionEvent) {
     }
 
-    public void makeNewSongWindowOpen(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../songCreator.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch(Exception e) {
-            displayError(e);
-            e.printStackTrace();
-        }
+    public void makeNewSongWindowOpen() {
+        NewSongDialog dialog = new NewSongDialog(listViewSongs.getScene().getWindow());
+        dialog.showAndWait().ifPresent(song -> {
+            if(song == null) return;
+
+            System.out.println(song.getTitle());
+            System.out.println(song.getData().length);
+        });
     }
 
     public void deleteSelectedSong(ActionEvent actionEvent) {
