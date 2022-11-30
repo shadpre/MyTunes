@@ -4,6 +4,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DatabaseConnectionHandler {
 
@@ -19,6 +20,23 @@ public class DatabaseConnectionHandler {
         source.setPassword(password);
         source.setDatabaseName(dbName);
         source.setTrustServerCertificate(true);
+
+        if(!isConnectionWorking()) {
+            System.exit(-1);
+        }
+    }
+
+    public boolean isConnectionWorking() {
+        try {
+            if (getConnection() != null && !getConnection().isClosed()) {
+                return true;
+            } else {
+                System.err.println("No connection to database!");
+            }
+        } catch (SQLException e) {
+            System.err.println("No connection to database!");
+        }
+        return false;
     }
 
     public static void init(String ip, int port, String dbName, String username, String password) {
