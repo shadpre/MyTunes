@@ -90,6 +90,7 @@ public class IndexController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newName -> {
+            System.out.println(selectedPlaylist + " " + newName);
             indexDataModel.editPlaylist(selectedPlaylist, newName);
         });
     }

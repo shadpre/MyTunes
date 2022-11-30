@@ -5,6 +5,7 @@ import group01.mytunes.Models.Playlist;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import group01.mytunes.exceptions.SQLDeleteException;
+import group01.mytunes.exceptions.SQLUpdateException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,12 +52,11 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
             statement.setInt(1, Main.currentUser.getId());
             statement.setString(2, name);
 
-            statement.executeUpdate();
+            var res = statement.executeQuery();
 
-            var res = statement.getGeneratedKeys();
             if(res.next()) {
                 return new Playlist(
-                    res.getInt(1),
+                    res.getInt("Id"),
                     Main.currentUser.getId(),
                     name,
                     null
@@ -95,6 +95,7 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
 
     @Override
     public void updatePlaylist(Playlist playlist, String newName) {
+
         if(playlist == null) return;
         if(newName == null) return;
 
@@ -109,7 +110,7 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
 
             var affectedRows = statement.executeUpdate();
 
-            if(affectedRows != 1) throw new SQLDeleteException(); // If not worked
+            if(affectedRows != 1) throw new SQLUpdateException(); // If not worked
 
             playlist.setName(newName);
 

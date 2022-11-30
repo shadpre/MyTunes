@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.SQLOutput;
+
 public class IndexDataModel {
 
     private IPlaylistDAO playlistDAO;
@@ -56,6 +58,7 @@ public class IndexDataModel {
         if(playlist.getName().equals(newName)) return false;
 
         playlistDAO.updatePlaylist(playlist, newName);
+
         int index = playlistsObservable.indexOf(playlist);
         System.out.println(index);
         playlist.setName(newName);
