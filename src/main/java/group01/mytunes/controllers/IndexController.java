@@ -1,6 +1,7 @@
 package group01.mytunes.controllers;
 
 import group01.mytunes.Models.Playlist;
+import group01.mytunes.Models.Song;
 import group01.mytunes.audio.AudioHandler;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.dao.SongDatabaseDAO;
@@ -24,7 +25,7 @@ public class IndexController implements Initializable {
 
     @FXML private ListView listViewPlaylistSongs;
     @FXML private ListView<Playlist> listViewPlayLists;
-    @FXML private ListView listViewSongs;
+    @FXML private ListView<Song> listViewSongs;
     @FXML private Label labelSongPlaying;
     @FXML private Label lblCurrentSelectedPlaylist;
     @FXML private TextField txtFieldSearchbar;
@@ -48,15 +49,22 @@ public class IndexController implements Initializable {
 
         this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO(), songDAO);
 
+        // Playlist list view
         listViewPlayLists.setItems(indexDataModel.getPlaylistsObservableList());
-
         listViewPlayLists.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 indexDataModel.setSelectedPlaylistObservable(listViewPlayLists.getSelectionModel().getSelectedItem());
             }
         });
 
+        // Song list view
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
+        listViewSongs.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                Song songToPlay = listViewSongs.getSelectionModel().getSelectedItem();
+                audioHandler.playSong(songToPlay);
+            }
+        });
 
         lblCurrentSelectedPlaylist.textProperty().bind(
             Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
