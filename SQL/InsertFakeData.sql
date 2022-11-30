@@ -18,13 +18,13 @@ INSERT INTO [Artists] ([Name]) VALUES
     ('Gnags'); -- id 3
 
 -- Albums
-INSERT INTO [Albums] ([Name], [ArtistId]) VALUES 
-    ('Midt Om Natten', 1), -- id 1
-    ('Det Var En Torsdag Aften', 1), -- id 2
-    ('Milan Allé', 2), -- id 3
-    ('Spil Noget Vi Kender', 2), -- id 4
-    ('Mr. Swing King', 3), -- id 5
-    ('Den Blå Hund', 3); -- id 6
+INSERT INTO [Albums] ([Name]) VALUES 
+    ('Midt Om Natten'), -- id 1
+    ('Det Var En Torsdag Aften'), -- id 2
+    ('Milan Allé'), -- id 3
+    ('Spil Noget Vi Kender'), -- id 4
+    ('Mr. Swing King'), -- id 5
+    ('Den Blå Hund'); -- id 6
 
 -- Songs and song_artist_relation and song_album_relation
 INSERT INTO [Songs] ([Title], [Data], [Playtime]) VALUES 

@@ -27,6 +27,6 @@ public class Artist {
 
     @Override
     public String toString() {
-        return "%d %s".formatted(getId(), getName());
+        return getName();
     }
 }

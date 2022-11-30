@@ -93,9 +93,9 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button fx:id="btnSongEdit" mnemonicParsing="false" onAction="#editSongWindowOpen" prefHeight="26.0" prefWidth="91.0" text="Edit" GridPane.columnIndex="1" />
-            <Button fx:id="btnSongNew" mnemonicParsing="false" onAction="#makeNewSongWindowOpen" prefHeight="26.0" prefWidth="92.0" text="New" />
-            <Button fx:id="btnSongDelete" mnemonicParsing="false" onAction="#deleteSelectedSong" prefHeight="26.0" prefWidth="91.0" text="Delete" GridPane.columnIndex="2" />
+            <Button fx:id="btnSongNew" mnemonicParsing="false" onAction="#makeNewSongWindowOpen" prefHeight="26.0" prefWidth="92.0" text="New song" GridPane.columnIndex="0"/>
+            <Button fx:id="btnSongEdit" mnemonicParsing="false" onAction="#editSongWindowOpen" prefHeight="26.0" prefWidth="91.0" text="Edit song" GridPane.columnIndex="1" />
+            <Button fx:id="btnSongDelete" mnemonicParsing="false" onAction="#deleteSelectedSong" prefHeight="26.0" prefWidth="91.0" text="Delete song" GridPane.columnIndex="2" />
          </children>
       </GridPane>
       <Button fx:id="btnMoveSongToPlaylist" layoutX="657.0" layoutY="182.0" mnemonicParsing="false" onAction="#InsertSongToPlaylist" text="←">

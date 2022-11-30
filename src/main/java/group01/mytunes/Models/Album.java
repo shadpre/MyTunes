@@ -5,10 +5,9 @@ public class Album {
     private String name;
     private int artistId;
 
-    public Album(int id, String name, int artistId) {
+    public Album(int id, String name) {
         this.id = id;
         this.name = name;
-        this.artistId = artistId;
     }
 
     public int getId() {
@@ -33,5 +32,10 @@ public class Album {
 
     public void setArtistId(int artistId) {
         this.artistId = artistId;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }
