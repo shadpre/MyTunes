@@ -2,7 +2,8 @@ package group01.mytunes.controllers;
 
 import group01.mytunes.Models.Playlist;
 import group01.mytunes.Models.Song;
-import group01.mytunes.audio.AudioHandler;
+import group01.mytunes.audio.IAudioHandler;
+import group01.mytunes.audio.SingleFileAudioHandler;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.dao.SongDatabaseDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
 public class IndexController implements Initializable {
 
     private IndexDataModel indexDataModel;
-    private AudioHandler audioHandler;
+    private IAudioHandler audioHandler;
 
     @FXML private ListView listViewPlaylistSongs;
     @FXML private ListView<Playlist> listViewPlayLists;
@@ -45,7 +46,7 @@ public class IndexController implements Initializable {
 
         ISongDAO songDAO = new SongDatabaseDAO();
 
-        audioHandler = new AudioHandler(songDAO);
+        audioHandler = new SingleFileAudioHandler(songDAO);
 
         this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO(), songDAO);
 

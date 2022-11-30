@@ -8,7 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import java.io.*;
 import java.nio.file.Files;
 
-public class AudioHandler {
+public class SingleFileAudioHandler implements IAudioHandler {
 
     private static final String DATA_DIR = System.getenv("APPDATA") + "/MyTunes/songs";
     private double volume = 0.1;
@@ -17,7 +17,7 @@ public class AudioHandler {
 
     private MediaPlayer mediaPlayer;
 
-    public AudioHandler(ISongDAO songDAO) {
+    public SingleFileAudioHandler(ISongDAO songDAO) {
         File dataDirectory = new File(DATA_DIR);
         if(!dataDirectory.exists()) {
             dataDirectory.mkdirs();
@@ -46,9 +46,6 @@ public class AudioHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
-
     }
 
     private String saveTempFile(byte[] data) throws IOException {
