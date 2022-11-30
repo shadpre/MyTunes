@@ -1,5 +1,6 @@
 package group01.mytunes.dao;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import group01.mytunes.Main;
 import group01.mytunes.Models.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
@@ -17,7 +18,7 @@ public class SongDatabaseDAO implements ISongDAO {
     @Override
     public List<Song> getAllSongInfo() {
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "exec spGetAllSongInfo";
+            String query = "EXEC spGetAllSongInfo;";
             Statement statement = connection.createStatement();
 
             var resultSet = statement.executeQuery(query);
@@ -36,5 +37,30 @@ public class SongDatabaseDAO implements ISongDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Song getSongById(int id) {
+        try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "EXEC spGetSongById ?;";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+
+            var result = statement.executeQuery();
+
+            if(result.next()) {
+                return new Song(
+                        id,
+                        result.getString("Title"),
+                        result.getBytes("Data"),
+                        result.getInt("Playtime")
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
     }
 }

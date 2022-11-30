@@ -8,4 +8,6 @@ public interface ISongDAO {
 
     List<Song> getAllSongInfo();
 
+    Song getSongById(int id);
+
 }
