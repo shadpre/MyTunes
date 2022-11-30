@@ -105,9 +105,12 @@ public class IndexController implements Initializable {
         });
         menuEditArtist.setOnAction(event -> indexDataModel.editArtist());
         menuDeleteArtist.setOnAction(event -> indexDataModel.deleteArtist());
+
+        menuAddPlaylist.setOnAction(event -> newPlaylistHandler());
+        menuEditPlaylist.setOnAction(event -> editPlaylistHandler());
     }
 
-    public void newPlaylistHandler(ActionEvent actionEvent) {
+    public void newPlaylistHandler() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("New playlist");
         dialog.setHeaderText("Create a new playlist");
@@ -118,7 +121,7 @@ public class IndexController implements Initializable {
         result.ifPresent(playlist -> indexDataModel.addPlaylist(playlist));
     }
 
-    public void editPlaylistHandler(ActionEvent actionEvent) {
+    public void editPlaylistHandler() {
         Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem();
         if(selectedPlaylist == null) return;
 
