@@ -111,12 +111,16 @@ drop procedure if exists spUpdatePlaylistById;
 drop procedure if exists spGetUserPlaylistById;
 go
 
-create procedure spNewPlaylist(
+CREATE PROCEDURE spNewPlaylist(
 @UserID int,
 @Name nvarchar(255))
-as
-insert into Playlists (UserID, Name) values (@UserID,@Name)
-go
+AS
+BEGIN
+    SET NOCOUNT ON
+    insert into Playlists (UserID, Name) values (@UserID,@Name)
+    SELECT * FROM [Playlists] WHERE Id=SCOPE_IDENTITY()
+END
+GO
 
 create procedure spGetUserPlaylists(
 @UserID int)

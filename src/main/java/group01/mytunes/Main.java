@@ -8,11 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 public class Main extends Application {
@@ -41,18 +38,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Index.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("PlaylistCreate.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("SongCreator.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateArtist.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateCategory.fxml"));
-
 
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
     }
 }

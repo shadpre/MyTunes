@@ -11,16 +11,16 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="612.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group01.mytunes.controllers.IndexController">
-    <fx:include fx:id="child" source="PlaylistCreate.fxml" />
-      <GridPane layoutX="14.0" layoutY="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="619.0">
+    <children>
+      <GridPane layoutX="16.0" layoutY="36.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="619.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="292.79998779296875" minWidth="10.0" prefWidth="292.79998779296875" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.40000000000003" minWidth="0.0" prefWidth="20.800012207031273" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="328.79997558593755" minWidth="0.0" prefWidth="302.19996337890626" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints maxHeight="200.60001220703126" minHeight="10.0" prefHeight="26.80000991821289" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="577.6000061035156" minHeight="10.0" prefHeight="475.5999900817871" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="200.60001220703126" minHeight="10.0" prefHeight="30.999989318847657" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="577.6000061035156" minHeight="10.0" prefHeight="491.00001068115233" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label prefHeight="43.0" prefWidth="90.0" text="Playlist">
@@ -28,7 +28,7 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label prefHeight="45.0" prefWidth="192.0" text="Songs in Playliste" GridPane.columnIndex="2">
+            <Label fx:id="lblCurrentSelectedPlaylist" prefHeight="45.0" prefWidth="192.0" text="No playlist selected" GridPane.columnIndex="2">
                <font>
                   <Font size="25.0" />
                </font>
@@ -49,9 +49,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="btnPlaylistEdit" mnemonicParsing="false" onAction="#editPlaylistWindowOpen" prefHeight="26.0" prefWidth="91.0" text="Edit Playlist" GridPane.columnIndex="1" />
-            <Button fx:id="btnPlaylistNew" mnemonicParsing="false" onAction="#newPlaylistWindowOpen" prefHeight="26.0" prefWidth="92.0" text="New Playlist" />
-            <Button fx:id="btnPlaylistDelete" mnemonicParsing="false" onAction="#deleteSelectedPlaylist" prefHeight="26.0" prefWidth="91.0" text="Delete Playlist" GridPane.columnIndex="2" />
+            <Button fx:id="btnPlaylistEdit" mnemonicParsing="false" onAction="#editPlaylistHandler" prefHeight="26.0" prefWidth="91.0" text="Edit Playlist" GridPane.columnIndex="1" />
+            <Button fx:id="btnPlaylistNew" mnemonicParsing="false" onAction="#newPlaylistHandler" prefHeight="26.0" prefWidth="92.0" text="New Playlist" />
+            <Button fx:id="btnPlaylistDelete" mnemonicParsing="false" onAction="#deleteSelectedPlaylistHandler" prefHeight="26.0" prefWidth="91.0" text="Delete Playlist" GridPane.columnIndex="2" />
             <Button fx:id="btnPlaylistUp" mnemonicParsing="false" onAction="#scrollUpInPlaylist" text="↑" GridPane.columnIndex="3">
                <font>
                   <Font name="System Bold" size="15.0" />
@@ -78,7 +78,7 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <ListView fx:id="listViewSongs" maxHeight="-Infinity" prefHeight="466.0" prefWidth="495.0" GridPane.rowIndex="1" />
+            <ListView fx:id="listViewSongs" maxHeight="-Infinity" prefHeight="487.0" prefWidth="503.0" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <GridPane layoutX="946.0" layoutY="551.0" prefHeight="30.0" prefWidth="303.0">
@@ -137,4 +137,5 @@
             <Font size="17.0" />
          </font>
       </Label>
+   </children>
 </AnchorPane>
