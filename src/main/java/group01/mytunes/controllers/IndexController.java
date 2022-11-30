@@ -120,9 +120,7 @@ public class IndexController implements Initializable {
         NewSongDialog dialog = new NewSongDialog(listViewSongs.getScene().getWindow());
         dialog.showAndWait().ifPresent(song -> {
             if(song == null) return;
-
-            System.out.println(song.getTitle());
-            System.out.println(song.getData().length);
+            indexDataModel.addSong(song);
         });
     }
 

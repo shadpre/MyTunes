@@ -86,4 +86,13 @@ public class IndexDataModel {
     public ObservableList getSongInfoObservableList() {
         return songObservableList;
     }
+
+    public void addSong(Song song) {
+        var result = songDAO.createSong(song);
+        if(result == null) return;
+
+        System.out.println(result.getId());
+
+        songObservableList.add(result);
+    }
 }

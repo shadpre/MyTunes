@@ -8,4 +8,10 @@ public interface ISongDAO {
 
     List<Song> getAllSongInfo();
 
+    Song getSongById(int id);
+
+    void deleteSong(int id);
+
+    Song createSong(Song song);
+
 }
