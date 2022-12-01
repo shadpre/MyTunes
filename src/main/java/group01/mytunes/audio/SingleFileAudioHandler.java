@@ -14,9 +14,9 @@ import java.util.TimerTask;
 
 public class SingleFileAudioHandler implements IAudioHandler {
 
-    private Timer timer;
+    private Media media;
 
-    boolean isPlaying ;
+    private boolean isPlaying ;
 
     private static final String DATA_DIR = System.getenv("APPDATA") + "/MyTunes/songs";
     private double volume = 0.1;
@@ -51,7 +51,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
         try {
             String path = saveTempFile(songData);
             System.out.println("Returned:" + path);
-            Media media = new Media(path);
+            media = new Media(path);
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setVolume(volume);
             isPlaying = true;
@@ -102,6 +102,16 @@ public class SingleFileAudioHandler implements IAudioHandler {
     @Override
     public boolean isPlaying() {
         return isPlaying;
+    }
+
+    @Override
+    public Media getMedia() {
+        return media;
+    }
+
+    @Override
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
     }
 
 

@@ -12,22 +12,16 @@ import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class IndexController implements Initializable {
 
@@ -99,6 +93,7 @@ public class IndexController implements Initializable {
             if (event.getClickCount() == 2) {
                 Song songToPlay = listViewSongs.getSelectionModel().getSelectedItem();
                 audioHandler.playSong(songToPlay);
+                bindSongSlider();
                 updatePlayPauseButtons();
             }
         });
@@ -109,6 +104,7 @@ public class IndexController implements Initializable {
             if (event.getClickCount() == 2) {
                 Song songToPlay = listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong();
                 audioHandler.playSong(songToPlay);
+                bindSongSlider();
                 updatePlayPauseButtons();
             }
         });
@@ -127,6 +123,12 @@ public class IndexController implements Initializable {
         });
 
         System.out.println("Controller initialized");
+
+        /**
+         * Slider
+         */
+
+
     }
 
     /**
@@ -230,5 +232,27 @@ public class IndexController implements Initializable {
             labelSongPlaying.setText("Not playing");
             btnPlayPause.setText("⪢");
         }
+    }
+
+    private void bindSongSlider() {
+        audioHandler.getMediaPlayer().setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                var player = audioHandler.getMediaPlayer();
+                sliderSong.maxProperty().bind(Bindings.createDoubleBinding(
+                        () -> player.getTotalDuration().toSeconds(),
+                        player.totalDurationProperty()));
+
+                sliderSong.valueProperty().bind(Bindings.createDoubleBinding(
+                        () -> player.getCurrentTime().toSeconds(),
+                        player.currentTimeProperty()));
+
+                lblCurrentTime.textProperty().bind(Bindings.createStringBinding(
+                        () -> String.valueOf(audioHandler.getMediaPlayer().getCurrentTime().toSeconds()),
+                        player.currentTimeProperty()));
+
+                lblTimeLength.setText(String.valueOf(audioHandler.getMediaPlayer().getTotalDuration().toSeconds()));
+            }
+        });
     }
 }

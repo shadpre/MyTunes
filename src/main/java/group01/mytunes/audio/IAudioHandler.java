@@ -1,6 +1,8 @@
 package group01.mytunes.audio;
 
 import group01.mytunes.Models.Song;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public interface IAudioHandler {
 
@@ -16,4 +18,7 @@ public interface IAudioHandler {
     boolean playPause();
 
     boolean isPlaying();
+
+    Media getMedia();
+    MediaPlayer getMediaPlayer();
 }
