@@ -2,6 +2,7 @@ package group01.mytunes.dao;
 
 import group01.mytunes.Main;
 import group01.mytunes.Models.Playlist;
+import group01.mytunes.Models.PlaylistSong;
 import group01.mytunes.Models.Song;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
@@ -122,9 +123,9 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
     }
 
     @Override
-    public boolean addSongToPlaylist(Song song, Playlist playlist) {
-        if(song == null) return false;
-        if(playlist == null) return false;
+    public PlaylistSong addSongToPlaylist(Song song, Playlist playlist) {
+        if(song == null) return null;
+        if(playlist == null) return null;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
             String query = "EXEC spAddSongToPlaylist ?, ?";
@@ -133,18 +134,23 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
             statement.setInt(1, song.getId());
             statement.setInt(2, playlist.getId());
 
-            var res = statement.executeUpdate(); // rows affected
+            var res = statement.executeQuery();
 
-            if(res < 1) return false;
-
-            return true;
+            if(res.next()) {
+                return new PlaylistSong(
+                        res.getInt(1),
+                        song
+                );
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     @Override
-    public List<Song> getSongsInPlaylist(Playlist playlist) {
+    public List<PlaylistSong> getSongsInPlaylist(Playlist playlist) {
 
         if(playlist == null) return null;
 
@@ -154,14 +160,17 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
             statement.setInt(1, playlist.getId());
 
             var resultSet = statement.executeQuery();
-            var resultList = new ArrayList<Song>();
+            var resultList = new ArrayList<PlaylistSong>();
 
             while(resultSet.next()) {
-                resultList.add(new Song(
-                        resultSet.getInt("Id"),
-                        resultSet.getString("Title"),
-                        null,
-                        resultSet.getInt("Playtime")
+                resultList.add(new PlaylistSong(
+                        resultSet.getInt("sprId"),
+                            new Song(
+                            resultSet.getInt("Id"),
+                            resultSet.getString("Title"),
+                            null,
+                            resultSet.getInt("Playtime")
+                        )
                 ));
             }
 

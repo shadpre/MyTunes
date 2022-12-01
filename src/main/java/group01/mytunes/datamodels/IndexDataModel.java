@@ -1,6 +1,7 @@
 package group01.mytunes.datamodels;
 
 import group01.mytunes.Models.Playlist;
+import group01.mytunes.Models.PlaylistSong;
 import group01.mytunes.Models.Song;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
@@ -20,7 +21,7 @@ public class IndexDataModel {
     private ObservableList<Playlist> playlistsObservableList;
 
     private ObservableList<Song> songObservableList;
-    private ObservableList<Song> songPlaylistObservableList;
+    private ObservableList<PlaylistSong> songPlaylistObservableList;
 
     private SimpleObjectProperty<Playlist> selectedPlaylistObservable;
 
@@ -124,8 +125,12 @@ public class IndexDataModel {
     }
 
     public void addSongToPlaylist(Song selectedSong, Playlist selectedPlaylist) {
-        var wasAdded = playlistDAO.addSongToPlaylist(selectedSong, selectedPlaylist);
+        var playlistSong = playlistDAO.addSongToPlaylist(selectedSong, selectedPlaylist);
 
-        if(wasAdded) songPlaylistObservableList.add(selectedSong);
+        if(playlistSong == null) return;
+
+        System.out.println(playlistSong.getRelationId());
+
+        songPlaylistObservableList.add(playlistSong);
     }
 }
