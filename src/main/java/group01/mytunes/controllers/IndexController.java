@@ -11,20 +11,44 @@ import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class IndexController implements Initializable {
 
     private IndexDataModel indexDataModel;
     private IAudioHandler audioHandler;
 
+    private boolean isPlaying;
+    private Media sound;
+    private Timer timer;
+    private double current;
+    private double end;
+    private double volume;
+
+    @FXML private Label lblCurrentTime;
+    @FXML private Label lblTimeLength;
+
+    @FXML private Button btnPlayPause;
+    @FXML private Button btnNextSong;
+
+    @FXML private Button btnPreviusSong;
+    @FXML private Slider sliderSong;
+    @FXML private Slider sliderSoundLevel;
     @FXML private ListView listViewPlaylistSongs;
     @FXML private ListView<Playlist> listViewPlayLists;
     @FXML private ListView<Song> listViewSongs;
@@ -50,6 +74,9 @@ public class IndexController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        sliderSoundLevel.setMin(0.0d);
+        sliderSoundLevel.setMax(1.0d);
+        this.isPlaying = false;
 
         ISongDAO songDAO = new SongDatabaseDAO();
 
@@ -71,6 +98,7 @@ public class IndexController implements Initializable {
             if (event.getClickCount() == 2) {
                 Song songToPlay = listViewSongs.getSelectionModel().getSelectedItem();
                 audioHandler.playSong(songToPlay);
+                updatePlayPauseButtons();
             }
         });
 
@@ -84,6 +112,11 @@ public class IndexController implements Initializable {
         );
 
         initMenuBar();
+
+        sliderSoundLevel.valueProperty().addListener((observable, oldValue, newValue) -> {
+            double volume = sliderSoundLevel.getValue();
+            audioHandler.changeVolume(volume);
+        });
 
         System.out.println("Controller initialized");
     }
@@ -176,4 +209,18 @@ public class IndexController implements Initializable {
     public void searchForSong(ActionEvent actionEvent) {
     }
 
+    public void playOrPauseSong(ActionEvent actionEvent) {
+        audioHandler.playPause();
+        updatePlayPauseButtons();
+    }
+
+    private void updatePlayPauseButtons() {
+        if (audioHandler.isPlaying()) {
+            labelSongPlaying.setText("Playing");
+            btnPlayPause.setText("II");
+        } else {
+            labelSongPlaying.setText("Not playing");
+            btnPlayPause.setText("⪢");
+        }
+    }
 }
