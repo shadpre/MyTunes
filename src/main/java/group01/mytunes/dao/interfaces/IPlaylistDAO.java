@@ -1,6 +1,7 @@
 package group01.mytunes.dao.interfaces;
 
 import group01.mytunes.Models.Playlist;
+import group01.mytunes.Models.Song;
 
 import java.util.List;
 
@@ -34,5 +35,9 @@ public interface IPlaylistDAO {
      * @param newName The new name of the playlist.
      */
     void updatePlaylist(Playlist playlist, String newName);
+
+    boolean addSongToPlaylist(Song song, Playlist playlist);
+
+    List<Song> getSongsInPlaylist(Playlist playlist);
 
 }

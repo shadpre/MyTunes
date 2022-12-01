@@ -74,6 +74,9 @@ public class IndexController implements Initializable {
             }
         });
 
+        // Playlist list view
+        listViewPlaylistSongs.setItems(indexDataModel.getSongPlaylistInfoObservableList());
+
         lblCurrentSelectedPlaylist.textProperty().bind(
             Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
                 .then("No playlist selected")
@@ -163,7 +166,11 @@ public class IndexController implements Initializable {
     public void deleteSelectedSong(ActionEvent actionEvent) {
     }
 
-    public void InsertSongToPlaylist(ActionEvent actionEvent) {
+    public void insertSongToPlaylist() {
+        var selectedPlaylist = indexDataModel.getSelectedPlaylistObservable().getValue();
+        var selecedSong = listViewSongs.getSelectionModel().getSelectedItem();
+
+        indexDataModel.addSongToPlaylist(selecedSong, selectedPlaylist);
     }
 
     public void searchForSong(ActionEvent actionEvent) {
