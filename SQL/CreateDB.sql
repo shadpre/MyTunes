@@ -266,7 +266,14 @@ as
 select s.Id, s.Title, s.Playtime, spr.Id sprId from Songs s inner join Song_playlist_relation spr on s.Id = spr.SongId where s.Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId)
 go
 
-
-
-
-
+DROP PROCEDURE IF EXISTS spHashSongData;
+GO
+CREATE PROCEDURE spHashSongData (
+@SongId INT)
+AS
+BEGIN
+    DECLARE @dataToHash VARBINARY(MAX)
+    SET @dataToHash = (SELECT [Data] FROM [Songs] WHERE [Id]=@SongId);
+    SELECT HASHBYTES('SHA2_256', @dataToHash) as [Hash];
+END
+GO

@@ -2,17 +2,15 @@ package group01.mytunes.audio;
 
 import group01.mytunes.Models.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class SingleFileAudioHandler implements IAudioHandler {
+
+
 
     private Media media;
 

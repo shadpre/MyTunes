@@ -92,10 +92,7 @@ public class IndexController implements Initializable {
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
         listViewSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                Song songToPlay = listViewSongs.getSelectionModel().getSelectedItem();
-                audioHandler.playSong(songToPlay);
-                bindSongSlider();
-                updatePlayPauseButtons();
+                playSong(listViewSongs.getSelectionModel().getSelectedItem());
             }
         });
 
@@ -103,10 +100,7 @@ public class IndexController implements Initializable {
         listViewPlaylistSongs.setItems(indexDataModel.getSongPlaylistInfoObservableList());
         listViewPlaylistSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                Song songToPlay = listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong();
-                audioHandler.playSong(songToPlay);
-                bindSongSlider();
-                updatePlayPauseButtons();
+                playSong(listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong());
             }
         });
 
@@ -124,12 +118,12 @@ public class IndexController implements Initializable {
         });
 
         System.out.println("Controller initialized");
+    }
 
-        /**
-         * Slider
-         */
-
-
+    private void playSong(Song song) {
+        audioHandler.playSong(song);
+        bindSongSlider();
+        updatePlayPauseButtons();
     }
 
     /**
