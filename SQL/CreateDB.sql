@@ -259,7 +259,7 @@ go
 create procedure spGetAllSongsInPlaylist(
 @PlaylistId int)
 as
-select Id, Title, Playtime from Songs where Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId)
+select s.Id, s.Title, s.Playtime, spr.Id sprId from Songs s inner join Song_playlist_relation spr on s.Id = spr.SongId where s.Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId)
 go
 
 
