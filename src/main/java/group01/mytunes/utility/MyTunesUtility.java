@@ -16,19 +16,15 @@ public class MyTunesUtility {
      */
     public static boolean compareHashFromDatabaseAndSong(Song song, ISongDAO songDAO) {
         try {
-            var md = MessageDigest.getInstance("MD5");
+            var messageDigest = MessageDigest.getInstance("MD5");
 
-            var res = md.digest(song.getData());
+            byte[] res = messageDigest.digest(song.getData());
 
             String localHash = bytesToHex(res);
-            System.out.println(localHash);
 
-            var dbHash = songDAO.getSongDataHash(song.getId());
-            System.out.println(dbHash);
+            String dbHash = songDAO.getSongDataHash(song.getId());
 
-            var equals = dbHash.equals(localHash);
-            return equals;
-
+            return dbHash.equals(localHash);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
