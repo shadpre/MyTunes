@@ -5,6 +5,8 @@ import group01.mytunes.dao.interfaces.ISongDAO;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MyTunesUtility {
 
@@ -43,28 +45,12 @@ public class MyTunesUtility {
     }
 
     public static String timeFormatConverter(double inputSeconds){
-        int min = 0;
-        int sec = 0;
-        int total = (int) inputSeconds;
+        int min = (int) (inputSeconds/60);
+        int sec = (int) (inputSeconds%60);
 
-        String minut = "";
-        String seconds = "";
-
-        min = total/60;
-        sec = total%60;
-
-        if (min < 10) {
-            minut = "0"+min;
-        } else  {
-            minut = min + "";
-        }
-
-        if (sec < 10) {
-            seconds = "0"+sec;
-        } else {
-            seconds = sec + "";
-        }
-
-        return minut + ":" + seconds;
+        return "%s:%s".formatted(
+                (min < 10) ? "0" + min : min,
+                (sec < 10) ? "0" + sec : sec
+        );
     }
 }
