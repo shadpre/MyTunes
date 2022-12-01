@@ -11,6 +11,7 @@ import group01.mytunes.dao.SongDatabaseDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
+import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -248,10 +249,10 @@ public class IndexController implements Initializable {
                         player.currentTimeProperty()));
 
                 lblCurrentTime.textProperty().bind(Bindings.createStringBinding(
-                        () -> String.valueOf(audioHandler.getMediaPlayer().getCurrentTime().toSeconds()),
+                        () -> MyTunesUtility.timeFormatConverter(audioHandler.getMediaPlayer().getCurrentTime().toSeconds()),
                         player.currentTimeProperty()));
 
-                lblTimeLength.setText(String.valueOf(audioHandler.getMediaPlayer().getTotalDuration().toSeconds()));
+                lblTimeLength.setText(MyTunesUtility.timeFormatConverter((audioHandler.getMediaPlayer().getTotalDuration().toSeconds())));
             }
         });
     }
