@@ -1,6 +1,7 @@
 package group01.mytunes.controllers;
 
 import group01.mytunes.Models.Playlist;
+import group01.mytunes.Models.PlaylistSong;
 import group01.mytunes.Models.Song;
 import group01.mytunes.audio.IAudioHandler;
 import group01.mytunes.audio.SingleFileAudioHandler;
@@ -49,7 +50,7 @@ public class IndexController implements Initializable {
     @FXML private Button btnPreviusSong;
     @FXML private Slider sliderSong;
     @FXML private Slider sliderSoundLevel;
-    @FXML private ListView listViewPlaylistSongs;
+    @FXML private ListView<PlaylistSong> listViewPlaylistSongs;
     @FXML private ListView<Playlist> listViewPlayLists;
     @FXML private ListView<Song> listViewSongs;
     @FXML private Label labelSongPlaying;
@@ -104,6 +105,13 @@ public class IndexController implements Initializable {
 
         // Playlist list view
         listViewPlaylistSongs.setItems(indexDataModel.getSongPlaylistInfoObservableList());
+        listViewPlaylistSongs.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                Song songToPlay = listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong();
+                audioHandler.playSong(songToPlay);
+                updatePlayPauseButtons();
+            }
+        });
 
         lblCurrentSelectedPlaylist.textProperty().bind(
             Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
