@@ -131,6 +131,7 @@ create procedure spDeletePlaylistById(
 @Id int,
 @UserID int)
 as
+delete from Song_playlist_relation where PlaylistId = @Id
 delete from Playlists where Id = @Id and UserID = @UserID
 go
 
