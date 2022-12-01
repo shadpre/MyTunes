@@ -234,6 +234,8 @@ where Id = @Id
 go
 
 drop procedure if exists spAddSongToPlaylist;
+drop procedure if exists spRemoveSongFromPlaylist;
+drop procedure if exists spGetAllSongsInPlaylist;
 go
 create procedure spAddSongToPlaylist
 (
@@ -241,4 +243,26 @@ create procedure spAddSongToPlaylist
 @PlaylistId int)
 as
 insert into Song_playlist_relation(SongId,PlaylistId) values (@SongId,@PlaylistId)
+update Playlists set Playtime = (select sum(Playtime) from Songs where Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId))
+SELECT [Id] FROM [Song_playlist_relation] WHERE [Id]=SCOPE_IDENTITY()
 Go
+
+create procedure spRemoveSongFromPlaylist(
+@SongId int,
+@PlaylistId int)
+as
+delete Song_playlist_relation
+where SongId = @SongId and PlaylistId = @PlaylistId
+update Playlists set Playtime = (select sum(Playtime) from Songs where Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId))
+go
+
+create procedure spGetAllSongsInPlaylist(
+@PlaylistId int)
+as
+select Id, Title, Playtime from Songs where Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId)
+go
+
+
+
+
+
