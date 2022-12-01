@@ -232,3 +232,13 @@ as
 delete Songs
 where Id = @Id
 go
+
+drop procedure if exists spAddSongToPlaylist;
+go
+create procedure spAddSongToPlaylist
+(
+@SongId int,
+@PlaylistId int)
+as
+insert into Song_playlist_relation(SongId,PlaylistId) values (@SongId,@PlaylistId)
+Go
