@@ -113,4 +113,21 @@ public class SongDatabaseDAO implements ISongDAO {
 
         return null;
     }
+
+    @Override
+    public String getSongDataHash(int id) {
+        try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "EXEC spHashSongData ?;";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+
+            var result = statement.executeQuery();
+
+            if(result.next()) return result.getString(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
 }

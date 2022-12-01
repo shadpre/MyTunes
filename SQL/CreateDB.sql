@@ -274,6 +274,6 @@ AS
 BEGIN
     DECLARE @dataToHash VARBINARY(MAX)
     SET @dataToHash = (SELECT [Data] FROM [Songs] WHERE [Id]=@SongId);
-    SELECT HASHBYTES('SHA2_256', @dataToHash) as [Hash];
+    SELECT HASHBYTES('MD5', @dataToHash) as [Hash];
 END
 GO

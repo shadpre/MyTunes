@@ -12,11 +12,14 @@ import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
+import group01.mytunes.utility.MyTunesUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -60,6 +63,14 @@ public class TestDBConnection {
         var connection = DatabaseConnectionHandler.getInstance().getConnection();
 
         assertTrue(!connection.isClosed());
+    }
+
+    @Test
+    public void testHashFunction() {
+        var song = songDAO.getSongById(1);
+        var equals = MyTunesUtility.compareHashFromDatabaseAndSong(song, songDAO);
+
+        assertTrue(equals);
     }
 
     @Test

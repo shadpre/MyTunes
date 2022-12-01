@@ -14,4 +14,6 @@ public interface ISongDAO {
 
     Song createSong(Song song);
 
+    String getSongDataHash(int id);
+
 }

@@ -1,6 +1,50 @@
 package group01.mytunes.utility;
 
+import group01.mytunes.Models.Song;
+import group01.mytunes.dao.interfaces.ISongDAO;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class MyTunesUtility {
+
+    /**
+     * Takes a song WITH data and compares the hash of the song data to the data in the DB.
+     * @param song The song with data you wish to verify.
+     * @param songDAO The songDAO to use.
+     * @return Truf if equal, false otherwise.
+     */
+    public static boolean compareHashFromDatabaseAndSong(Song song, ISongDAO songDAO) {
+        try {
+            var md = MessageDigest.getInstance("MD5");
+
+            var res = md.digest(song.getData());
+
+            String localHash = bytesToHex(res);
+            System.out.println(localHash);
+
+            var dbHash = songDAO.getSongDataHash(song.getId());
+            System.out.println(dbHash);
+
+            var equals = dbHash.equals(localHash);
+            return equals;
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString().toUpperCase();
+    }
 
     public static String timeFormatConverter(double inputSeconds){
         int min = 0;
