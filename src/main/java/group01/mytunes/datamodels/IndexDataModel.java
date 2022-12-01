@@ -8,6 +8,7 @@ import group01.mytunes.dao.interfaces.ISongDAO;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
 
 public class IndexDataModel {
 
@@ -19,6 +20,7 @@ public class IndexDataModel {
     private ObservableList<Playlist> playlistsObservableList;
 
     private ObservableList<Song> songObservableList;
+    private ObservableList<Song> songPlaylistObservableList;
 
     private SimpleObjectProperty<Playlist> selectedPlaylistObservable;
 
@@ -30,6 +32,7 @@ public class IndexDataModel {
 
         playlistsObservableList = FXCollections.observableArrayList(playlistDAO.getPlaylists());
         songObservableList = FXCollections.observableArrayList(songDAO.getAllSongInfo());
+        songPlaylistObservableList = FXCollections.observableArrayList();
         selectedPlaylistObservable = new SimpleObjectProperty<>(null);
     }
 
@@ -39,10 +42,6 @@ public class IndexDataModel {
 
     public SimpleObjectProperty<Playlist> getSelectedPlaylistObservable() {
         return selectedPlaylistObservable;
-    }
-
-    public void setSelectedPlaylistObservable(Playlist playlist) {
-        selectedPlaylistObservable.setValue(playlist);
     }
 
     /**
@@ -92,6 +91,16 @@ public class IndexDataModel {
         return songObservableList;
     }
 
+    public ObservableList getSongPlaylistInfoObservableList() {
+        return songPlaylistObservableList;
+    }
+    public void setSelectedPlaylistObservable(Playlist playlist) {
+        var result = playlistDAO.getSongsInPlaylist(playlist);
+        songPlaylistObservableList.setAll(result);
+        selectedPlaylistObservable.setValue(playlist);
+
+    }
+
     public void addSong(Song song) {
         var result = songDAO.createSong(song);
         if(result == null) return;
@@ -112,5 +121,11 @@ public class IndexDataModel {
     }
 
     public void deleteArtist() {
+    }
+
+    public void addSongToPlaylist(Song selectedSong, Playlist selectedPlaylist) {
+        var wasAdded = playlistDAO.addSongToPlaylist(selectedSong, selectedPlaylist);
+
+        if(wasAdded) songPlaylistObservableList.add(selectedSong);
     }
 }

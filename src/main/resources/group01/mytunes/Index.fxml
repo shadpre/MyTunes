@@ -92,7 +92,7 @@
             <Button fx:id="btnSongDelete" mnemonicParsing="false" onAction="#deleteSelectedSong" prefHeight="26.0" prefWidth="91.0" text="Delete song" GridPane.columnIndex="2" />
          </children>
       </GridPane>
-      <Button fx:id="btnMoveSongToPlaylist" layoutX="657.0" layoutY="182.0" mnemonicParsing="false" onAction="#InsertSongToPlaylist" text="←">
+      <Button fx:id="btnMoveSongToPlaylist" layoutX="657.0" layoutY="182.0" mnemonicParsing="false" onAction="#insertSongToPlaylist" text="←">
          <font>
             <Font size="23.0" />
          </font>
