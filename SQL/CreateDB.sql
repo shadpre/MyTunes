@@ -230,8 +230,10 @@ go
 create procedure spDeleteSong(
 @Id int)
 as
-delete Songs
-where Id = @Id
+delete Song_album_relation where Songid = @Id
+delete Song_artist_relation where Songid = @Id
+delete Song_playlist_relation where SongId = @Id
+delete Songs where Id = @Id
 go
 
 drop procedure if exists spAddSongToPlaylist;
