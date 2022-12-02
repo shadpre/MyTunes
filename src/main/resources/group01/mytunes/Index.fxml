@@ -118,7 +118,7 @@
                 <Font size="23.0" />
             </font>
         </Label>
-        <TextField fx:id="txtFieldSearchbar" prefHeight="30.0" prefWidth="62.0" promptText="Seartch...." GridPane.columnIndex="1">
+        <TextField fx:id="txtFieldSearchbar" onKeyTyped="#searchForSong" prefHeight="30.0" prefWidth="62.0" promptText="Seartch...." GridPane.columnIndex="1">
             <font>
                 <Font size="14.0" />
             </font>

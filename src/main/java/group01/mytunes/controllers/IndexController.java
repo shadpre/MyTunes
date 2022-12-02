@@ -211,7 +211,13 @@ public class IndexController implements Initializable {
         indexDataModel.addSongToPlaylist(selecedSong, selectedPlaylist);
     }
 
-    public void searchForSong(ActionEvent actionEvent) {
+    public void searchForSong() {
+        listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
+        try {
+            indexDataModel.searchForSong(txtFieldSearchbar.getText().toUpperCase());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void playOrPauseSong(ActionEvent actionEvent) {
