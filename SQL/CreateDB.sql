@@ -30,19 +30,19 @@ CREATE TABLE Songs(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     [Title] NVARCHAR(255) NOT NULL,
 	[Data] VARBINARY(MAX) NOT NULL,
-	[Playtime] INT NOT NULL default 0
+	[Playtime] INT NOT NULL DEFAULT 0
 )
 
-CREATE TABLE Song_artist_relation(
+CREATE TABLE Song_Artist_Relation(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [SongId] INT FOREIGN KEY REFERENCES [Songs](id) NOT NULL,
-    [ArtistId] INT FOREIGN KEY REFERENCES [Artists](id) NOT NULL
+    [SongId] INT FOREIGN KEY REFERENCES [Songs](Id) NOT NULL,
+    [ArtistId] INT FOREIGN KEY REFERENCES [Artists](Id) NOT NULL
 )
 
-CREATE TABLE Song_album_relation(
+CREATE TABLE Song_Album_Relation(
     [Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    [SongId] INT FOREIGN KEY REFERENCES [Songs](id) NOT NULL,
-    [Albumid] INT FOREIGN KEY REFERENCES [Albums](id) NOT NULL
+    [SongId] INT FOREIGN KEY REFERENCES [Songs](Id) NOT NULL,
+    [AlbumId] INT FOREIGN KEY REFERENCES [Albums](Id) NOT NULL
 )
 
 CREATE TABLE Playlists(
@@ -50,10 +50,10 @@ CREATE TABLE Playlists(
 	[UserID] INT FOREIGN KEY REFERENCES [Users](Id),
     [Name] NVARCHAR(255) NOT NULL,
 	[Date] DATETIME DEFAULT GETUTCDATE(),
-	[Playtime] INT NOT NULL default 0
+	[Playtime] INT NOT NULL DEFAULT 0
 )
 
-CREATE TABLE Song_playlist_relation(
+CREATE TABLE Song_Playlist_Relation(
     [Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     [SongId] INT FOREIGN KEY REFERENCES [Songs](id) NOT NULL,
     [PlaylistId] INT FOREIGN KEY REFERENCES [Playlists](id) NOT NULL,
@@ -97,7 +97,7 @@ GO
 CREATE PROCEDURE spDeleteArtist(
 @Id INT)
 AS
-	DELETE Song_artist_relation
+	DELETE Song_Artist_Relation
 	WHERE SongId = @Id
 
 	DELETE Artists
@@ -146,7 +146,7 @@ CREATE PROCEDURE spDeletePlaylistById(
 @Id INT,
 @UserID INT)
 AS
-	DELETE FROM Song_playlist_relation
+	DELETE FROM Song_Playlist_Relation
 	WHERE PlaylistId = @Id
 
 	DELETE FROM Playlists
@@ -199,6 +199,9 @@ GO
 CREATE PROCEDURE spDeleteAlbum(
 @Id INT)
 AS
+    DELETE Song_Album_Relation
+    WHERE AlbumId = @Id
+
 	DELETE Albums
 	WHERE Id = @Id
 GO
@@ -261,13 +264,13 @@ GO
 CREATE PROCEDURE spDeleteSong(
 @Id INT)
 AS
-	DELETE Song_album_relation
-	WHERE Songid = @Id
+	DELETE Song_Album_Relation
+	WHERE SongId = @Id
 
-	DELETE Song_artist_relation
-	WHERE Songid = @Id
+	DELETE Song_Artist_Relation
+	WHERE SongId = @Id
 
-	DELETE Song_playlist_relation
+	DELETE Song_Playlist_Relation
 	WHERE SongId = @Id
 
 	DELETE Songs
@@ -285,7 +288,7 @@ CREATE PROCEDURE spAddSongToPlaylist
 @SongId INT,
 @PlaylistId INT)
 AS
-	INSERT INTO Song_playlist_relation(SongId,PlaylistId)
+	INSERT INTO Song_Playlist_Relation(SongId,PlaylistId)
 	VALUES (@SongId,@PlaylistId)
 
 	UPDATE Playlists
@@ -294,10 +297,10 @@ AS
 		FROM Songs
 		WHERE Id IN(
 			SELECT SongId
-			FROM Song_playlist_relation
+			FROM Song_Playlist_Relation
 			WHERE PlaylistId = @PlaylistId))
 
-	SELECT Id FROM Song_playlist_relation
+	SELECT Id FROM Song_Playlist_Relation
 	WHERE Id=SCOPE_IDENTITY()
 GO
 
@@ -308,10 +311,10 @@ AS
 
 	SET @PlaylistId = (
 		SELECT PlaylistId
-		FROM Song_playlist_relation
+		FROM Song_Playlist_Relation
 		WHERE Id = @Id)
 
-	DELETE Song_playlist_relation
+	DELETE Song_Playlist_Relation
 	WHERE Id = @Id
 
 	UPDATE Playlists
@@ -320,7 +323,7 @@ AS
 		FROM Songs
 		WHERE Id IN (
 			SELECT SongId
-			FROM Song_playlist_relation
+			FROM Song_Playlist_Relation
 			WHERE PlaylistId = @PlaylistId))
 GO
 
@@ -331,11 +334,11 @@ AS
 	FROM
 		Songs s
 		INNER JOIN
-		Song_playlist_relation spr
+		Song_Playlist_Relation spr
 		ON s.Id = spr.SongId
-	WHERE s.Id in (
+	WHERE s.Id IN (
 		SELECT SongId
-		FROM Song_playlist_relation
+		FROM Song_Playlist_Relation
 		WHERE PlaylistId = @PlaylistId)
 GO
 
