@@ -1,8 +1,8 @@
 package group01.mytunes.controllers;
 
-import group01.mytunes.Models.Playlist;
-import group01.mytunes.Models.PlaylistSong;
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Playlist;
+import group01.mytunes.entities.PlaylistSong;
+import group01.mytunes.entities.Song;
 import group01.mytunes.audio.IAudioHandler;
 import group01.mytunes.audio.SingleFileAudioHandler;
 import group01.mytunes.dao.ArtistDatabaseDAO;
@@ -20,12 +20,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.media.Media;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Timer;
 
 public class IndexController implements Initializable {
 

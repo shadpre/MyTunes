@@ -1,9 +1,9 @@
 package group01.mytunes.dao;
 
 import group01.mytunes.Main;
-import group01.mytunes.Models.Playlist;
-import group01.mytunes.Models.PlaylistSong;
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Playlist;
+import group01.mytunes.entities.PlaylistSong;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import group01.mytunes.exceptions.SQLDeleteException;

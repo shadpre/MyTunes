@@ -1,9 +1,8 @@
 package group01.mytunes.datamodels;
 
-import group01.mytunes.Models.Playlist;
-import group01.mytunes.Models.PlaylistSong;
-import group01.mytunes.Models.Song;
-import group01.mytunes.dao.SongDatabaseDAO;
+import group01.mytunes.entities.Playlist;
+import group01.mytunes.entities.PlaylistSong;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
@@ -11,7 +10,6 @@ import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 
 import java.util.List;
 

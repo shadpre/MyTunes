@@ -1,6 +1,6 @@
 package group01.mytunes.audio;
 
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

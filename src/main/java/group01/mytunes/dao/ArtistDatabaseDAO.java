@@ -1,6 +1,6 @@
 package group01.mytunes.dao;
 
-import group01.mytunes.Models.Artist;
+import group01.mytunes.entities.Artist;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import group01.mytunes.exceptions.SQLDeleteException;

@@ -1,13 +1,9 @@
 package group01.mytunes.dao;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import group01.mytunes.Main;
-import group01.mytunes.Models.Album;
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import group01.mytunes.exceptions.SQLDeleteException;
-import group01.mytunes.exceptions.SQLUpdateException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
