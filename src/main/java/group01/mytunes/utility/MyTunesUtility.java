@@ -34,9 +34,9 @@ public class MyTunesUtility {
 
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
                 hexString.append('0');
             }
             hexString.append(hex);
@@ -49,8 +49,8 @@ public class MyTunesUtility {
         int sec = (int) (inputSeconds%60);
 
         return "%s:%s".formatted(
-                (min < 10) ? "0" + min : min,
-                (sec < 10) ? "0" + sec : sec
+            (min < 10) ? "0" + min : min,
+            (sec < 10) ? "0" + sec : sec
         );
     }
 
