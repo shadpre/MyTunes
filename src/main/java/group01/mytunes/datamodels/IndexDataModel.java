@@ -1,9 +1,8 @@
 package group01.mytunes.datamodels;
 
-import group01.mytunes.Models.Playlist;
-import group01.mytunes.Models.PlaylistSong;
-import group01.mytunes.Models.Song;
-import group01.mytunes.dao.SongDatabaseDAO;
+import group01.mytunes.entities.Playlist;
+import group01.mytunes.entities.PlaylistSong;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
@@ -11,7 +10,6 @@ import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 
 import java.util.List;
 
@@ -105,11 +103,11 @@ public class IndexDataModel {
         playlistsObservableList.remove(playlist);
     }
 
-    public ObservableList getSongInfoObservableList() {
+    public ObservableList<Song> getSongInfoObservableList() {
         return songObservableList;
     }
 
-    public ObservableList getSongPlaylistInfoObservableList() {
+    public ObservableList<PlaylistSong> getSongPlaylistInfoObservableList() {
         return songPlaylistObservableList;
     }
     public void setSelectedPlaylistObservable(Playlist playlist) {
@@ -147,14 +145,16 @@ public class IndexDataModel {
     public void deleteArtist() {
     }
 
-    public void addSongToPlaylist(Song selectedSong, Playlist selectedPlaylist) {
-        var playlistSong = playlistDAO.addSongToPlaylist(selectedSong, selectedPlaylist);
+    public void addSongToPlaylist(Song selectedSong, Playlist playlistToAddTo, Playlist selectedPlaylist) {
+        var playlistSong = playlistDAO.addSongToPlaylist(selectedSong, playlistToAddTo);
 
         if(playlistSong == null) return;
 
-        System.out.println(playlistSong.getRelationId());
+        if(playlistToAddTo.getId() == selectedPlaylist.getId()) songPlaylistObservableList.add(playlistSong);
+    }
 
-        songPlaylistObservableList.add(playlistSong);
+    public void editSong(Song song) {
+        System.out.println(song);
     }
 
 }

@@ -1,8 +1,8 @@
 import group01.mytunes.Main;
-import group01.mytunes.Models.Album;
-import group01.mytunes.Models.Artist;
-import group01.mytunes.Models.Playlist;
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Album;
+import group01.mytunes.entities.Artist;
+import group01.mytunes.entities.Playlist;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.AlbumDatabaseDAO;
 import group01.mytunes.dao.ArtistDatabaseDAO;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
@@ -18,8 +18,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Properties;
 

@@ -1,8 +1,8 @@
 package group01.mytunes.dialogs;
 
-import group01.mytunes.Models.Album;
-import group01.mytunes.Models.Artist;
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Album;
+import group01.mytunes.entities.Artist;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.AlbumDatabaseDAO;
 import group01.mytunes.dao.ArtistDatabaseDAO;
 import group01.mytunes.dao.interfaces.IAlbumDAO;

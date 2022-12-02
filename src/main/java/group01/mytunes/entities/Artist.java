@@ -1,4 +1,4 @@
-package group01.mytunes.Models;
+package group01.mytunes.entities;
 
 public class Artist {
     private int id;

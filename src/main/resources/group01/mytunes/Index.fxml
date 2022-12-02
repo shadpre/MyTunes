@@ -52,16 +52,6 @@
         <Button fx:id="btnPlaylistEdit" mnemonicParsing="false" onAction="#editPlaylistHandler" prefHeight="26.0" prefWidth="91.0" text="Edit Playlist" GridPane.columnIndex="1" />
         <Button fx:id="btnPlaylistNew" mnemonicParsing="false" onAction="#newPlaylistHandler" prefHeight="26.0" prefWidth="92.0" text="New Playlist" />
         <Button fx:id="btnPlaylistDelete" mnemonicParsing="false" onAction="#deleteSelectedPlaylistHandler" prefHeight="26.0" prefWidth="91.0" text="Delete Playlist" GridPane.columnIndex="2" />
-        <Button fx:id="btnPlaylistUp" mnemonicParsing="false" onAction="#scrollUpInPlaylist" text="↑" GridPane.columnIndex="3">
-            <font>
-                <Font name="System Bold" size="15.0" />
-            </font>
-        </Button>
-        <Button fx:id="btnPlaylistDown" mnemonicParsing="false" onAction="#scrollDownInPlaylist" text="↓" GridPane.columnIndex="4">
-            <font>
-                <Font name="System Bold" size="15.0" />
-            </font>
-        </Button>
     </GridPane>
     <GridPane layoutX="739.0" layoutY="55.0" prefHeight="483.0" prefWidth="495.0">
         <columnConstraints>

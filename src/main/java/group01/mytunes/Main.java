@@ -1,6 +1,6 @@
 package group01.mytunes;
 
-import group01.mytunes.Models.User;
+import group01.mytunes.entities.User;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

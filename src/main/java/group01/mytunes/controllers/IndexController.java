@@ -1,40 +1,34 @@
 package group01.mytunes.controllers;
 
-import group01.mytunes.Models.Playlist;
-import group01.mytunes.Models.PlaylistSong;
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Playlist;
+import group01.mytunes.entities.PlaylistSong;
+import group01.mytunes.entities.Song;
 import group01.mytunes.audio.IAudioHandler;
 import group01.mytunes.audio.SingleFileAudioHandler;
 import group01.mytunes.dao.ArtistDatabaseDAO;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.dao.SongDatabaseDAO;
+import group01.mytunes.dao.interfaces.IArtistDAO;
+import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.media.Media;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Timer;
 
 public class IndexController implements Initializable {
 
     private IndexDataModel indexDataModel;
     private IAudioHandler audioHandler;
-
-    private boolean isPlaying;
-    private Media sound;
-    private Timer timer;
-    private double current;
-    private double end;
-    private double volume;
 
     @FXML private Label lblCurrentTime;
     @FXML private Label lblTimeLength;
@@ -54,8 +48,6 @@ public class IndexController implements Initializable {
     @FXML private Button btnPlaylistEdit;
     @FXML private Button btnPlaylistNew;
     @FXML private Button btnPlaylistDelete;
-    @FXML private Button btnPlaylistUp;
-    @FXML private Button btnPlaylistDown;
     @FXML private Button btnSongEdit;
     @FXML private Button btnSongNew;
     @FXML private Button btnSongDelete;
@@ -70,39 +62,24 @@ public class IndexController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sliderSoundLevel.setMin(0.0d);
-        sliderSoundLevel.setMax(1.0d);
-        this.isPlaying = false;
 
         ISongDAO songDAO = new SongDatabaseDAO();
+        IPlaylistDAO playlistDAO = new PlaylistDatabaseDAO();
+        IArtistDAO artistDAO = new ArtistDatabaseDAO();
+
+        this.indexDataModel = new IndexDataModel(playlistDAO, songDAO, artistDAO);
 
         audioHandler = new SingleFileAudioHandler(songDAO);
 
-        this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO(), songDAO, new ArtistDatabaseDAO());
+        initMenuBar();
 
-        // Playlist list view
-        listViewPlayLists.setItems(indexDataModel.getPlaylistsObservableList());
-        listViewPlayLists.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                indexDataModel.setSelectedPlaylistObservable(listViewPlayLists.getSelectionModel().getSelectedItem());
-            }
-        });
+        initListViewPlaylists();
 
-        // Song list view
-        listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
-        listViewSongs.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                playSong(listViewSongs.getSelectionModel().getSelectedItem());
-            }
-        });
+        initListViewSongs();
 
-        // Playlist list view
-        listViewPlaylistSongs.setItems(indexDataModel.getSongPlaylistInfoObservableList());
-        listViewPlaylistSongs.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                playSong(listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong());
-            }
-        });
+        initListViewPlaylistSong();
+
+        initSliderSoundLevelSlider();
 
         lblCurrentSelectedPlaylist.textProperty().bind(
             Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
@@ -110,20 +87,73 @@ public class IndexController implements Initializable {
                 .otherwise(indexDataModel.getSelectedPlaylistObservable().asString())
         );
 
-        initMenuBar();
-
-        sliderSoundLevel.valueProperty().addListener((observable, oldValue, newValue) -> {
-            double volume = sliderSoundLevel.getValue();
-            audioHandler.changeVolume(volume);
-        });
-
         System.out.println("Controller initialized");
     }
 
-    private void playSong(Song song) {
-        audioHandler.playSong(song);
-        bindSongSlider();
-        updatePlayPauseButtons();
+    private void initListViewPlaylists() {
+        listViewPlayLists.setItems(indexDataModel.getPlaylistsObservableList());
+        listViewPlayLists.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                indexDataModel.setSelectedPlaylistObservable(listViewPlayLists.getSelectionModel().getSelectedItem());
+            }
+        });
+    }
+
+    private void initListViewSongs() {
+        listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
+        listViewSongs.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                playSong(listViewSongs.getSelectionModel().getSelectedItem());
+            }
+        });
+        listViewSongs.setCellFactory(lv -> {
+            ListCell<Song> cell = new ListCell<>();
+
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem editSong = new MenuItem();
+            editSong.setText("Edit song");
+            editSong.setOnAction(event -> indexDataModel.editSong(cell.getItem()));
+
+            Menu addToPlaylist = new Menu("Add to playlist");
+
+
+            for(Playlist p : indexDataModel.getPlaylistsObservableList()) {
+                var menuItem = new MenuItem(p.getName());
+                addToPlaylist.getItems().add(menuItem);
+                menuItem.setOnAction(event -> indexDataModel.addSongToPlaylist(cell.getItem(), p, getSelectedPlaylist()));
+            }
+
+            contextMenu.getItems().addAll(editSong, addToPlaylist);
+
+            cell.emptyProperty().addListener(((observable, wasEmpty, isNowEmpty) -> {
+                if(isNowEmpty) cell.setContextMenu(null);
+                else cell.setContextMenu(contextMenu);
+            }));
+
+            StringBinding stringBinding = new StringBinding(){
+                {
+                    super.bind(cell.itemProperty().asString());
+                }
+                @Override
+                protected String computeValue() {
+                    if(cell.itemProperty().getValue() == null) return "";
+                    return cell.itemProperty().getValue().getTitle();
+                }
+            };
+
+            cell.textProperty().bind(stringBinding);
+
+            return cell;
+        });
+    }
+
+    private void initListViewPlaylistSong()  {
+        listViewPlaylistSongs.setItems(indexDataModel.getSongPlaylistInfoObservableList());
+        listViewPlaylistSongs.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                playSong(listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong());
+            }
+        });
     }
 
     /**
@@ -151,6 +181,15 @@ public class IndexController implements Initializable {
         menuEditPlaylist.setOnAction(event -> editPlaylistHandler());
     }
 
+    private void initSliderSoundLevelSlider() {
+        sliderSoundLevel.setMin(0.0d);
+        sliderSoundLevel.setMax(1.0d);
+        sliderSoundLevel.valueProperty().addListener((observable, oldValue, newValue) -> {
+            double volume = sliderSoundLevel.getValue();
+            audioHandler.changeVolume(volume);
+        });
+    }
+
     public void newPlaylistHandler() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("New playlist");
@@ -160,6 +199,12 @@ public class IndexController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(playlist -> indexDataModel.addPlaylist(playlist));
+    }
+
+    private void playSong(Song song) {
+        audioHandler.playSong(song);
+        bindSongSlider();
+        updatePlayPauseButtons();
     }
 
     public void editPlaylistHandler() {
@@ -182,12 +227,6 @@ public class IndexController implements Initializable {
     public void deleteSelectedPlaylistHandler(ActionEvent actionEvent) {
         Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem();
         if(selectedPlaylist != null) indexDataModel.deletePlaylist(selectedPlaylist);
-    }
-
-    public void scrollUpInPlaylist(ActionEvent actionEvent) {
-    }
-
-    public void scrollDownInPlaylist(ActionEvent actionEvent) {
     }
 
     public void editSongWindowOpen(ActionEvent actionEvent) {
@@ -219,10 +258,13 @@ public class IndexController implements Initializable {
     }
 
     public void insertSongToPlaylist() {
-        var selectedPlaylist = indexDataModel.getSelectedPlaylistObservable().getValue();
         var selecedSong = listViewSongs.getSelectionModel().getSelectedItem();
 
-        indexDataModel.addSongToPlaylist(selecedSong, selectedPlaylist);
+        indexDataModel.addSongToPlaylist(selecedSong, getSelectedPlaylist(), getSelectedPlaylist());
+    }
+
+    private Playlist getSelectedPlaylist() {
+        return indexDataModel.getSelectedPlaylistObservable().getValue();
     }
 
     public void searchForSong() {
@@ -249,6 +291,9 @@ public class IndexController implements Initializable {
         }
     }
 
+    /**
+     * Binds the data to the songslider.
+     */
     private void bindSongSlider() {
         audioHandler.getMediaPlayer().setOnReady(new Runnable() {
             @Override

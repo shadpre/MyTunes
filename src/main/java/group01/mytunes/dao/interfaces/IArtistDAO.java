@@ -1,6 +1,6 @@
 package group01.mytunes.dao.interfaces;
 
-import group01.mytunes.Models.Artist;
+import group01.mytunes.entities.Artist;
 
 import java.util.List;
 

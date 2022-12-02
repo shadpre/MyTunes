@@ -1,13 +1,11 @@
 package group01.mytunes.utility;
 
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MyTunesUtility {

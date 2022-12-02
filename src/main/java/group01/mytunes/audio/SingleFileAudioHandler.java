@@ -1,6 +1,6 @@
 package group01.mytunes.audio;
 
-import group01.mytunes.Models.Song;
+import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -9,8 +9,6 @@ import java.io.*;
 import java.nio.file.Files;
 
 public class SingleFileAudioHandler implements IAudioHandler {
-
-
 
     private Media media;
 
@@ -70,15 +68,6 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
         return tempFile.getAbsoluteFile().toURI().toString();
     }
-
-    private byte[] getFileAsByteArray() throws IOException {
-        String path = "C:/Users/Lasse Emil Hansen/Downloads/Stanley Most - Kom Kom ft. Rune RK.mp3";
-        File file = new File(path);
-
-        return Files.readAllBytes(file.toPath());
-    }
-
-
 
     public void changeVolume(double volume) {
         mediaPlayer.setVolume(volume);
