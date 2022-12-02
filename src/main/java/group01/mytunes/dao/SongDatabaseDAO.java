@@ -7,6 +7,7 @@ import group01.mytunes.Models.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import group01.mytunes.exceptions.SQLDeleteException;
+import group01.mytunes.exceptions.SQLUpdateException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -129,5 +130,28 @@ public class SongDatabaseDAO implements ISongDAO {
         }
 
         return null;
+    }
+
+    @Override
+    public void updateSong(Song selectedSong, String newSongName) {
+        if(selectedSong == null) return;
+        if(newSongName == null) return;
+
+        try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "exec spUpdateSongTittle ?,?"; //sets song tittle
+
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            statement.setInt(1,selectedSong.getId());
+            statement.setString(2, newSongName); //tittle
+
+            statement.executeUpdate();
+
+            selectedSong.setTitle(newSongName);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLDeleteException();
+        }
     }
 }

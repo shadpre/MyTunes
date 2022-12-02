@@ -3,6 +3,7 @@ package group01.mytunes.datamodels;
 import group01.mytunes.Models.Playlist;
 import group01.mytunes.Models.PlaylistSong;
 import group01.mytunes.Models.Song;
+import group01.mytunes.dao.SongDatabaseDAO;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
@@ -81,6 +82,19 @@ public class IndexDataModel {
         return true;
     }
 
+    public boolean editSong(Song selectedSong, String newSongName) {
+        if(newSongName == null) return false;
+        if(newSongName.isEmpty()) return false;
+        if(selectedSong.getTitle().equals(newSongName)) return false;
+
+        songDAO.updateSong(selectedSong, newSongName);
+
+        songObservableList.clear();
+        songObservableList.addAll(FXCollections.observableArrayList(songDAO.getAllSongInfo()));
+
+        return true;
+    }
+
     /**
      * Deletes a playlist.
      * @param playlist The playlist to be deleted.
@@ -142,4 +156,5 @@ public class IndexDataModel {
 
         songPlaylistObservableList.add(playlistSong);
     }
+
 }

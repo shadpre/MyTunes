@@ -191,6 +191,20 @@ public class IndexController implements Initializable {
     }
 
     public void editSongWindowOpen(ActionEvent actionEvent) {
+        Song selectedSong = listViewSongs.getSelectionModel().getSelectedItem();
+        if(selectedSong == null) return;
+
+        TextInputDialog dialog = new TextInputDialog(selectedSong.getTitle());
+        dialog.setTitle("Edit Song");
+        dialog.setHeaderText("Edit Song");
+        dialog.setContentText("New Song name:");
+        dialog.setGraphic(null);
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newName -> {
+            System.out.println(selectedSong + " " + newName);
+            indexDataModel.editSong(selectedSong, newName);
+        });
     }
 
     public void makeNewSongWindowOpen() {
