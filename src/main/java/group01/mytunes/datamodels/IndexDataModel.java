@@ -88,11 +88,11 @@ public class IndexDataModel {
         playlistsObservableList.remove(playlist);
     }
 
-    public ObservableList getSongInfoObservableList() {
+    public ObservableList<Song> getSongInfoObservableList() {
         return songObservableList;
     }
 
-    public ObservableList getSongPlaylistInfoObservableList() {
+    public ObservableList<PlaylistSong> getSongPlaylistInfoObservableList() {
         return songPlaylistObservableList;
     }
     public void setSelectedPlaylistObservable(Playlist playlist) {
@@ -124,13 +124,15 @@ public class IndexDataModel {
     public void deleteArtist() {
     }
 
-    public void addSongToPlaylist(Song selectedSong, Playlist selectedPlaylist) {
-        var playlistSong = playlistDAO.addSongToPlaylist(selectedSong, selectedPlaylist);
+    public void addSongToPlaylist(Song selectedSong, Playlist playlistToAddTo, Playlist selectedPlaylist) {
+        var playlistSong = playlistDAO.addSongToPlaylist(selectedSong, playlistToAddTo);
 
         if(playlistSong == null) return;
 
-        System.out.println(playlistSong.getRelationId());
+        if(playlistToAddTo.getId() == selectedPlaylist.getId()) songPlaylistObservableList.add(playlistSong);
+    }
 
-        songPlaylistObservableList.add(playlistSong);
+    public void editSong(Song song) {
+        System.out.println(song);
     }
 }

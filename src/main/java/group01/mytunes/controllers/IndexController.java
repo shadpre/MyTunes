@@ -13,6 +13,7 @@ import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,13 +29,6 @@ public class IndexController implements Initializable {
 
     private IndexDataModel indexDataModel;
     private IAudioHandler audioHandler;
-
-    private boolean isPlaying;
-    private Media sound;
-    private Timer timer;
-    private double current;
-    private double end;
-    private double volume;
 
     @FXML private Label lblCurrentTime;
     @FXML private Label lblTimeLength;
@@ -72,7 +66,6 @@ public class IndexController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         sliderSoundLevel.setMin(0.0d);
         sliderSoundLevel.setMax(1.0d);
-        this.isPlaying = false;
 
         ISongDAO songDAO = new SongDatabaseDAO();
 
@@ -94,6 +87,45 @@ public class IndexController implements Initializable {
             if (event.getClickCount() == 2) {
                 playSong(listViewSongs.getSelectionModel().getSelectedItem());
             }
+        });
+        listViewSongs.setCellFactory(lv -> {
+            ListCell<Song> cell = new ListCell<>();
+
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem editSong = new MenuItem();
+            editSong.setText("Edit song");
+            editSong.setOnAction(event -> indexDataModel.editSong(cell.getItem()));
+
+            Menu addToPlaylist = new Menu("Add to playlist");
+
+
+            for(Playlist p : indexDataModel.getPlaylistsObservableList()) {
+                var menuItem = new MenuItem(p.getName());
+                addToPlaylist.getItems().add(menuItem);
+                menuItem.setOnAction(event -> indexDataModel.addSongToPlaylist(cell.getItem(), p, getSelectedPlaylist()));
+            }
+
+            contextMenu.getItems().addAll(editSong, addToPlaylist);
+
+            cell.emptyProperty().addListener(((observable, wasEmpty, isNowEmpty) -> {
+                if(isNowEmpty) cell.setContextMenu(null);
+                else cell.setContextMenu(contextMenu);
+            }));
+
+            StringBinding stringBinding = new StringBinding(){
+                {
+                    super.bind(cell.itemProperty().asString());
+                }
+                @Override
+                protected String computeValue() {
+                    if(cell.itemProperty().getValue() == null) return "";
+                    return cell.itemProperty().getValue().getTitle();
+                }
+            };
+
+            cell.textProperty().bind(stringBinding);
+
+            return cell;
         });
 
         // Playlist list view
@@ -205,10 +237,13 @@ public class IndexController implements Initializable {
     }
 
     public void insertSongToPlaylist() {
-        var selectedPlaylist = indexDataModel.getSelectedPlaylistObservable().getValue();
         var selecedSong = listViewSongs.getSelectionModel().getSelectedItem();
 
-        indexDataModel.addSongToPlaylist(selecedSong, selectedPlaylist);
+        indexDataModel.addSongToPlaylist(selecedSong, getSelectedPlaylist(), getSelectedPlaylist());
+    }
+
+    private Playlist getSelectedPlaylist() {
+        return indexDataModel.getSelectedPlaylistObservable().getValue();
     }
 
     public void searchForSong(ActionEvent actionEvent) {
@@ -229,6 +264,9 @@ public class IndexController implements Initializable {
         }
     }
 
+    /**
+     * Binds the data to the songslider.
+     */
     private void bindSongSlider() {
         audioHandler.getMediaPlayer().setOnReady(new Runnable() {
             @Override
