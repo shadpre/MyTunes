@@ -30,7 +30,7 @@ CREATE TABLE Songs(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     [Title] NVARCHAR(255) NOT NULL,
 	[Data] VARBINARY(MAX) NOT NULL,
-	[Playtime] Int NOT NULL default 0
+	[Playtime] INT NOT NULL default 0
 )
 
 CREATE TABLE Song_artist_relation(
@@ -123,8 +123,8 @@ DROP PROCEDURE IF EXISTS spGetUserPlaylistById;
 GO
 
 CREATE PROCEDURE spNewPlaylist(
-@UserID int,
-@Name nvarchar(255))
+@UserID INT,
+@Name NVARCHAR(255))
 AS
     INSERT INTO Playlists (UserID, Name)
 	VALUES (@UserID, @Name)
