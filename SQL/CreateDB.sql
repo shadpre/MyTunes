@@ -11,270 +11,346 @@ DROP TABLE IF EXISTS Artists;
 DROP TABLE IF Exists Users;
 
 -- Creates all of the tables
-Create table Users(
+CREATE TABLE Users(
 	[Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[Name] NVARCHAR(255) NOT NULL)
+	[Name] NVARCHAR(255) NOT NULL
+)
 
 CREATE TABLE Artists(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     [Name] NVARCHAR(255) NOT NULL
-);
+)
 
 CREATE TABLE Albums(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     [Name] NVARCHAR(255) NOT NULL
-);
+)
 
 CREATE TABLE Songs(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     [Title] NVARCHAR(255) NOT NULL,
 	[Data] VARBINARY(MAX) NOT NULL,
-	[Playtime] Int Not Null default 0
-);
+	[Playtime] Int NOT NULL default 0
+)
 
 CREATE TABLE Song_artist_relation(
     [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [Songid] INT FOREIGN KEY REFERENCES [songs](id) NOT NULL,
-    [ArtistId] INT FOREIGN KEY REFERENCES [artists](id) NOT NULL,
-);
+    [SongId] INT FOREIGN KEY REFERENCES [Songs](id) NOT NULL,
+    [ArtistId] INT FOREIGN KEY REFERENCES [Artists](id) NOT NULL
+)
 
 CREATE TABLE Song_album_relation(
     [Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    [Songid] INT FOREIGN KEY REFERENCES [songs](id) NOT NULL,
-    [Albumid] INT FOREIGN KEY REFERENCES [albums](id) NOT NULL,
-);
+    [SongId] INT FOREIGN KEY REFERENCES [Songs](id) NOT NULL,
+    [Albumid] INT FOREIGN KEY REFERENCES [Albums](id) NOT NULL
+)
 
 CREATE TABLE Playlists(
     [Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[UserID] int foreign key references [Users](Id),
+	[UserID] INT FOREIGN KEY REFERENCES [Users](Id),
     [Name] NVARCHAR(255) NOT NULL,
-	[Date] datetime default getutcdate(),
-	[Playtime] Int Not Null default 0
-);
+	[Date] DATETIME DEFAULT GETUTCDATE(),
+	[Playtime] INT NOT NULL default 0
+)
 
 CREATE TABLE Song_playlist_relation(
     [Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    [SongId] INT FOREIGN KEY REFERENCES [songs](id) NOT NULL,
-    [PlaylistId] INT FOREIGN KEY REFERENCES [playlists](id) NOT NULL,
-    [Date_Added] DATETIME DEFAULT GETUTCDATE() NOT NULL,
-);
---Create trigger for Playtime on playlist
+    [SongId] INT FOREIGN KEY REFERENCES [Songs](id) NOT NULL,
+    [PlaylistId] INT FOREIGN KEY REFERENCES [Playlists](id) NOT NULL,
+    [Date_Added] DATETIME DEFAULT GETUTCDATE() NOT NULL
+)
 
 --Stored procedures
 --Artist
 
-go
-drop procedure if exists spNewArtist;
-drop procedure if exists spGetAllArtists;
-drop procedure if exists spGetArtistById;
-drop procedure if exists spDeleteArtist;
-drop procedure if exists spUpdateArtistById;
-go
+GO
 
-Create procedure spNewArtist(
-@Name nvarchar(255))
-as
-insert into Artists (name) values(@Name)
-go
+DROP PROCEDURE IF EXISTS spNewArtist;
+DROP PROCEDURE IF EXISTS spGetAllArtists;
+DROP PROCEDURE IF EXISTS spGetArtistById;
+DROP PROCEDURE IF EXISTS spDeleteArtist;
+DROP PROCEDURE IF EXISTS spUpdateArtistById;
 
-create procedure spGetAllArtists
-as
-select * from Artists
-go
+GO
 
-create procedure spGetArtistById(
-@Id int)
-as
-select * from Artists where Id = @Id
-go
+CREATE PROCEDURE spNewArtist(
+@Name NVARCHAR(255))
+AS
+	INSERT INTO Artists (name)
+	VALUES(@Name)
+GO
 
-create procedure spDeleteArtist(
-@Id int)
-as
-delete Song_artist_relation where Songid = @Id
-delete Artists where Id = @Id
-go
+CREATE PROCEDURE spGetAllArtists
+AS
+	SELECT *
+	FROM Artists
+GO
 
-create procedure spUpdateArtistById(
-@Id int,
-@Name nvarchar(255))
-as
-update Artists
-set Name = @Name where Id = @Id
-go
+CREATE PROCEDURE spGetArtistById(
+@Id INT)
+AS
+	SELECT *
+	FROM Artists
+	WHERE Id = @Id
+GO
+
+CREATE PROCEDURE spDeleteArtist(
+@Id INT)
+AS
+	DELETE Song_artist_relation
+	WHERE SongId = @Id
+
+	DELETE Artists
+	WHERE Id = @Id
+GO
+
+CREATE PROCEDURE spUpdateArtistById(
+@Id INT,
+@Name NVARCHAR(255))
+AS
+	UPDATE Artists
+	SET Name = @Name
+	WHERE Id = @Id
+GO
 
 --Playlists
-drop procedure if exists spNewPlaylist;
-drop procedure if exists spGetUserPlaylists;
-drop procedure if exists spDeletePlaylistById;
-drop procedure if exists spUpdatePlaylistById;
-drop procedure if exists spGetUserPlaylistById;
-go
+DROP PROCEDURE IF EXISTS spNewPlaylist;
+DROP PROCEDURE IF EXISTS spGetUserPlaylists;
+DROP PROCEDURE IF EXISTS spDeletePlaylistById;
+DROP PROCEDURE IF EXISTS spUpdatePlaylistById;
+DROP PROCEDURE IF EXISTS spGetUserPlaylistById;
+
+GO
 
 CREATE PROCEDURE spNewPlaylist(
 @UserID int,
 @Name nvarchar(255))
 AS
-BEGIN
-    SET NOCOUNT ON
-    insert into Playlists (UserID, Name) values (@UserID,@Name)
-    SELECT * FROM [Playlists] WHERE Id=SCOPE_IDENTITY()
-END
+    INSERT INTO Playlists (UserID, Name)
+	VALUES (@UserID, @Name)
+
+    SELECT *
+	FROM [Playlists]
+	WHERE Id=SCOPE_IDENTITY()
 GO
 
-create procedure spGetUserPlaylists(
-@UserID int)
-as
-select Id, Name, Date, Playtime from Playlists where UserID = @UserID
-go
+CREATE PROCEDURE spGetUserPlaylists(
+@UserID INT)
+AS
+	SELECT Id, Name, Date, Playtime
+	FROM Playlists
+	WHERE UserID = @UserID
+GO
 
-create procedure spDeletePlaylistById(
-@Id int,
-@UserID int)
-as
-delete from Song_playlist_relation where PlaylistId = @Id
-delete from Playlists where Id = @Id and UserID = @UserID
-go
+CREATE PROCEDURE spDeletePlaylistById(
+@Id INT,
+@UserID INT)
+AS
+	DELETE FROM Song_playlist_relation
+	WHERE PlaylistId = @Id
 
-create procedure spUpdatePlaylistById(
-@Id int,
-@UserId int,
-@Name nvarchar(255))
-as
-update Playlists
-set Name = @Name where Id = @Id and UserID = @UserId
-go
+	DELETE FROM Playlists
+	WHERE Id = @Id
+	AND UserID = @UserID
+GO
+
+CREATE PROCEDURE spUpdatePlaylistById(
+@Id INT,
+@UserId INT,
+@Name NVARCHAR(255))
+AS
+	UPDATE Playlists
+	SET Name = @Name
+	WHERE Id = @Id
+	AND UserID = @UserId
+GO
 
 --Album
 
-drop procedure if exists spNewAlbum;
-drop procedure if exists spGetAllAlbums;
-drop procedure if exists spUpdateAlbum;
-drop procedure if exists spDeleteAlbum;
+DROP PROCEDURE IF EXISTS spNewAlbum;
+DROP PROCEDURE IF EXISTS spGetAllAlbums;
+DROP PROCEDURE IF EXISTS spUpdateAlbum;
+DROP PROCEDURE IF EXISTS spDeleteAlbum;
 
-go
-create procedure spNewAlbum(
-@Name nvarchar(255))
-as
-insert into Albums(Name) values (@Name)
-go
+GO
 
-create procedure spGetAllAlbums
-as
-select * from Albums
-go
+CREATE PROCEDURE spNewAlbum(
+@Name NVARCHAR(255))
+AS
+	INSERT INTO Albums(Name)
+	VALUES (@Name)
+GO
 
-create procedure spUpdateAlbum(
-@Id int,
-@Name nvarchar(255))
-as
-update Albums
-set Name = @Name where Id = @Id
-go
+CREATE PROCEDURE spGetAllAlbums
+AS
+	SELECT *
+	FROM Albums
+GO
 
-create procedure spDeleteAlbum(
-@Id int)
-as
-delete Albums where Id = @Id
-go
+CREATE PROCEDURE spUpdateAlbum(
+@Id INT,
+@Name NVARCHAR(255))
+AS
+	UPDATE Albums
+	SET Name = @Name
+	WHERE Id = @Id
+GO
+
+CREATE PROCEDURE spDeleteAlbum(
+@Id INT)
+AS
+	DELETE Albums
+	WHERE Id = @Id
+GO
 
 --Songs
 
-drop procedure if exists spNewSong;
-drop procedure if exists spGetAllSongInfo;
-drop procedure if exists spGetSongById;
-drop procedure if exists spUpdateSongTittle;
-drop procedure if exists spUpdateSongData;
-drop procedure if exists spDeleteSong;
-go
+DROP PROCEDURE IF EXISTS spNewSong;
+DROP PROCEDURE IF EXISTS spGetAllSongInfo;
+DROP PROCEDURE IF EXISTS spGetSongById;
+DROP PROCEDURE IF EXISTS spUpdateSongTittle;
+DROP PROCEDURE IF EXISTS spUpdateSongData;
+DROP PROCEDURE IF EXISTS spDeleteSong;
 
-create procedure spNewSong(
-@Title nvarchar(255),
-@Playtime int,
-@Data varbinary(Max))
-AS
-BEGIN
-    insert into Songs (Title,Playtime,Data) Values (@Title, @Playtime, @Data)
-    SELECT [Id] FROM [Songs] WHERE [Id]=SCOPE_IDENTITY()
-END
 GO
 
-create procedure spGetAllSongInfo
-as
-select Id, Title, Playtime from Songs
-go
+CREATE PROCEDURE spNewSong(
+@Title NVARCHAR(255),
+@Playtime INT,
+@Data VARBINARY(MAX))
+AS
+    INSERT INTO Songs (Title,Playtime,Data)
+	VALUES (@Title, @Playtime, @Data)
 
-create procedure spGetSongById(
-@Id int)
-as
-select * from Songs where Id = @Id
-go
+    SELECT Id
+	FROM Songs
+	WHERE Id = SCOPE_IDENTITY()
+GO
 
-create procedure spUpdateSongTittle(
-@Id int,
-@Title nvarchar(255))
-as
-update Songs
-set Title = @Title
-where Id = @Id
-go
+CREATE PROCEDURE spGetAllSongInfo
+AS
+	SELECT Id, Title, Playtime
+	FROM Songs
+GO
 
-create procedure spUpdateSongData(
-@Id int,
-@Data varbinary(Max))
-as
-update Songs
-set Data = @Data
-where Id = @Id
-go
+CREATE PROCEDURE spGetSongById(
+@Id INT)
+AS
+	SELECT * FROM Songs
+	WHERE Id = @Id
+GO
 
-create procedure spDeleteSong(
-@Id int)
-as
-delete Song_album_relation where Songid = @Id
-delete Song_artist_relation where Songid = @Id
-delete Song_playlist_relation where SongId = @Id
-delete Songs where Id = @Id
-go
+CREATE PROCEDURE spUpdateSongTittle(
+@Id INT,
+@Title NVARCHAR(255))
+AS
+	UPDATE Songs
+	SET Title = @Title
+	WHERE Id = @Id
+GO
 
-drop procedure if exists spAddSongToPlaylist;
-drop procedure if exists spRemoveSongFromPlaylist;
-drop procedure if exists spGetAllSongsInPlaylist;
-go
-create procedure spAddSongToPlaylist
+CREATE PROCEDURE spUpdateSongData(
+@Id INT,
+@Data VARBINARY(Max))
+AS
+	UPDATE Songs
+	SET Data = @Data
+	WHERE Id = @Id
+GO
+
+CREATE PROCEDURE spDeleteSong(
+@Id INT)
+AS
+	DELETE Song_album_relation
+	WHERE Songid = @Id
+
+	DELETE Song_artist_relation
+	WHERE Songid = @Id
+
+	DELETE Song_playlist_relation
+	WHERE SongId = @Id
+
+	DELETE Songs
+	WHERE Id = @Id
+GO
+
+DROP PROCEDURE IF EXISTS spAddSongToPlaylist;
+DROP PROCEDURE IF EXISTS spRemoveSongFromPlaylist;
+DROP PROCEDURE IF EXISTS spGetAllSongsInPlaylist;
+
+GO
+
+CREATE PROCEDURE spAddSongToPlaylist
 (
-@SongId int,
-@PlaylistId int)
-as
-insert into Song_playlist_relation(SongId,PlaylistId) values (@SongId,@PlaylistId)
-update Playlists set Playtime = (select Isnull(sum(Playtime),0) from Songs where Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId))
-SELECT [Id] FROM [Song_playlist_relation] WHERE [Id]=SCOPE_IDENTITY()
-Go
+@SongId INT,
+@PlaylistId INT)
+AS
+	INSERT INTO Song_playlist_relation(SongId,PlaylistId)
+	VALUES (@SongId,@PlaylistId)
 
-create procedure spRemoveSongFromPlaylist(
-@Id int)
-as
-declare @PlaylistId int;
-set @PlaylistId = (select PlaylistId from Song_playlist_relation where Id = @Id)
-delete Song_playlist_relation
-where Id = @Id
-update Playlists set Playtime = (select Isnull(sum(Playtime),0) from Songs where Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId))
-go
+	UPDATE Playlists
+	SET Playtime = (
+		SELECT ISNULL(SUM(Playtime),0)
+		FROM Songs
+		WHERE Id IN(
+			SELECT SongId
+			FROM Song_playlist_relation
+			WHERE PlaylistId = @PlaylistId))
 
-create procedure spGetAllSongsInPlaylist(
-@PlaylistId int)
-as
-select s.Id, s.Title, s.Playtime, spr.Id sprId from Songs s inner join Song_playlist_relation spr on s.Id = spr.SongId where s.Id in (select SongId from Song_playlist_relation where PlaylistId = @PlaylistId)
-go
+	SELECT Id FROM Song_playlist_relation
+	WHERE Id=SCOPE_IDENTITY()
+GO
+
+CREATE PROCEDURE spRemoveSongFromPlaylist(
+@Id INT)
+AS
+	DECLARE @PlaylistId INT;
+
+	SET @PlaylistId = (
+		SELECT PlaylistId
+		FROM Song_playlist_relation
+		WHERE Id = @Id)
+
+	DELETE Song_playlist_relation
+	WHERE Id = @Id
+
+	UPDATE Playlists
+	SET Playtime = (
+		SELECT ISNULL(SUM(Playtime),0)
+		FROM Songs
+		WHERE Id IN (
+			SELECT SongId
+			FROM Song_playlist_relation
+			WHERE PlaylistId = @PlaylistId))
+GO
+
+CREATE PROCEDURE spGetAllSongsInPlaylist(
+@PlaylistId INT)
+AS
+	SELECT s.Id, s.Title, s.Playtime, spr.Id sprId
+	FROM
+		Songs s
+		INNER JOIN
+		Song_playlist_relation spr
+		ON s.Id = spr.SongId
+	WHERE s.Id in (
+		SELECT SongId
+		FROM Song_playlist_relation
+		WHERE PlaylistId = @PlaylistId)
+GO
 
 DROP PROCEDURE IF EXISTS spHashSongData;
+
 GO
+
 CREATE PROCEDURE spHashSongData (
 @SongId INT)
 AS
-BEGIN
     DECLARE @dataToHash VARBINARY(MAX)
-    SET @dataToHash = (SELECT [Data] FROM [Songs] WHERE [Id]=@SongId);
-    SELECT HASHBYTES('MD5', @dataToHash) as [Hash];
-END
+    SET @dataToHash = (
+		SELECT [Data]
+		FROM [Songs]
+		WHERE [Id]=@SongId)
+
+    SELECT HASHBYTES('MD5', @dataToHash) AS [Hash]
 GO
