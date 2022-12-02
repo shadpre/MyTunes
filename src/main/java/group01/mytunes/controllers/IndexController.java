@@ -36,7 +36,7 @@ public class IndexController implements Initializable {
     @FXML private Button btnPlayPause;
     @FXML private Button btnNextSong;
 
-    @FXML private Button btnPreviusSong;
+    @FXML private Button btnPreviousSong;
     @FXML private Slider sliderSong;
     @FXML private Slider sliderSoundLevel;
     @FXML private ListView<PlaylistSong> listViewPlaylistSongs;
@@ -80,6 +80,8 @@ public class IndexController implements Initializable {
         initListViewPlaylistSong();
 
         initSliderSoundLevelSlider();
+
+        initPlayPrevious();
 
         lblCurrentSelectedPlaylist.textProperty().bind(
             Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
@@ -314,5 +316,18 @@ public class IndexController implements Initializable {
                 lblTimeLength.setText(MyTunesUtility.timeFormatConverter((audioHandler.getMediaPlayer().getTotalDuration().toSeconds())));
             }
         });
+    }
+
+    public void initPlayPrevious() {
+        btnPreviousSong.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                audioHandler.restartSong();
+            }
+            if (event.getClickCount() == 2) {
+            audioHandler.playPreviousSong();
+            }
+        });
+
+
     }
 }

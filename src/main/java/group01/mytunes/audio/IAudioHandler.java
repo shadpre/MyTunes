@@ -21,4 +21,7 @@ public interface IAudioHandler {
 
     Media getMedia();
     MediaPlayer getMediaPlayer();
+
+    void playPreviousSong();
+    void restartSong();
 }

@@ -6,7 +6,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.*;
-import java.nio.file.Files;
+import java.util.EmptyStackException;
+import java.util.Stack;
 
 public class SingleFileAudioHandler implements IAudioHandler {
 
@@ -16,6 +17,8 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
     private static final String DATA_DIR = System.getenv("APPDATA") + "/MyTunes/songs";
     private double volume = 0.1;
+
+    private Stack<Song> songsPlayed;
 
     private ISongDAO songDAO;
 
@@ -27,6 +30,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
         if(!dataDirectory.exists()) {
             dataDirectory.mkdirs();
         }
+        this.songsPlayed = new Stack<>();
 
         this.songDAO = songDAO;
     }
@@ -52,6 +56,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
             mediaPlayer.setVolume(volume);
             isPlaying = true;
             mediaPlayer.play();
+            songsPlayed.push(song);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -67,6 +72,24 @@ public class SingleFileAudioHandler implements IAudioHandler {
         fos.close();
 
         return tempFile.getAbsoluteFile().toURI().toString();
+    }
+    public void playPreviousSong(){
+        try {
+
+            songsPlayed.pop();
+            Song song = songsPlayed.pop();
+            if (song != null) {
+                playSong(song);
+            }
+        } catch (EmptyStackException e){
+            System.out.println("No Previous Song");
+        }
+    }
+
+    @Override
+    public void restartSong() {
+        mediaPlayer.stop();
+        mediaPlayer.play();
     }
 
     public void changeVolume(double volume) {
