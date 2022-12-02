@@ -16,7 +16,6 @@ import group01.mytunes.dialogs.AddSongDialog;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -34,7 +33,6 @@ public class IndexController implements Initializable {
     @FXML private Label lblTimeLength;
 
     @FXML private Button btnPlayPause;
-    @FXML private Button btnNextSong;
 
     @FXML private Button btnPreviousSong;
     @FXML private Slider sliderSong;
@@ -45,20 +43,11 @@ public class IndexController implements Initializable {
     @FXML private Label labelSongPlaying;
     @FXML private Label lblCurrentSelectedPlaylist;
     @FXML private TextField txtFieldSearchbar;
-    @FXML private Button btnPlaylistEdit;
-    @FXML private Button btnPlaylistNew;
-    @FXML private Button btnPlaylistDelete;
-    @FXML private Button btnSongEdit;
-    @FXML private Button btnSongNew;
-    @FXML private Button btnSongDelete;
-    @FXML private Button btnMoveSongToPlaylist;
-    @FXML private Button btnSearch;
-
     @FXML private MenuItem menuQuit;
     @FXML private MenuItem menuAddSong;
 
     @FXML private MenuItem menuAddArtist, menuEditArtist, menuDeleteArtist;
-    @FXML private MenuItem menuAddPlaylist, menuEditPlaylist, menuDeletePlaylist;
+    @FXML private MenuItem menuAddPlaylist, menuEditPlaylist;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -226,12 +215,12 @@ public class IndexController implements Initializable {
         });
     }
 
-    public void deleteSelectedPlaylistHandler(ActionEvent actionEvent) {
+    public void deleteSelectedPlaylistHandler() {
         Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem();
         if(selectedPlaylist != null) indexDataModel.deletePlaylist(selectedPlaylist);
     }
 
-    public void editSongWindowOpen(ActionEvent actionEvent) {
+    public void editSongWindowOpen() {
         Song selectedSong = listViewSongs.getSelectionModel().getSelectedItem();
         if(selectedSong == null) return;
 
@@ -250,19 +239,13 @@ public class IndexController implements Initializable {
 
     public void makeNewSongWindowOpen() {
         AddSongDialog dialog = new AddSongDialog(listViewSongs.getScene().getWindow());
-        dialog.showAndWait().ifPresent(song -> {
-            if(song == null) return;
-            indexDataModel.addSong(song);
-        });
-    }
-
-    public void deleteSelectedSong(ActionEvent actionEvent) {
+        dialog.showAndWait().ifPresent(song -> indexDataModel.addSong(song));
     }
 
     public void insertSongToPlaylist() {
-        var selecedSong = listViewSongs.getSelectionModel().getSelectedItem();
+        var selectedSong = listViewSongs.getSelectionModel().getSelectedItem();
 
-        indexDataModel.addSongToPlaylist(selecedSong, getSelectedPlaylist(), getSelectedPlaylist());
+        indexDataModel.addSongToPlaylist(selectedSong, getSelectedPlaylist(), getSelectedPlaylist());
     }
 
     private Playlist getSelectedPlaylist() {
@@ -278,7 +261,7 @@ public class IndexController implements Initializable {
         }
     }
 
-    public void playOrPauseSong(ActionEvent actionEvent) {
+    public void playOrPauseSong() {
         audioHandler.playPause();
         updatePlayPauseButtons();
     }
@@ -294,27 +277,24 @@ public class IndexController implements Initializable {
     }
 
     /**
-     * Binds the data to the songslider.
+     * Binds the data to the song slider.
      */
     private void bindSongSlider() {
-        audioHandler.getMediaPlayer().setOnReady(new Runnable() {
-            @Override
-            public void run() {
-                var player = audioHandler.getMediaPlayer();
-                sliderSong.maxProperty().bind(Bindings.createDoubleBinding(
-                        () -> player.getTotalDuration().toSeconds(),
-                        player.totalDurationProperty()));
+        audioHandler.getMediaPlayer().setOnReady(() -> {
+            var player = audioHandler.getMediaPlayer();
+            sliderSong.maxProperty().bind(Bindings.createDoubleBinding(
+                    () -> player.getTotalDuration().toSeconds(),
+                    player.totalDurationProperty()));
 
-                sliderSong.valueProperty().bind(Bindings.createDoubleBinding(
-                        () -> player.getCurrentTime().toSeconds(),
-                        player.currentTimeProperty()));
+            sliderSong.valueProperty().bind(Bindings.createDoubleBinding(
+                    () -> player.getCurrentTime().toSeconds(),
+                    player.currentTimeProperty()));
 
-                lblCurrentTime.textProperty().bind(Bindings.createStringBinding(
-                        () -> MyTunesUtility.timeFormatConverter(audioHandler.getMediaPlayer().getCurrentTime().toSeconds()),
-                        player.currentTimeProperty()));
+            lblCurrentTime.textProperty().bind(Bindings.createStringBinding(
+                    () -> MyTunesUtility.timeFormatConverter(audioHandler.getMediaPlayer().getCurrentTime().toSeconds()),
+                    player.currentTimeProperty()));
 
-                lblTimeLength.setText(MyTunesUtility.timeFormatConverter((audioHandler.getMediaPlayer().getTotalDuration().toSeconds())));
-            }
+            lblTimeLength.setText(MyTunesUtility.timeFormatConverter((audioHandler.getMediaPlayer().getTotalDuration().toSeconds())));
         });
     }
 
