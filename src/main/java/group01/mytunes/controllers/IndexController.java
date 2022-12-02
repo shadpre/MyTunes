@@ -8,6 +8,8 @@ import group01.mytunes.audio.SingleFileAudioHandler;
 import group01.mytunes.dao.ArtistDatabaseDAO;
 import group01.mytunes.dao.PlaylistDatabaseDAO;
 import group01.mytunes.dao.SongDatabaseDAO;
+import group01.mytunes.dao.interfaces.IArtistDAO;
+import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
@@ -64,24 +66,44 @@ public class IndexController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sliderSoundLevel.setMin(0.0d);
-        sliderSoundLevel.setMax(1.0d);
 
         ISongDAO songDAO = new SongDatabaseDAO();
+        IPlaylistDAO playlistDAO = new PlaylistDatabaseDAO();
+        IArtistDAO artistDAO = new ArtistDatabaseDAO();
+
+        this.indexDataModel = new IndexDataModel(playlistDAO, songDAO, artistDAO);
 
         audioHandler = new SingleFileAudioHandler(songDAO);
 
-        this.indexDataModel = new IndexDataModel(new PlaylistDatabaseDAO(), songDAO, new ArtistDatabaseDAO());
+        initMenuBar();
 
-        // Playlist list view
+        initListViewPlaylists();
+
+        initListViewSongs();
+
+        initListViewPlaylistSong();
+
+        initSliderSoundLevelSlider();
+
+        lblCurrentSelectedPlaylist.textProperty().bind(
+            Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
+                .then("No playlist selected")
+                .otherwise(indexDataModel.getSelectedPlaylistObservable().asString())
+        );
+
+        System.out.println("Controller initialized");
+    }
+
+    private void initListViewPlaylists() {
         listViewPlayLists.setItems(indexDataModel.getPlaylistsObservableList());
         listViewPlayLists.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 indexDataModel.setSelectedPlaylistObservable(listViewPlayLists.getSelectionModel().getSelectedItem());
             }
         });
+    }
 
-        // Song list view
+    private void initListViewSongs() {
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
         listViewSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
@@ -127,35 +149,15 @@ public class IndexController implements Initializable {
 
             return cell;
         });
+    }
 
-        // Playlist list view
+    private void initListViewPlaylistSong()  {
         listViewPlaylistSongs.setItems(indexDataModel.getSongPlaylistInfoObservableList());
         listViewPlaylistSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 playSong(listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong());
             }
         });
-
-        lblCurrentSelectedPlaylist.textProperty().bind(
-            Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
-                .then("No playlist selected")
-                .otherwise(indexDataModel.getSelectedPlaylistObservable().asString())
-        );
-
-        initMenuBar();
-
-        sliderSoundLevel.valueProperty().addListener((observable, oldValue, newValue) -> {
-            double volume = sliderSoundLevel.getValue();
-            audioHandler.changeVolume(volume);
-        });
-
-        System.out.println("Controller initialized");
-    }
-
-    private void playSong(Song song) {
-        audioHandler.playSong(song);
-        bindSongSlider();
-        updatePlayPauseButtons();
     }
 
     /**
@@ -183,6 +185,15 @@ public class IndexController implements Initializable {
         menuEditPlaylist.setOnAction(event -> editPlaylistHandler());
     }
 
+    private void initSliderSoundLevelSlider() {
+        sliderSoundLevel.setMin(0.0d);
+        sliderSoundLevel.setMax(1.0d);
+        sliderSoundLevel.valueProperty().addListener((observable, oldValue, newValue) -> {
+            double volume = sliderSoundLevel.getValue();
+            audioHandler.changeVolume(volume);
+        });
+    }
+
     public void newPlaylistHandler() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("New playlist");
@@ -192,6 +203,12 @@ public class IndexController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(playlist -> indexDataModel.addPlaylist(playlist));
+    }
+
+    private void playSong(Song song) {
+        audioHandler.playSong(song);
+        bindSongSlider();
+        updatePlayPauseButtons();
     }
 
     public void editPlaylistHandler() {
@@ -246,7 +263,13 @@ public class IndexController implements Initializable {
         return indexDataModel.getSelectedPlaylistObservable().getValue();
     }
 
-    public void searchForSong(ActionEvent actionEvent) {
+    public void searchForSong() {
+        listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
+        try {
+            indexDataModel.searchForSong(txtFieldSearchbar.getText().toUpperCase());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void playOrPauseSong(ActionEvent actionEvent) {

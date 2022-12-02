@@ -6,7 +6,9 @@ import group01.mytunes.dao.interfaces.ISongDAO;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MyTunesUtility {
 
@@ -53,4 +55,23 @@ public class MyTunesUtility {
                 (sec < 10) ? "0" + sec : sec
         );
     }
+
+    public static List<Song> search(List<Song> searchInThisList, String query) {
+        List<Song> searchResult = new ArrayList<>();
+
+        for (Song song : searchInThisList) {
+            if(compareSongTittle(query, song))
+            {
+                searchResult.add(song);
+            }
+        }
+
+        return searchResult;
+    }
+
+
+    private static boolean compareSongTittle(String query, Song song) {
+        return song.getTitle().toLowerCase().contains(query.toLowerCase());
+    }
+
 }

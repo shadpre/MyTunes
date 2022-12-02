@@ -6,10 +6,13 @@ import group01.mytunes.Models.Song;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
+import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
+
+import java.util.List;
 
 public class IndexDataModel {
 
@@ -100,6 +103,12 @@ public class IndexDataModel {
         songPlaylistObservableList.setAll(result);
         selectedPlaylistObservable.setValue(playlist);
 
+    }
+
+    public void searchForSong(String query) throws Exception {
+        List<Song> searchResults = MyTunesUtility.search(FXCollections.observableArrayList(songDAO.getAllSongInfo()),query);
+        songObservableList.clear();
+        songObservableList.addAll(searchResults);
     }
 
     public void addSong(Song song) {
