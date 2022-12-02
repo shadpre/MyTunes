@@ -10,8 +10,6 @@ import java.nio.file.Files;
 
 public class SingleFileAudioHandler implements IAudioHandler {
 
-
-
     private Media media;
 
     private boolean isPlaying ;
@@ -70,15 +68,6 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
         return tempFile.getAbsoluteFile().toURI().toString();
     }
-
-    private byte[] getFileAsByteArray() throws IOException {
-        String path = "C:/Users/Lasse Emil Hansen/Downloads/Stanley Most - Kom Kom ft. Rune RK.mp3";
-        File file = new File(path);
-
-        return Files.readAllBytes(file.toPath());
-    }
-
-
 
     public void changeVolume(double volume) {
         mediaPlayer.setVolume(volume);
