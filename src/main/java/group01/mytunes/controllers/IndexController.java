@@ -48,8 +48,6 @@ public class IndexController implements Initializable {
     @FXML private Button btnPlaylistEdit;
     @FXML private Button btnPlaylistNew;
     @FXML private Button btnPlaylistDelete;
-    @FXML private Button btnPlaylistUp;
-    @FXML private Button btnPlaylistDown;
     @FXML private Button btnSongEdit;
     @FXML private Button btnSongNew;
     @FXML private Button btnSongDelete;
@@ -229,12 +227,6 @@ public class IndexController implements Initializable {
     public void deleteSelectedPlaylistHandler(ActionEvent actionEvent) {
         Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem();
         if(selectedPlaylist != null) indexDataModel.deletePlaylist(selectedPlaylist);
-    }
-
-    public void scrollUpInPlaylist(ActionEvent actionEvent) {
-    }
-
-    public void scrollDownInPlaylist(ActionEvent actionEvent) {
     }
 
     public void editSongWindowOpen(ActionEvent actionEvent) {
