@@ -304,10 +304,9 @@ public class IndexController implements Initializable {
                 audioHandler.restartSong();
             }
             if (event.getClickCount() == 2) {
-            audioHandler.playPreviousSong();
+                audioHandler.playPreviousSong();
+                bindSongSlider();
             }
         });
-
-
     }
 }

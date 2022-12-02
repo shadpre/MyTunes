@@ -38,7 +38,7 @@ public class AddSongDialog extends Dialog<Song> {
     private TextField titleTextField;
 
     @FXML
-    private TextField txtFieldFilePath;
+    private Label lblFieldFilePath;
 
     private IArtistDAO artistDAO;
     private IAlbumDAO albumDAO;
@@ -63,7 +63,7 @@ public class AddSongDialog extends Dialog<Song> {
                 if (selectedFile != null) {
                     selectedSongFile = selectedFile;
                     System.out.println(selectedFile.getAbsoluteFile());
-                    txtFieldFilePath.setText(String.valueOf(selectedFile));
+                    lblFieldFilePath.setText(String.valueOf(selectedFile));
                 }
             });
 
