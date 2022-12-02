@@ -91,6 +91,7 @@ go
 create procedure spDeleteArtist(
 @Id int)
 as
+delete Song_artist_relation where Songid = @Id
 delete Artists where Id = @Id
 go
 
