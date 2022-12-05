@@ -281,6 +281,7 @@ GO
 DROP PROCEDURE IF EXISTS spAddSongToPlaylist;
 DROP PROCEDURE IF EXISTS spRemoveSongFromPlaylist;
 DROP PROCEDURE IF EXISTS spGetAllSongsInPlaylist;
+DROP PROCEDURE IF EXISTS spSwapSongsInPlaylist;
 
 GO
 
@@ -309,10 +310,9 @@ AS
 GO
 
 CREATE PROCEDURE spRemoveSongFromPlaylist(
-@Id INT)
+@Id INT,
+@PlaylistId INT)
 AS
-	DECLARE @PlaylistId INT;
-
 	SET @PlaylistId = (
 		SELECT PlaylistId
 		FROM Song_Playlist_Relation
@@ -329,7 +329,57 @@ AS
 			SELECT SongId
 			FROM Song_Playlist_Relation
 			WHERE PlaylistId = @PlaylistId))
+
+	DROP TABLE IF EXISTS #TEMP;
+	CREATE TABLE #TEMP(
+	[SongID] INT,
+	[Position] INT,
+	[Done] INT NOT NULL DEFAULT 0)
+
+	INSERT INTO #TEMP(SongID, Position)
+		SELECT SongID, Position
+		FROM Song_Playlist_Relation
+		WHERE PlaylistId = @PlaylistId
+
+	DECLARE @NewPosition INT = 1;
+	DECLARE @SongId INT;
+	WHILE EXISTS (SELECT SongId FROM #TEMP WHERE Done = 0)
+	BEGIN
+		SELECT @SongId = (SELECT TOP 1 SongId
+							FROM #TEMP
+							WHERE Done = 0
+							ORDER BY Position)
+
+		UPDATE Song_Playlist_Relation
+		SET Position = @NewPosition
+		WHERE SongId = @SongId
+		AND PlaylistId = @PlaylistId
+
+		UPDATE #TEMP
+		SET Done = 1
+		WHERE SongID = @SongId
+
+		SET @NewPosition = @NewPosition + 1
+	END
+	DROP TABLE IF EXISTS #TEMP
 GO
+
+CREATE PROCEDURE spSwapSongsInPlaylist(
+@PlaylistId INT,
+@SongId1 INT,
+@Position1 INT,
+@SongId2 INT,
+@Position2 INT)
+AS
+	UPDATE Song_Playlist_Relation
+	SET Position = @Position1
+	WHERE SongId = @SongId2 and PlaylistId = @PlaylistId
+
+	UPDATE Song_Playlist_Relation
+	SET Position = @Position2
+	WHERE SongId = @SongId1 and PlaylistId = @PlaylistId
+GO
+
 
 CREATE PROCEDURE spGetAllSongsInPlaylist(
 @PlaylistId INT)
