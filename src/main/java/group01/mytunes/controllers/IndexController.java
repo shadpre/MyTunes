@@ -14,7 +14,7 @@ import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
 import group01.mytunes.nextsong.INextSongStrategy;
-import group01.mytunes.nextsong.NextSongFromPlaylistLinear;
+import group01.mytunes.nextsong.NextSongFromPlaylistLinearStrategy;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -146,7 +146,7 @@ public class IndexController implements Initializable {
             if (event.getClickCount() == 2) {
                 var song = listViewPlaylistSongs.getSelectionModel().getSelectedIndex();
                 if(nextSongStrategy == null) {
-                    nextSongStrategy = new NextSongFromPlaylistLinear(
+                    nextSongStrategy = new NextSongFromPlaylistLinearStrategy(
                         indexDataModel.getSongPlaylistInfoObservableList(),
                         song
                     );

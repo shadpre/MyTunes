@@ -7,12 +7,12 @@ import javafx.collections.ObservableList;
 /**
  * Fot this to work, the playlist MUST be sorted in the order that you want to play.
  */
-public class NextSongFromPlaylistLinear implements INextSongStrategy {
+public class NextSongFromPlaylistLinearStrategy implements INextSongStrategy {
 
     public ObservableList<PlaylistSong> songList;
     int playingNowIndex;
 
-    public NextSongFromPlaylistLinear(ObservableList<PlaylistSong> songList, int startSong) {
+    public NextSongFromPlaylistLinearStrategy(ObservableList<PlaylistSong> songList, int startSong) {
         this.songList = songList;
         changeSong(startSong); // Minus 1 since it returns the next song.
     }
