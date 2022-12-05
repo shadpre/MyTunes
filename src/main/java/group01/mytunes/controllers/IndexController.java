@@ -214,8 +214,27 @@ public class IndexController implements Initializable {
     }
 
     public void deleteSelectedPlaylistHandler() {
-        Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem();
-        if(selectedPlaylist != null) indexDataModel.deletePlaylist(selectedPlaylist);
+        Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem(); //gets sellected item
+
+        if (selectedPlaylist == null){ //If selectedPlaylist is not sellected, the method stops here
+            return;
+        }
+
+        // Makes a pop up box with 2 buttons Confirm and cancel.
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete");
+        alert.setContentText("Do you want to delete the selected playlist?");
+        ButtonType okButton = new ButtonType("Confirm", ButtonBar.ButtonData.YES); //MakesConfirm button, with a yes Value
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE); //Makes the cancel button
+        alert.getButtonTypes().setAll(okButton, cancelButton); //Sets buttons in window
+        alert.showAndWait().ifPresent(type -> {
+            if (type == ButtonType.YES) { //if confirm button i presed dellete playlist
+                indexDataModel.deletePlaylist(selectedPlaylist);
+            } else { //If cancel presed do nothing
+                System.out.println("Cancel Selected delete");
+            }
+        });
+
     }
 
     public void editSongWindowOpen() {
