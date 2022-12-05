@@ -259,6 +259,24 @@ public class IndexController implements Initializable {
         dialog.showAndWait().ifPresent(song -> indexDataModel.addSong(song));
     }
 
+    public void deleteSelectedSong() {
+        Song song = listViewSongs.getSelectionModel().getSelectedItem();
+        if(song == null) return;
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setGraphic(null);
+        alert.setTitle("Delete a song");
+        alert.setContentText("Are you sure you want to delete %s".formatted(song.getTitle()));
+        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(okButton, cancelButton);
+        alert.showAndWait().ifPresent(type -> {
+            if(type == okButton) {
+                indexDataModel.deleteSong(song);
+            }
+        });
+    }
+
     public void insertSongToPlaylist() {
         var selectedSong = listViewSongs.getSelectionModel().getSelectedItem();
 

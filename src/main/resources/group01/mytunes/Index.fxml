@@ -81,7 +81,7 @@
         </rowConstraints>
         <Button mnemonicParsing="false" onAction="#makeNewSongWindowOpen" prefHeight="26.0" prefWidth="92.0" text="New song" GridPane.columnIndex="0" />
         <Button mnemonicParsing="false" onAction="#editSongWindowOpen" prefHeight="26.0" prefWidth="91.0" text="Edit song" GridPane.columnIndex="1" />
-        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Delete song" GridPane.columnIndex="2" />
+        <Button mnemonicParsing="false" onAction="#deleteSelectedSong" prefHeight="26.0" prefWidth="91.0" text="Delete song" GridPane.columnIndex="2" />
     </GridPane>
     <Button layoutX="657.0" layoutY="182.0" mnemonicParsing="false" onAction="#insertSongToPlaylist" text="←">
         <font>
