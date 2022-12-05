@@ -292,7 +292,7 @@ CREATE PROCEDURE spAddSongToPlaylist
 AS
 	INSERT INTO Song_Playlist_Relation(SongId,PlaylistId,Position)
 	VALUES (@SongId,@PlaylistId,(
-		SELECT MAX(Position)
+		SELECT ISNULL(MAX(Position),0)
 		FROM Song_Playlist_Relation
 		WHERE PlaylistId = @PlaylistId)+1)
 
