@@ -13,6 +13,8 @@ import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
+import group01.mytunes.nextsong.INextSongStrategy;
+import group01.mytunes.nextsong.NextSongFromPlaylistLinear;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -44,9 +46,10 @@ public class IndexController implements Initializable {
     @FXML private TextField txtFieldSearchbar;
     @FXML private MenuItem menuQuit;
     @FXML private MenuItem menuAddSong;
-
     @FXML private MenuItem menuAddArtist, menuEditArtist, menuDeleteArtist;
     @FXML private MenuItem menuAddPlaylist, menuEditPlaylist;
+
+    private INextSongStrategy nextSongStrategy;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -141,7 +144,16 @@ public class IndexController implements Initializable {
         listViewPlaylistSongs.setItems(indexDataModel.getSongPlaylistInfoObservableList());
         listViewPlaylistSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                playSong(listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong());
+                var song = listViewPlaylistSongs.getSelectionModel().getSelectedIndex();
+                if(nextSongStrategy == null) {
+                    nextSongStrategy = new NextSongFromPlaylistLinear(
+                        indexDataModel.getSongPlaylistInfoObservableList(),
+                        song
+                    );
+                } else {
+                    nextSongStrategy.changeSong(song);
+                }
+                playSong();
             }
         });
     }
@@ -195,6 +207,16 @@ public class IndexController implements Initializable {
         audioHandler.playSong(song);
         bindSongSlider();
         updatePlayPauseButtons();
+    }
+
+    private void playSong() {
+        var songToPlay = nextSongStrategy.getNextSong();
+        audioHandler.playSong(songToPlay);
+        bindSongSlider();
+        updatePlayPauseButtons();
+        audioHandler.getMediaPlayer().setOnEndOfMedia(() -> {
+            playSong();
+        });
     }
 
     public void editPlaylistHandler() {
