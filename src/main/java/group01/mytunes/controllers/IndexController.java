@@ -222,6 +222,8 @@ public class IndexController implements Initializable {
 
         // Makes a pop-up box with 2 buttons Confirm and cancel.
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(null);
+        alert.setGraphic(null);
         alert.setTitle("Delete");
         alert.setContentText("Do you want to delete the selected playlist? \n" + selectedPlaylist.getName());
         ButtonType OkButton = new ButtonType("Ok", ButtonBar.ButtonData.YES); //MakesConfirm button, with a yes Value
@@ -265,6 +267,7 @@ public class IndexController implements Initializable {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setGraphic(null);
+        alert.setHeaderText(null);
         alert.setTitle("Delete a song");
         alert.setContentText("Are you sure you want to delete %s".formatted(song.getTitle()));
         ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
