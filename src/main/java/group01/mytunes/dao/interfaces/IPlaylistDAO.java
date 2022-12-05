@@ -41,4 +41,8 @@ public interface IPlaylistDAO {
 
     List<PlaylistSong> getSongsInPlaylist(Playlist playlist);
 
+    void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls);
+    void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls);
+
+
 }

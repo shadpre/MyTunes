@@ -185,4 +185,21 @@ public class IndexDataModel {
             e.printStackTrace();
         }
     }
+
+    public void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls){
+        try {
+            playlistDAO.moveSongUpInPlaylist(playlist, pls);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls){
+        try {
+            playlistDAO.moveSongDownInPlaylist(playlist, pls);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
