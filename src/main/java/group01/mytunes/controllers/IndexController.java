@@ -224,11 +224,11 @@ public class IndexController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete");
         alert.setContentText("Do you want to delete the selected playlist? \n" + selectedPlaylist.getName());
-        ButtonType confirmButton = new ButtonType("Confirm", ButtonBar.ButtonData.YES); //MakesConfirm button, with a yes Value
+        ButtonType OkButton = new ButtonType("Ok", ButtonBar.ButtonData.YES); //MakesConfirm button, with a yes Value
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE); //Makes the cancel button
-        alert.getButtonTypes().setAll(confirmButton, cancelButton); //Sets buttons in window
+        alert.getButtonTypes().setAll(OkButton, cancelButton); //Sets buttons in window
         alert.showAndWait().ifPresent(type -> {
-            if (type == confirmButton) { //if confirm button i pressed delete playlist
+            if (type == OkButton) { //if confirm button i pressed delete playlist
                 indexDataModel.deletePlaylist(selectedPlaylist);
             } else { //If cancel pressed do nothing
                 System.out.println("Cancel delete_Playlist");
