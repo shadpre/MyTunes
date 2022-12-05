@@ -15,7 +15,6 @@ import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -40,7 +39,6 @@ public class IndexController implements Initializable {
     @FXML private ListView<PlaylistSong> listViewPlaylistSongs;
     @FXML private ListView<Playlist> listViewPlayLists;
     @FXML private ListView<Song> listViewSongs;
-    @FXML private Label labelSongPlaying;
     @FXML private Label lblCurrentSelectedPlaylist;
     @FXML private TextField txtFieldSearchbar;
     @FXML private MenuItem menuQuit;
@@ -97,7 +95,7 @@ public class IndexController implements Initializable {
                 playSong(listViewSongs.getSelectionModel().getSelectedItem());
             }
         });
-        listViewSongs.setCellFactory(lv -> {
+        /*listViewSongs.setCellFactory(lv -> {
             ListCell<Song> cell = new ListCell<>();
 
             ContextMenu contextMenu = new ContextMenu();
@@ -135,7 +133,7 @@ public class IndexController implements Initializable {
             cell.textProperty().bind(stringBinding);
 
             return cell;
-        });
+        });*/
     }
 
     private void initListViewPlaylistSong()  {
@@ -253,12 +251,7 @@ public class IndexController implements Initializable {
     }
 
     public void searchForSong() {
-        listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
-        try {
-            indexDataModel.searchForSong(txtFieldSearchbar.getText().toUpperCase());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        indexDataModel.searchForSong(txtFieldSearchbar.getText());
     }
 
     public void playOrPauseSong() {
@@ -268,10 +261,8 @@ public class IndexController implements Initializable {
 
     private void updatePlayPauseButtons() {
         if (audioHandler.isPlaying()) {
-            labelSongPlaying.setText("Playing");
             btnPlayPause.setText("II");
         } else {
-            labelSongPlaying.setText("Not playing");
             btnPlayPause.setText("⪢");
         }
     }

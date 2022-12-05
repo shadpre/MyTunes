@@ -22,6 +22,7 @@ public class IndexDataModel {
 
     private ObservableList<Playlist> playlistsObservableList;
 
+    private List<Song> songList;
     private ObservableList<Song> songObservableList;
     private ObservableList<PlaylistSong> songPlaylistObservableList;
 
@@ -34,7 +35,9 @@ public class IndexDataModel {
         this.artistDAO = artistDAO;
 
         playlistsObservableList = FXCollections.observableArrayList(playlistDAO.getPlaylists());
-        songObservableList = FXCollections.observableArrayList(songDAO.getAllSongInfo());
+
+        songList = songDAO.getAllSongInfo();
+        songObservableList = FXCollections.observableArrayList(songList);
         songPlaylistObservableList = FXCollections.observableArrayList();
         selectedPlaylistObservable = new SimpleObjectProperty<>(null);
     }
@@ -117,10 +120,9 @@ public class IndexDataModel {
 
     }
 
-    public void searchForSong(String query) throws Exception {
-        List<Song> searchResults = MyTunesUtility.search(FXCollections.observableArrayList(songDAO.getAllSongInfo()),query);
-        songObservableList.clear();
-        songObservableList.addAll(searchResults);
+    public void searchForSong(String query) {
+        var filtered = songList.stream().filter(x -> x.getTitle().toUpperCase().contains(query.toUpperCase())).toList();
+        songObservableList.setAll(filtered);
     }
 
     public void addSong(Song song) {
@@ -129,6 +131,7 @@ public class IndexDataModel {
 
         System.out.println(result.getId());
 
+        songList.add(result);
         songObservableList.add(result);
     }
 
