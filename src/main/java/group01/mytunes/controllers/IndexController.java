@@ -229,10 +229,9 @@ public class IndexController implements Initializable {
         alert.getButtonTypes().setAll(confirmButton, cancelButton); //Sets buttons in window
         alert.showAndWait().ifPresent(type -> {
             if (type == confirmButton) { //if confirm button i pressed delete playlist
-                System.out.println("Deleting selected playlist");
                 indexDataModel.deletePlaylist(selectedPlaylist);
             } else { //If cancel pressed do nothing
-                System.out.println("Cancel Selected delete");
+                System.out.println("Cancel delete_Playlist");
             }
         });
 

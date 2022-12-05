@@ -83,11 +83,8 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
             statement.setInt(1, id);
             statement.setInt(2, Main.currentUser.getId());
 
-            var affectedRows = statement.executeUpdate();
+            statement.executeUpdate();
 
-            if(affectedRows != 1) {
-                throw new SQLDeleteException();
-            }
 
         } catch (SQLException e) {
             e.printStackTrace();
