@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 public class NextSongFromPlaylistLinearStrategy implements INextSongStrategy {
 
     public ObservableList<PlaylistSong> songList;
-    int playingNowIndex;
+    private int playingNowIndex;
 
     public NextSongFromPlaylistLinearStrategy(ObservableList<PlaylistSong> songList, int startSong) {
         this.songList = songList;
@@ -22,9 +22,10 @@ public class NextSongFromPlaylistLinearStrategy implements INextSongStrategy {
         if(songList.size() == 0) return null;
 
         playingNowIndex++;
-        PlaylistSong songToPlay = songList.get(playingNowIndex);
 
-        if(songToPlay == null) songToPlay = songList.stream().findFirst().get();
+        if(playingNowIndex >= songList.size()) playingNowIndex = 0;
+
+        PlaylistSong songToPlay = songList.get(playingNowIndex);
 
         return songToPlay.getSong();
     }
