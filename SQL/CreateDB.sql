@@ -334,7 +334,7 @@ GO
 CREATE PROCEDURE spGetAllSongsInPlaylist(
 @PlaylistId INT)
 AS
-	SELECT s.Id, s.Title, s.Playtime, spr.Id sprId
+	SELECT s.Id, s.Title, s.Playtime, spr.Id sprId, spr.Position Position
 	FROM
 		Songs s
 		INNER JOIN
@@ -344,6 +344,8 @@ AS
 		SELECT SongId
 		FROM Song_Playlist_Relation
 		WHERE PlaylistId = @PlaylistId)
+	ORDER BY
+	spr.Position
 GO
 
 DROP PROCEDURE IF EXISTS spHashSongData;
