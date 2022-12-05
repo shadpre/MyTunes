@@ -6,11 +6,14 @@ import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
+import group01.mytunes.exceptions.SQLDeleteException;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class IndexDataModel {
@@ -160,4 +163,26 @@ public class IndexDataModel {
         System.out.println(song);
     }
 
+    /**
+     * Deletes a song.
+     * If  the song is in a playlist or album, it will also be deleted from those.
+     * @param song The song to delete.
+     */
+    public void deleteSong(Song song) {
+        try {
+            songDAO.deleteSong(song.getId());
+
+            List<PlaylistSong> toDelete = new ArrayList<>();
+            for(PlaylistSong p : songPlaylistObservableList) {
+                if(p.getSong().getId() == song.getId()) toDelete.add(p);
+            }
+
+            songPlaylistObservableList.removeAll(toDelete);
+
+            songList.remove(song);
+            songObservableList.remove(song);
+        } catch (SQLDeleteException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -80,7 +80,7 @@ public class IndexController implements Initializable {
     }
 
     private void initListViewPlaylists() {
-        listViewPlayLists.setItems(indexDataModel.getPlaylistsObservableList());
+        //listViewPlayLists.setItems(indexDataModel.getPlaylistsObservableList());
         listViewPlayLists.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 indexDataModel.setSelectedPlaylistObservable(listViewPlayLists.getSelectionModel().getSelectedItem());
@@ -238,6 +238,23 @@ public class IndexController implements Initializable {
     public void makeNewSongWindowOpen() {
         AddSongDialog dialog = new AddSongDialog(listViewSongs.getScene().getWindow());
         dialog.showAndWait().ifPresent(song -> indexDataModel.addSong(song));
+    }
+
+    public void deleteSelectedSong() {
+        Song song = listViewSongs.getSelectionModel().getSelectedItem();
+        if(song == null) return;
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete a song");
+        alert.setContentText("Are you sure you want to delete %s".formatted(song.getTitle()));
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(okButton, cancelButton);
+        alert.showAndWait().ifPresent(type -> {
+            if(type == okButton) {
+                indexDataModel.deleteSong(song);
+            }
+        });
     }
 
     public void insertSongToPlaylist() {

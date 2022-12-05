@@ -4,6 +4,7 @@ import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
 import group01.mytunes.exceptions.SQLDeleteException;
+import group01.mytunes.exceptions.SQLUpdateException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,21 +65,16 @@ public class SongDatabaseDAO implements ISongDAO {
     }
 
     @Override
-    public void deleteSong(int id) {
+    public void deleteSong(int id) throws SQLDeleteException {
         if(id < 0) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
             String query = "exec spDeleteSong ?";
 
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, id);
 
-            var affectedRows = statement.executeUpdate();
-
-            if(affectedRows != 1) {
-                throw new SQLDeleteException();
-            }
-
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLDeleteException();
@@ -147,7 +143,7 @@ public class SongDatabaseDAO implements ISongDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLDeleteException();
+            throw new SQLUpdateException();
         }
     }
 }
