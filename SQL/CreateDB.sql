@@ -57,6 +57,7 @@ CREATE TABLE Song_Playlist_Relation(
     [Id] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     [SongId] INT FOREIGN KEY REFERENCES [Songs](id) NOT NULL,
     [PlaylistId] INT FOREIGN KEY REFERENCES [Playlists](id) NOT NULL,
+	[Position] INT NOT NULL,
     [Date_Added] DATETIME DEFAULT GETUTCDATE() NOT NULL
 )
 
@@ -288,8 +289,11 @@ CREATE PROCEDURE spAddSongToPlaylist
 @SongId INT,
 @PlaylistId INT)
 AS
-	INSERT INTO Song_Playlist_Relation(SongId,PlaylistId)
-	VALUES (@SongId,@PlaylistId)
+	INSERT INTO Song_Playlist_Relation(SongId,PlaylistId,Position)
+	VALUES (@SongId,@PlaylistId,(
+		SELECT MAX(Position)
+		FROM Song_Playlist_Relation
+		WHERE PlaylistId = @PlaylistId)+1)
 
 	UPDATE Playlists
 	SET Playtime = (
