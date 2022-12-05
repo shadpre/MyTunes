@@ -15,6 +15,7 @@ import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -339,5 +340,11 @@ public class IndexController implements Initializable {
                 bindSongSlider();
             }
         });
+    }
+
+    public void moveSongDownInPlaylist(ActionEvent actionEvent) {
+    }
+
+    public void moveSongUpInPlaylist(ActionEvent actionEvent) {
     }
 }
