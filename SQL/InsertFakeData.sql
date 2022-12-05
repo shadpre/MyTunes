@@ -65,12 +65,11 @@ INSERT INTO [Playlists] ([UserId], [Name]) VALUES
 
 
 -- song_playlist_relation
-INSERT INTO [Song_playlist_relation] ([SongId], [PlaylistId]) VALUES
-    (1, 1), -- id 1
-    (3, 1), -- id 2
-    (4, 1), -- id 3
-    (6, 1), -- id 4
-    (2, 5), -- id 5
-    (1, 5), -- id 6
-    (5, 5), -- id 7
-    (4, 5); -- id 8
+EXEC spAddSongToPlaylist 1, 1; -- id 1
+EXEC spAddSongToPlaylist 3, 1; -- id 2
+EXEC spAddSongToPlaylist 4, 1; -- id 3
+EXEC spAddSongToPlaylist 6, 1; -- id 4
+EXEC spAddSongToPlaylist 2, 5; -- id 5
+EXEC spAddSongToPlaylist 1, 5; -- id 6
+EXEC spAddSongToPlaylist 5, 5; -- id 7
+EXEC spAddSongToPlaylist 4, 5; -- id 8
