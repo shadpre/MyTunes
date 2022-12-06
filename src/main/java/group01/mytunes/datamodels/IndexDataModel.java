@@ -1,5 +1,6 @@
 package group01.mytunes.datamodels;
 
+import group01.mytunes.dao.SongDatabaseDAO;
 import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Playlist;
 import group01.mytunes.entities.PlaylistSong;
@@ -59,6 +60,19 @@ public class IndexDataModel {
             tempMap.put(a.getId(), a);
         }
         artistObservableMap = FXCollections.observableMap(tempMap);
+    }
+
+    private String getArtistFoSong(Song song) { //returns a string of artist names at eatch song
+        List<Integer> artistId = songDAO.getArtistsToSong(song.getId());
+        StringBuilder artistNames = new StringBuilder();
+
+        for (Integer i:artistId) {
+            artistNames.append(artistObservableMap.get(i).getName() + ",");
+        }
+
+        artistNames.deleteCharAt(artistNames.length()-1);
+
+        return String.valueOf(artistNames);
     }
 
     public ObservableList<Playlist> getPlaylistsObservableList() {
