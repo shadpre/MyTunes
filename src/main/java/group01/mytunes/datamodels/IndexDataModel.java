@@ -1,5 +1,6 @@
 package group01.mytunes.datamodels;
 
+import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Playlist;
 import group01.mytunes.entities.PlaylistSong;
 import group01.mytunes.entities.Song;
@@ -8,13 +9,18 @@ import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.exceptions.SQLDeleteException;
 import group01.mytunes.utility.MyTunesUtility;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
+import javax.swing.*;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class IndexDataModel {
 
@@ -23,6 +29,7 @@ public class IndexDataModel {
 
     private IArtistDAO artistDAO;
 
+    private ObservableMap<Integer, Artist> artistObservableMap;
     private ObservableList<Playlist> playlistsObservableList;
 
     private List<Song> songList;
@@ -36,13 +43,22 @@ public class IndexDataModel {
         this.playlistDAO = playlistDAO;
         this.songDAO = songDAO;
         this.artistDAO = artistDAO;
-
+        initArtistObservableMap();
         playlistsObservableList = FXCollections.observableArrayList(playlistDAO.getPlaylists());
 
         songList = songDAO.getAllSongInfo();
         songObservableList = FXCollections.observableArrayList(songList);
         songPlaylistObservableList = FXCollections.observableArrayList();
         selectedPlaylistObservable = new SimpleObjectProperty<>(null);
+    }
+
+    private void initArtistObservableMap() {
+        var artists = artistDAO.getArtists();
+        Map<Integer, Artist> tempMap = new HashMap<>();
+        for(Artist a : artists) {
+            tempMap.put(a.getId(), a);
+        }
+        artistObservableMap = FXCollections.observableMap(tempMap);
     }
 
     public ObservableList<Playlist> getPlaylistsObservableList() {
