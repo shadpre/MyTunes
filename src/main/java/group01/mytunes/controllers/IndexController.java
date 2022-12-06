@@ -15,6 +15,7 @@ import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
 import group01.mytunes.nextsong.INextSongStrategy;
 import group01.mytunes.nextsong.NextSongFromPlaylistLinearStrategy;
+import group01.mytunes.nextsong.NextSongLinearStrategy;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -108,7 +109,17 @@ public class IndexController implements Initializable {
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
         listViewSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                playSong(listViewSongs.getSelectionModel().getSelectedItem());
+                //playSong(listViewSongs.getSelectionModel().getSelectedItem());
+                var songId = listViewSongs.getSelectionModel().getSelectedIndex();
+                if(nextSongStrategy == null || !nextSongStrategy.getClass().equals(NextSongLinearStrategy.class)) {
+                    nextSongStrategy = new NextSongLinearStrategy(
+                            indexDataModel.getSongInfoObservableList(),
+                            songId
+                    );
+                } else {
+                    nextSongStrategy.changeSong(songId);
+                }
+                playSong();
             }
         });
         /*listViewSongs.setCellFactory(lv -> {
@@ -157,7 +168,7 @@ public class IndexController implements Initializable {
         listViewPlaylistSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 var song = listViewPlaylistSongs.getSelectionModel().getSelectedIndex();
-                if(nextSongStrategy == null) {
+                if(nextSongStrategy == null || !nextSongStrategy.getClass().equals(NextSongFromPlaylistLinearStrategy.class)) {
                     nextSongStrategy = new NextSongFromPlaylistLinearStrategy(
                         indexDataModel.getSongPlaylistInfoObservableList(),
                         song
@@ -215,11 +226,11 @@ public class IndexController implements Initializable {
         result.ifPresent(playlist -> indexDataModel.addPlaylist(playlist));
     }
 
-    private void playSong(Song song) {
+    /*private void playSong(Song song) {
         audioHandler.playSong(song);
         bindSongSlider();
         updatePlayPauseButtons();
-    }
+    }*/
 
     private void playSong() {
         var songToPlay = nextSongStrategy.getNextSong();
