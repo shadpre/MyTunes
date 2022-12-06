@@ -1,5 +1,6 @@
 package group01.mytunes.controllers;
 
+import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Playlist;
 import group01.mytunes.entities.PlaylistSong;
 import group01.mytunes.entities.Song;
@@ -13,6 +14,9 @@ import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.dialogs.AddSongDialog;
+import group01.mytunes.nextsong.INextSongStrategy;
+import group01.mytunes.nextsong.NextSongFromPlaylistLinearStrategy;
+import group01.mytunes.nextsong.NextSongLinearStrategy;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -45,9 +49,11 @@ public class IndexController implements Initializable {
     @FXML private TextField txtFieldSearchbar;
     @FXML private MenuItem menuQuit;
     @FXML private MenuItem menuAddSong;
-
     @FXML private MenuItem menuAddArtist, menuEditArtist, menuDeleteArtist;
     @FXML private MenuItem menuAddPlaylist, menuEditPlaylist;
+    @FXML private ToggleButton shuffleToggleButton;
+
+    private INextSongStrategy nextSongStrategy;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,6 +78,8 @@ public class IndexController implements Initializable {
 
         initPlayPrevious();
 
+        initShuffleToggleButton();
+
         lblCurrentSelectedPlaylist.textProperty().bind(
             Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
                 .then("No playlist selected")
@@ -79,6 +87,14 @@ public class IndexController implements Initializable {
         );
 
         System.out.println("Controller initialized");
+    }
+
+    private void initShuffleToggleButton() {
+        shuffleToggleButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+            // TODO: Needs to be implemented!
+            System.out.println("Old: " + oldValue);
+            System.out.println("New: " + newValue);
+        }));
     }
 
     private void initListViewPlaylists() {
@@ -94,7 +110,17 @@ public class IndexController implements Initializable {
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
         listViewSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                playSong(listViewSongs.getSelectionModel().getSelectedItem());
+                //playSong(listViewSongs.getSelectionModel().getSelectedItem());
+                var songId = listViewSongs.getSelectionModel().getSelectedIndex();
+                if(nextSongStrategy == null || !nextSongStrategy.getClass().equals(NextSongLinearStrategy.class)) {
+                    nextSongStrategy = new NextSongLinearStrategy(
+                            indexDataModel.getSongInfoObservableList(),
+                            songId
+                    );
+                } else {
+                    nextSongStrategy.changeSong(songId);
+                }
+                playSong();
             }
         });
         /*listViewSongs.setCellFactory(lv -> {
@@ -142,7 +168,16 @@ public class IndexController implements Initializable {
         listViewPlaylistSongs.setItems(indexDataModel.getSongPlaylistInfoObservableList());
         listViewPlaylistSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                playSong(listViewPlaylistSongs.getSelectionModel().getSelectedItem().getSong());
+                var song = listViewPlaylistSongs.getSelectionModel().getSelectedIndex();
+                if(nextSongStrategy == null || !nextSongStrategy.getClass().equals(NextSongFromPlaylistLinearStrategy.class)) {
+                    nextSongStrategy = new NextSongFromPlaylistLinearStrategy(
+                        indexDataModel.getSongPlaylistInfoObservableList(),
+                        song
+                    );
+                } else {
+                    nextSongStrategy.changeSong(song);
+                }
+                playSong();
             }
         });
     }
@@ -166,7 +201,17 @@ public class IndexController implements Initializable {
             result.ifPresent(artist -> indexDataModel.addArtist(artist));
         });
         menuEditArtist.setOnAction(event -> indexDataModel.editArtist());
-        menuDeleteArtist.setOnAction(event -> indexDataModel.deleteArtist());
+        menuDeleteArtist.setOnAction(event -> {
+            Dialog<Artist> deleteArtistDialog = new ChoiceDialog<>(null, indexDataModel.getAllArtists());
+            deleteArtistDialog.setGraphic(null);
+            deleteArtistDialog.setHeaderText(null);
+            deleteArtistDialog.setContentText("Delete artist:");
+            deleteArtistDialog.setTitle("Delete an artist");
+            Optional<Artist> result = deleteArtistDialog.showAndWait();
+            result.ifPresent(artist -> {
+                indexDataModel.deleteArtist(artist);
+            });
+        });
 
         menuAddPlaylist.setOnAction(event -> newPlaylistHandler());
         menuEditPlaylist.setOnAction(event -> editPlaylistHandler());
@@ -192,10 +237,14 @@ public class IndexController implements Initializable {
         result.ifPresent(playlist -> indexDataModel.addPlaylist(playlist));
     }
 
-    private void playSong(Song song) {
-        audioHandler.playSong(song);
+    private void playSong() {
+        var songToPlay = nextSongStrategy.getNextSong();
+        audioHandler.playSong(songToPlay);
         bindSongSlider();
         updatePlayPauseButtons();
+        audioHandler.getMediaPlayer().setOnEndOfMedia(() -> {
+            playSong();
+        });
     }
 
     public void editPlaylistHandler() {
@@ -210,7 +259,6 @@ public class IndexController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newName -> {
-            System.out.println(selectedPlaylist + " " + newName);
             indexDataModel.editPlaylist(selectedPlaylist, newName);
         });
     }
@@ -234,8 +282,6 @@ public class IndexController implements Initializable {
         alert.showAndWait().ifPresent(type -> {
             if (type == OkButton) { //if confirm button i pressed delete playlist
                 indexDataModel.deletePlaylist(selectedPlaylist);
-            } else { //If cancel pressed do nothing
-                System.out.println("Cancel delete_Playlist");
             }
         });
 
@@ -253,7 +299,6 @@ public class IndexController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newName -> {
-            System.out.println(selectedSong + " " + newName);
             indexDataModel.editSong(selectedSong, newName);
         });
     }
@@ -355,9 +400,6 @@ public class IndexController implements Initializable {
         sliderSong.valueProperty().unbind();
 
         audioHandler.setTime(sliderSong.getValue());
-
-        System.out.println("time Changed");
-
     }
 
     public void continueSlider(MouseEvent mouseEvent) { //resume music after drag
@@ -373,7 +415,5 @@ public class IndexController implements Initializable {
         });
 
         audioHandler.start();
-
-        System.out.println("continue");
     }
 }

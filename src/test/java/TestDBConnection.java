@@ -102,7 +102,7 @@ public class TestDBConnection {
 
     @Test
     public void TestDeleteArtist() {
-        int artistToDelete = 2;
+        Artist artistToDelete = new Artist(2, "Hej");
 
         artistDAO.deleteArtist(artistToDelete);
     }

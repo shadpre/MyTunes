@@ -19,7 +19,7 @@ public interface IArtistDAO {
 
     Artist createArtist(String name);
 
-    void deleteArtist(int id);
+    void deleteArtist(Artist artist);
 
     /**
      * Updates an artist.

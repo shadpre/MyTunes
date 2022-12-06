@@ -1,5 +1,6 @@
 package group01.mytunes.datamodels;
 
+import group01.mytunes.entities.Artist;
 import group01.mytunes.dao.SongDatabaseDAO;
 import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Playlist;
@@ -14,7 +15,6 @@ import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
 import javax.swing.*;
 import java.sql.Array;
@@ -178,7 +178,12 @@ public class IndexDataModel {
     public void editArtist() {
     }
 
-    public void deleteArtist() {
+    public List<Artist> getAllArtists() {
+        return artistDAO.getArtists();
+    }
+
+    public void deleteArtist(Artist artist) {
+        artistDAO.deleteArtist(artist);
     }
 
     public void addSongToPlaylist(Song selectedSong, Playlist playlistToAddTo, Playlist selectedPlaylist) {
