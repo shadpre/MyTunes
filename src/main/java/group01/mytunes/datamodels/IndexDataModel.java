@@ -61,10 +61,6 @@ public class IndexDataModel {
             tempMap.put(a.getId(), a);
         }
         artistObservableMap = FXCollections.observableMap(tempMap);
-
-        artistObservableMap.entrySet().forEach(entry -> {
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        });
     }
 
     public String getArtistsForSong(Song song) {
@@ -75,7 +71,6 @@ public class IndexDataModel {
         StringBuilder artists = new StringBuilder();
 
         for(int v : artistToSong) {
-            System.out.println("V: " + v);
             artists.append(artistObservableMap.get(v) + " ");
         }
 
