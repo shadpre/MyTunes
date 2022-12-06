@@ -17,4 +17,6 @@ public interface ISongDAO {
     String getSongDataHash(int id);
 
     void updateSong(Song selectedSong, String newSongName);
+
+    List<Integer> getArtistsToSong(int id);
 }
