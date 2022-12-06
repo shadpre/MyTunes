@@ -139,5 +139,5 @@
             <MenuItem fx:id="menuQuit" mnemonicParsing="false" text="Quit" />
         </Menu>
     </MenuBar>
-   <ToggleButton layoutX="772.0" layoutY="554.0" mnemonicParsing="false" text="Shuffle" />
+   <ToggleButton fx:id="shuffleToggleButton" layoutX="772.0" layoutY="554.0" mnemonicParsing="false" text="Shuffle" />
 </AnchorPane>

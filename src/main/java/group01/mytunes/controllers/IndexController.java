@@ -48,6 +48,7 @@ public class IndexController implements Initializable {
     @FXML private MenuItem menuAddSong;
     @FXML private MenuItem menuAddArtist, menuEditArtist, menuDeleteArtist;
     @FXML private MenuItem menuAddPlaylist, menuEditPlaylist;
+    @FXML private ToggleButton shuffleToggleButton;
 
     private INextSongStrategy nextSongStrategy;
 
@@ -74,6 +75,8 @@ public class IndexController implements Initializable {
 
         initPlayPrevious();
 
+        initShuffleToggleButton();
+
         lblCurrentSelectedPlaylist.textProperty().bind(
             Bindings.when(indexDataModel.getSelectedPlaylistObservable().isNull())
                 .then("No playlist selected")
@@ -81,6 +84,14 @@ public class IndexController implements Initializable {
         );
 
         System.out.println("Controller initialized");
+    }
+
+    private void initShuffleToggleButton() {
+        shuffleToggleButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+            // TODO: Needs to be implemented!
+            System.out.println("Old: " + oldValue);
+            System.out.println("New: " + newValue);
+        }));
     }
 
     private void initListViewPlaylists() {
