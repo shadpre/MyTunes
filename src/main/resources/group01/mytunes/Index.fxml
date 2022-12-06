@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane prefHeight="612.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group01.mytunes.controllers.IndexController">
     <GridPane layoutX="16.0" layoutY="62.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="619.0">
         <columnConstraints>
@@ -58,7 +59,17 @@
                 <Font size="25.0" />
             </font>
         </Label>
-        <ListView fx:id="listViewSongs" maxHeight="-Infinity" prefHeight="487.0" prefWidth="503.0" GridPane.rowIndex="1" />
+        <TableView fx:id="listViewSongs" maxHeight="-Infinity" prefHeight="487.0" prefWidth="503.0" GridPane.rowIndex="1">
+            <columns>
+                <TableColumn fx:id="tableColumnTitle" text="Title">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="title"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tableColumnArtist" text="Artis(t)" />
+                <TableColumn fx:id="tableColumnAlbum" text="Album(s)" />
+            </columns>
+        </TableView>
     </GridPane>
     <GridPane layoutX="946.0" layoutY="551.0" prefHeight="30.0" prefWidth="303.0">
         <columnConstraints>
