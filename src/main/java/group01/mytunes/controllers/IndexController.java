@@ -19,11 +19,14 @@ import group01.mytunes.nextsong.NextSongFromPlaylistLinearStrategy;
 import group01.mytunes.nextsong.NextSongLinearStrategy;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.Optional;
@@ -44,7 +47,8 @@ public class IndexController implements Initializable {
     @FXML private Slider sliderSoundLevel;
     @FXML private ListView<PlaylistSong> listViewPlaylistSongs;
     @FXML private ListView<Playlist> listViewPlayLists;
-    @FXML private ListView<Song> listViewSongs;
+    @FXML private TableView<Song> listViewSongs;
+    @FXML private TableColumn tableColumnTitle, tableColumnArtist;
     @FXML private Label lblCurrentSelectedPlaylist;
     @FXML private TextField txtFieldSearchbar;
     @FXML private MenuItem menuQuit;
@@ -108,9 +112,12 @@ public class IndexController implements Initializable {
 
     private void initListViewSongs() {
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
+        tableColumnArtist.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Song, String>, ObservableValue<String>>) param -> {
+            return new SimpleStringProperty("Hej");
+        });
+
         listViewSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                //playSong(listViewSongs.getSelectionModel().getSelectedItem());
                 var songId = listViewSongs.getSelectionModel().getSelectedIndex();
                 if(nextSongStrategy == null || !nextSongStrategy.getClass().equals(NextSongLinearStrategy.class)) {
                     nextSongStrategy = new NextSongLinearStrategy(
