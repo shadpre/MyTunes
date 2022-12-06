@@ -58,7 +58,7 @@
                 <Font size="25.0" />
             </font>
         </Label>
-        <ListView fx:id="listViewSongs" maxHeight="-Infinity" prefHeight="487.0" prefWidth="503.0" GridPane.rowIndex="1" />
+      <ListView fx:id="listViewSongs" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
     </GridPane>
     <GridPane layoutX="946.0" layoutY="551.0" prefHeight="30.0" prefWidth="303.0">
         <columnConstraints>
