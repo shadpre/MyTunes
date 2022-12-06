@@ -63,7 +63,7 @@ public class IndexDataModel {
         artistObservableMap = FXCollections.observableMap(tempMap);
     }
 
-    private String getArtistFoSong(Song song) { //returns a string of artist names at eatch song
+    public String getArtistFoSong(Song song) { //returns a string of artist names at eatch song
         List<Integer> artistId = songDAO.getArtistsToSong(song.getId());
         StringBuilder artistNames = new StringBuilder();
 
@@ -71,7 +71,7 @@ public class IndexDataModel {
             artistNames.append(artistObservableMap.get(i).getName() + ",");
         }
 
-        artistNames.deleteCharAt(artistNames.length()-1);
+        //artistNames.deleteCharAt(artistNames.length());
 
         return String.valueOf(artistNames);
     }

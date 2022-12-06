@@ -1,4 +1,5 @@
 import group01.mytunes.Main;
+import group01.mytunes.datamodels.IndexDataModel;
 import group01.mytunes.entities.Album;
 import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Playlist;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +31,7 @@ public class TestDBConnection {
     private IPlaylistDAO playlistDAO;
 
     private IAlbumDAO albumDAO;
+    private IndexDataModel indexDataModel;
 
     private ISongDAO songDAO;
 
@@ -54,6 +57,7 @@ public class TestDBConnection {
         playlistDAO = new PlaylistDatabaseDAO();
         albumDAO = new AlbumDatabaseDAO();
         songDAO = new SongDatabaseDAO();
+        indexDataModel = new IndexDataModel(playlistDAO, songDAO, artistDAO);
     }
 
     @Test
@@ -193,4 +197,5 @@ public class TestDBConnection {
 
         System.out.println("%d %s %d %d".formatted(song.getId(), song.getTitle(), song.getData().length, song.getPlaytime()));
     }
+
 }

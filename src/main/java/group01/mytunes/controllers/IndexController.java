@@ -113,7 +113,7 @@ public class IndexController implements Initializable {
     private void initListViewSongs() {
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
         tableColumnArtist.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Song, String>, ObservableValue<String>>) param -> {
-            return new SimpleStringProperty("Hej");
+            return new SimpleStringProperty(indexDataModel.getArtistFoSong(param.getValue()));
         });
 
         listViewSongs.setOnMouseClicked(event -> {
