@@ -117,7 +117,7 @@
         <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="52.0" text="»" GridPane.columnIndex="4" />
         <Button fx:id="btnPreviousSong" mnemonicParsing="false" prefHeight="46.0" prefWidth="52.0" text="«" />
     </GridPane>
-    <Slider fx:id="sliderSong" layoutX="428.0" layoutY="591.0" prefHeight="14.0" prefWidth="521.0" />
+    <Slider fx:id="sliderSong" layoutX="428.0" layoutY="591.0" onMousePressed="#songStop" onMouseReleased="#continueSlider" prefHeight="14.0" prefWidth="521.0" />
     <Label fx:id="lblCurrentTime" layoutX="400.0" layoutY="589.0" text="00:00" />
     <Label fx:id="lblTimeLength" layoutX="951.0" layoutY="589.0" text="00:00" />
     <Slider fx:id="sliderSoundLevel" layoutX="31.0" layoutY="40.0" prefHeight="14.0" prefWidth="163.0" />

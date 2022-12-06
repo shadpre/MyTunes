@@ -21,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.Optional;
@@ -347,16 +348,16 @@ public class IndexController implements Initializable {
     private void bindSongSlider() {
         audioHandler.getMediaPlayer().setOnReady(() -> {
             var player = audioHandler.getMediaPlayer();
-            sliderSong.maxProperty().bind(Bindings.createDoubleBinding(
+            sliderSong.maxProperty().bind(Bindings.createDoubleBinding( //sets  Song Leangthh
                     () -> player.getTotalDuration().toSeconds(),
                     player.totalDurationProperty()));
 
-            sliderSong.valueProperty().bind(Bindings.createDoubleBinding(
+            sliderSong.valueProperty().bind(Bindings.createDoubleBinding( //Binds slider progress tto mediaPlayer
                     () -> player.getCurrentTime().toSeconds(),
                     player.currentTimeProperty()));
 
             lblCurrentTime.textProperty().bind(Bindings.createStringBinding(
-                    () -> MyTunesUtility.timeFormatConverter(audioHandler.getMediaPlayer().getCurrentTime().toSeconds()),
+                    () -> MyTunesUtility.timeFormatConverter(audioHandler.getMediaPlayer().getCurrentTime().toSeconds()), //Displays current time
                     player.currentTimeProperty()));
 
             lblTimeLength.setText(MyTunesUtility.timeFormatConverter((audioHandler.getMediaPlayer().getTotalDuration().toSeconds())));
@@ -379,5 +380,33 @@ public class IndexController implements Initializable {
     }
 
     public void moveSongUpInPlaylist(ActionEvent actionEvent) {
+    }
+
+    public void songStop(MouseEvent mouseEvent) { //On drag detected stops music
+        audioHandler.stop();
+
+        sliderSong.valueProperty().unbind();
+
+        audioHandler.setTime(sliderSong.getValue());
+
+        System.out.println("time Changed");
+
+    }
+
+    public void continueSlider(MouseEvent mouseEvent) { //resume music after drag
+        audioHandler.getMediaPlayer().setOnReady(() -> {
+            var player = audioHandler.getMediaPlayer();
+            sliderSong.maxProperty().bind(Bindings.createDoubleBinding( //sets  Song Leangthh
+                    () -> player.getTotalDuration().toSeconds(),
+                    player.totalDurationProperty()));
+
+            sliderSong.valueProperty().bind(Bindings.createDoubleBinding( //Binds slider progress tto mediaPlayer
+                    () -> player.getCurrentTime().toSeconds(),
+                    player.currentTimeProperty()));
+        });
+
+        audioHandler.start();
+
+        System.out.println("continue");
     }
 }

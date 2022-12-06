@@ -24,4 +24,8 @@ public interface IAudioHandler {
 
     void playPreviousSong();
     void restartSong();
+    void setTime(double songProgress);
+    void stop();
+    void start();
+
 }
