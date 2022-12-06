@@ -151,7 +151,7 @@ public class SongDatabaseDAO implements ISongDAO {
 
         try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
 
-            String sql = "SELECT * FROM Song_Artist_Relation WHERE SongId = ?";
+            String sql = "SELECT * FROM Song_artist_relation WHERE [Songid] = ?";
 
             //Connnect prepared stametnt to sql
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -163,7 +163,7 @@ public class SongDatabaseDAO implements ISongDAO {
             ResultSet rs = stmt.getResultSet();
 
             while (rs.next()) {
-                artistID.add(rs.getInt(1));
+                artistID.add(rs.getInt("ArtistId"));
             }
 
 

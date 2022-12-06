@@ -193,4 +193,11 @@ public class TestDBConnection {
 
         System.out.println("%d %s %d %d".formatted(song.getId(), song.getTitle(), song.getData().length, song.getPlaytime()));
     }
+
+    @Test
+    public void TestSongDAOGetArtistsToSong() {
+        var res = songDAO.getArtistsToSong(4);
+
+        res.forEach(System.out::println);
+    }
 }

@@ -61,19 +61,25 @@ public class IndexDataModel {
             tempMap.put(a.getId(), a);
         }
         artistObservableMap = FXCollections.observableMap(tempMap);
+
+        artistObservableMap.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        });
     }
 
-    private String getArtistFoSong(Song song) { //returns a string of artist names at eatch song
-        List<Integer> artistId = songDAO.getArtistsToSong(song.getId());
-        StringBuilder artistNames = new StringBuilder();
+    public String getArtistsForSong(Song song) {
+        var artistToSong = songDAO.getArtistsToSong(song.getId());
 
-        for (Integer i:artistId) {
-            artistNames.append(artistObservableMap.get(i).getName() + ",");
+        if(artistToSong.size() == 0) return "";
+
+        StringBuilder artists = new StringBuilder();
+
+        for(int v : artistToSong) {
+            System.out.println("V: " + v);
+            artists.append(artistObservableMap.get(v) + " ");
         }
 
-        artistNames.deleteCharAt(artistNames.length()-1);
-
-        return String.valueOf(artistNames);
+        return artists.toString();
     }
 
     public ObservableList<Playlist> getPlaylistsObservableList() {
