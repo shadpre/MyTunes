@@ -482,8 +482,8 @@ public class IndexController implements Initializable {
     public void moveSongUpInPlaylist(ActionEvent actionEvent) {
     }
 
-    /*
-     *  For handling the song time slider.
+    /**
+     *  For handling the song time slider. when being dragged
      */
     public void songStop(MouseEvent mouseEvent) { // on drag detected stops music
         audioHandler.stop();
