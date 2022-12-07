@@ -27,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.MediaException;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -153,7 +154,11 @@ public class IndexController implements Initializable {
                     nextSongStrategy.changeSong(songId);
                 }
 
-                playSong();
+                try {
+                    playSong();
+                } catch(MediaException e) {
+                    showErrorAlert("Can not play this song!");
+                }
             }
         });
     }
@@ -470,7 +475,11 @@ public class IndexController implements Initializable {
                 audioHandler.restartSong();
             }
             if (event.getClickCount() == 2) {
-                audioHandler.playPreviousSong();
+                try {
+                    audioHandler.playPreviousSong();
+                } catch (MediaException e) {
+                    showErrorAlert("Can not play this song!");
+                }
                 bindSongSlider();
             }
         });
@@ -507,4 +516,15 @@ public class IndexController implements Initializable {
 
         audioHandler.start();
     }
+
+    private void showErrorAlert(String errorMsg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setTitle("ERROR!");
+        alert.setContentText(errorMsg);
+        ButtonType OkButton = new ButtonType("Ok", ButtonBar.ButtonData.YES); //MakesConfirm button, with a yes Value
+        alert.getButtonTypes().setAll(OkButton); //Sets buttons in window
+        alert.show();
+    }
+
 }

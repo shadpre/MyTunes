@@ -3,6 +3,7 @@ package group01.mytunes.audio;
 import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
@@ -38,7 +39,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
         time = 0.0;
     }
 
-    public void playSong(Song song) {
+    public void playSong(Song song) throws MediaException {
         System.out.println("Play:\n" +
                 song.getId() + "\n" +
                 song.getTitle() + "\n"
@@ -62,6 +63,8 @@ public class SingleFileAudioHandler implements IAudioHandler {
             songsPlayed.push(song);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (MediaException me) {
+            throw me;
         }
     }
 
@@ -76,7 +79,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
         return tempFile.getAbsoluteFile().toURI().toString();
     }
-    public void playPreviousSong(){
+    public void playPreviousSong() throws MediaException {
         try {
 
             songsPlayed.pop();
