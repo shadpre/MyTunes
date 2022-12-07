@@ -1,5 +1,6 @@
 package group01.mytunes.controllers;
 
+import group01.mytunes.dialogs.DropDownTextDialog;
 import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Playlist;
 import group01.mytunes.entities.PlaylistSong;
@@ -132,6 +133,45 @@ public class IndexController implements Initializable {
                 playSong();
             }
         });
+        /*listViewSongs.setCellFactory(lv -> {
+            ListCell<Song> cell = new ListCell<>();
+
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem editSong = new MenuItem();
+            editSong.setText("Edit song");
+            editSong.setOnAction(event -> indexDataModel.editSong(cell.getItem()));
+
+            Menu addToPlaylist = new Menu("Add to playlist");
+
+
+            for(Playlist p : indexDataModel.getPlaylistsObservableList()) {
+                var menuItem = new MenuItem(p.getName());
+                addToPlaylist.getItems().add(menuItem);
+                menuItem.setOnAction(event -> indexDataModel.addSongToPlaylist(cell.getItem(), p, getSelectedPlaylist()));
+            }
+
+            contextMenu.getItems().addAll(editSong, addToPlaylist);
+
+            cell.emptyProperty().addListener(((observable, wasEmpty, isNowEmpty) -> {
+                if(isNowEmpty) cell.setContextMenu(null);
+                else cell.setContextMenu(contextMenu);
+            }));
+
+            StringBinding stringBinding = new StringBinding(){
+                {
+                    super.bind(cell.itemProperty().asString());
+                }
+                @Override
+                protected String computeValue() {
+                    if(cell.itemProperty().getValue() == null) return "";
+                    return cell.itemProperty().getValue().getTitle();
+                }
+            };
+
+            cell.textProperty().bind(stringBinding);
+
+            return cell;
+        });*/
     }
 
     private void initListViewPlaylistSong()  {
@@ -182,17 +222,17 @@ public class IndexController implements Initializable {
             dialog.setGraphic(null);
             dialog.setHeaderText(null);
             dialog.setTitle("Add artist");
+            dialog.setHeaderText("Add an artist");
             dialog.setContentText("Artist name:");
             var result = dialog.showAndWait();
             result.ifPresent(artist -> indexDataModel.editArtist());
         });
-
-        // Edit artist
         menuEditArtist.setOnAction(event -> {
-
+            DropDownTextDialog<Artist> dialog = new DropDownTextDialog<>(listViewSongs.getScene().getWindow(), "Edit Artist", "New namne", indexDataModel.getArtistList());
+            dialog.showAndWait().ifPresent(result ->
+                    indexDataModel.editArtist(result.getFirst(), result.getSecond()));
+            listViewSongs.refresh();
         });
-
-        // Delete artist
         menuDeleteArtist.setOnAction(event -> {
             Dialog<Artist> deleteArtistDialog = new ChoiceDialog<>(null, indexDataModel.getAllArtists());
             deleteArtistDialog.setGraphic(null);
@@ -210,12 +250,17 @@ public class IndexController implements Initializable {
         menuAddPlaylist.setOnAction(event -> newPlaylistHandler());
 
         // Edit playlist
-        menuEditPlaylist.setOnAction(event -> editPlaylistHandler());
+        menuEditPlaylist.setOnAction(event -> {
+            DropDownTextDialog<Playlist> dialog = new DropDownTextDialog<>(listViewPlayLists.getScene().getWindow(), "Edit Playlist", "New namne", indexDataModel.getPlaylistsObservableList());
+            dialog.showAndWait().ifPresent(result ->
+                    indexDataModel.editPlaylist(result.getFirst(), result.getSecond()));
+        });
 
         /*
             Quit button
          */
         menuQuit.setOnAction(event -> System.exit(0));
+
     }
 
     private void initSliderSoundLevelSlider() {

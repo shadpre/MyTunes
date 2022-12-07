@@ -170,6 +170,10 @@ public class IndexDataModel {
         songObservableList.add(result);
     }
 
+    public List<Artist> getArtistList() {
+        return new ArrayList<Artist>(artistObservableMap.values());
+    }
+
     public void addArtist(String artistName) {
         if(artistName == null) return;
         if(artistName.isEmpty()) return;
@@ -177,7 +181,12 @@ public class IndexDataModel {
         artistDAO.createArtist(artistName);
     }
 
-    public void editArtist() {
+    public void editArtist(Artist artist, String newName) {
+        if (artist == null) return;
+
+        if (newName == null || newName.isEmpty()) return;
+
+        artistDAO.updateArtist(artist, newName);
     }
 
     public List<Artist> getAllArtists() {
@@ -194,10 +203,6 @@ public class IndexDataModel {
         if(playlistSong == null) return;
 
         if(playlistToAddTo.getId() == selectedPlaylist.getId()) songPlaylistObservableList.add(playlistSong);
-    }
-
-    public void editSong(Song song) {
-        System.out.println(song);
     }
 
     /**
