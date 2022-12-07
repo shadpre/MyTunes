@@ -30,6 +30,11 @@ public class MyTunesUtility {
         }
     }
 
+    /**
+     * converts a byte object to its hex value and returns it as a String
+     * @param hash byte object
+     * @return a string
+     */
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (byte b : hash) {
@@ -42,6 +47,11 @@ public class MyTunesUtility {
         return hexString.toString().toUpperCase();
     }
 
+    /**
+     * Converts a boolean in seconds to time in minets and seconds
+     * @param inputSeconds input seconds as a double
+     * @return a string with minets and secons as return
+     */
     public static String timeFormatConverter(double inputSeconds){
         int min = (int) (inputSeconds/60);
         int sec = (int) (inputSeconds%60);

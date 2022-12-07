@@ -16,6 +16,11 @@ public class Main extends Application {
 
     public static User currentUser = new User(1, "User 1");
 
+    /**
+     * Reads the Congig file and makes the connection to DB
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         var url = Main.class.getResource("config.properties");
 
@@ -25,6 +30,7 @@ public class Main extends Application {
             props.load(input);
         }
 
+        //Gets the DB Value from a config file
         var dbIp = props.getProperty("DB_IP");
         var dbPort = Integer.parseInt(props.getProperty("DB_PORT"));
         var dbName= props.getProperty("DB_NAME");
@@ -36,6 +42,14 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Launches the FXML program and index file
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Index.fxml"));
