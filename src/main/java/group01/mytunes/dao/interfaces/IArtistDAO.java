@@ -11,14 +11,28 @@ public interface IArtistDAO {
 
     /**
      * Gets all the artists.
-     * @return A List of the artists
+     * @return A List of the artists.
      */
     List<Artist> getArtists();
 
+    /**
+     * Gets an artist by its ID.
+     * @param id The artist ID.
+     * @return The requested artist.
+     */
     Artist getArtistById(int id);
 
+    /**
+     * Creates an artist with the given name.
+     * @param name New artist name.
+     * @return The artist created.
+     */
     Artist createArtist(String name);
 
+    /**
+     * Deletes an artist
+     * @param artist The artist to delete
+     */
     void deleteArtist(Artist artist);
 
     /**
