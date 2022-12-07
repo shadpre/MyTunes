@@ -100,7 +100,7 @@ CREATE PROCEDURE spDeleteArtist(
 @Id INT)
 AS
 	DELETE Song_Artist_Relation
-	WHERE SongId = @Id
+	WHERE ArtistId = @Id
 
 	DELETE Artists
 	WHERE Id = @Id

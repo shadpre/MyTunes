@@ -88,14 +88,15 @@ public class ArtistDatabaseDAO implements IArtistDAO {
     }
 
     @Override
-    public void deleteArtist(int id) {
-        if(id < 0) return;
+    public void deleteArtist(Artist artist) {
+        if(artist == null) return;
+        if(artist.getId() < 0) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
             String query = "exec spDeleteArtist ?";
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, id);
+            statement.setInt(1, artist.getId());
 
             var affectedRows = statement.executeUpdate();
 

@@ -102,7 +102,7 @@ public class TestDBConnection {
 
     @Test
     public void TestDeleteArtist() {
-        int artistToDelete = 2;
+        Artist artistToDelete = new Artist(2, "Hej");
 
         artistDAO.deleteArtist(artistToDelete);
     }
@@ -192,5 +192,12 @@ public class TestDBConnection {
         var song = songDAO.getSongById(1);
 
         System.out.println("%d %s %d %d".formatted(song.getId(), song.getTitle(), song.getData().length, song.getPlaytime()));
+    }
+
+    @Test
+    public void TestSongDAOGetArtistsToSong() {
+        var res = songDAO.getArtistsToSong(4);
+
+        res.forEach(System.out::println);
     }
 }
