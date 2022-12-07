@@ -205,7 +205,7 @@ public class IndexController implements Initializable {
             dialog.setGraphic(null);
 
             Optional<String> result = dialog.showAndWait();
-            result.ifPresent(artist -> indexDataModel.addArtist(artist));
+            result.ifPresent(artist -> indexDataModel.editArtist());
         });
         menuEditArtist.setOnAction(event -> indexDataModel.editArtist());
         menuDeleteArtist.setOnAction(event -> {

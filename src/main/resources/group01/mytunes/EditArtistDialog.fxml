@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<DialogPane prefWidth="500" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+
+    <content>
+        <GridPane hgap="5" prefHeight="70.0" prefWidth="406.0" vgap="5">
+            <Label text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="titleTextField" prefHeight="26.0" prefWidth="247.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <Label GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <ComboBox fx:id="artistPicker" prefHeight="26.0" prefWidth="102.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:id="addButton" buttonData="OK_DONE" text="Ok" />
+        <ButtonType buttonData="CANCEL_CLOSE" text="Cancel" />
+    </buttonTypes>
+
+</DialogPane>
