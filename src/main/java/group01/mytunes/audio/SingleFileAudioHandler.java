@@ -101,6 +101,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
     @Override
     public boolean playPause() {
+        if(mediaPlayer == null) return false;
         if (!isPlaying) {
             mediaPlayer.play();
             isPlaying = true;
