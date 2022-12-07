@@ -227,7 +227,11 @@ public class IndexController implements Initializable {
         });
 
         menuAddPlaylist.setOnAction(event -> newPlaylistHandler());
-        menuEditPlaylist.setOnAction(event -> editPlaylistHandler());
+        menuEditPlaylist.setOnAction(event -> {
+            DropDownTextDialog<Playlist> dialog = new DropDownTextDialog<>(listViewPlayLists.getScene().getWindow(), "Edit Playlist", "New namne", indexDataModel.getPlaylistsObservableList());
+            dialog.showAndWait().ifPresent(result ->
+                    indexDataModel.editPlaylist(result.getFirst(), result.getSecond()));
+        });
     }
 
     private void initSliderSoundLevelSlider() {
