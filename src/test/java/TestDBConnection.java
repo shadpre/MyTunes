@@ -157,6 +157,14 @@ public class TestDBConnection {
         assertEquals(newName, p.getName());
     }
 
+    @Test
+    public void TestGetSongsInPlaylist() {
+        Playlist p = new Playlist(10, Main.currentUser.getId(), null, null);
+
+        var result = playlistDAO.getSongsInPlaylist(p);
+        result.forEach(System.out::println);
+    }
+
     /*
      * Albums
      */
