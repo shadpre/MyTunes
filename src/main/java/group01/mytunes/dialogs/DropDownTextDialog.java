@@ -17,6 +17,9 @@ public class DropDownTextDialog<T> extends Dialog<Tuple<T,String>>{
     private ComboBox<T> tComboBox;
 
     @FXML
+    private Label lblForTextField;
+
+    @FXML
     private TextField inputTextField;
 
     /**
@@ -28,7 +31,7 @@ public class DropDownTextDialog<T> extends Dialog<Tuple<T,String>>{
      * @param text the given display tekst
      * @param obList the given list of values for the comboBOx of any type
      */
-    public DropDownTextDialog(Window owner, String title , String text, List<T> obList) {
+    public DropDownTextDialog(Window owner, String title, String labelText, String text, List<T> obList) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("../DropDownTextDialog.fxml"));
@@ -36,13 +39,14 @@ public class DropDownTextDialog<T> extends Dialog<Tuple<T,String>>{
 
             DialogPane pane = loader.load();
 
-           inputTextField.setText(text);
+            inputTextField.setPromptText(text);
 
             initOwner(owner);
             initModality(Modality.APPLICATION_MODAL);
 
             setResizable(false);
             setTitle(title);
+            lblForTextField.setText(labelText);
             setDialogPane(pane);
 
             tComboBox.setItems(FXCollections.observableArrayList(obList));

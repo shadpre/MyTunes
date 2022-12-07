@@ -7,14 +7,14 @@
 
     <content>
         <GridPane hgap="5" prefHeight="70.0" prefWidth="406.0" vgap="5">
-            <Label prefHeight="17.0" prefWidth="90.0" text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label fx:id="lblForTextField" prefHeight="17.0" prefWidth="90.0" text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
             <TextField fx:id="inputTextField" prefHeight="25.0" prefWidth="454.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
             <Label GridPane.columnIndex="0" GridPane.rowIndex="1" />
             <ComboBox fx:id="tComboBox" prefHeight="25.0" prefWidth="454.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="107.0" minWidth="20.0" />
+            <ColumnConstraints maxWidth="456.0" minWidth="368.0" prefWidth="447.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />

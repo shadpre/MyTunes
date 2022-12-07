@@ -133,45 +133,6 @@ public class IndexController implements Initializable {
                 playSong();
             }
         });
-        /*listViewSongs.setCellFactory(lv -> {
-            ListCell<Song> cell = new ListCell<>();
-
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem editSong = new MenuItem();
-            editSong.setText("Edit song");
-            editSong.setOnAction(event -> indexDataModel.editSong(cell.getItem()));
-
-            Menu addToPlaylist = new Menu("Add to playlist");
-
-
-            for(Playlist p : indexDataModel.getPlaylistsObservableList()) {
-                var menuItem = new MenuItem(p.getName());
-                addToPlaylist.getItems().add(menuItem);
-                menuItem.setOnAction(event -> indexDataModel.addSongToPlaylist(cell.getItem(), p, getSelectedPlaylist()));
-            }
-
-            contextMenu.getItems().addAll(editSong, addToPlaylist);
-
-            cell.emptyProperty().addListener(((observable, wasEmpty, isNowEmpty) -> {
-                if(isNowEmpty) cell.setContextMenu(null);
-                else cell.setContextMenu(contextMenu);
-            }));
-
-            StringBinding stringBinding = new StringBinding(){
-                {
-                    super.bind(cell.itemProperty().asString());
-                }
-                @Override
-                protected String computeValue() {
-                    if(cell.itemProperty().getValue() == null) return "";
-                    return cell.itemProperty().getValue().getTitle();
-                }
-            };
-
-            cell.textProperty().bind(stringBinding);
-
-            return cell;
-        });*/
     }
 
     private void initListViewPlaylistSong()  {
@@ -229,7 +190,7 @@ public class IndexController implements Initializable {
 
         // Edit artist
         menuEditArtist.setOnAction(event -> {
-            DropDownTextDialog<Artist> dialog = new DropDownTextDialog<>(listViewSongs.getScene().getWindow(), "Edit Artist", "New name", indexDataModel.getArtistList());
+            DropDownTextDialog<Artist> dialog = new DropDownTextDialog<>(listViewSongs.getScene().getWindow(), "Edit Artist","New name:","New name", indexDataModel.getArtistList());
             dialog.showAndWait().ifPresent(result ->
                     indexDataModel.editArtist(result.getFirst(), result.getSecond()));
             listViewSongs.refresh();
@@ -257,6 +218,7 @@ public class IndexController implements Initializable {
             DropDownTextDialog<Playlist> dialog = new DropDownTextDialog<>(
                     listViewPlayLists.getScene().getWindow(),
                     "Edit Playlist",
+                    "New name",
                     "New name",
                     indexDataModel.getPlaylistsObservableList()
             );
