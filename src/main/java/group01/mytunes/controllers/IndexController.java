@@ -154,11 +154,7 @@ public class IndexController implements Initializable {
                     nextSongStrategy.changeSong(songId);
                 }
 
-                try {
-                    playSong();
-                } catch(MediaException e) {
-                    showErrorAlert("Can not play this song!");
-                }
+                playSong();
             }
         });
     }
@@ -296,11 +292,16 @@ public class IndexController implements Initializable {
      * Plays the next song.
      */
     private void playSong() {
-        var songToPlay = nextSongStrategy.getNextSong();
-        audioHandler.playSong(songToPlay);
-        bindSongSlider();
-        updatePlayPauseButtons();
-        audioHandler.getMediaPlayer().setOnEndOfMedia(this::playSong);
+        try {
+            var songToPlay = nextSongStrategy.getNextSong();
+            audioHandler.playSong(songToPlay);
+            bindSongSlider();
+            updatePlayPauseButtons();
+
+            audioHandler.getMediaPlayer().setOnEndOfMedia(this::playSong);
+        } catch(MediaException me) {
+            showErrorAlert("Can not play this song!");
+        }
     }
 
     /**
@@ -459,7 +460,10 @@ public class IndexController implements Initializable {
                     player.currentTimeProperty()));
 
             lblCurrentSongTime.textProperty().bind(Bindings.createStringBinding(
-                    () -> MyTunesUtility.timeFormatConverter(audioHandler.getMediaPlayer().getCurrentTime().toSeconds()), // displays current time
+                    () -> {
+                        if(audioHandler.getMediaPlayer() == null) return "00:00";
+                        return MyTunesUtility.timeFormatConverter(audioHandler.getMediaPlayer().getCurrentTime().toSeconds());
+                    }, // displays current time
                     player.currentTimeProperty()));
 
             lblSongLength.setText(MyTunesUtility.timeFormatConverter((audioHandler.getMediaPlayer().getTotalDuration().toSeconds())));
@@ -475,11 +479,7 @@ public class IndexController implements Initializable {
                 audioHandler.restartSong();
             }
             if (event.getClickCount() == 2) {
-                try {
-                    audioHandler.playPreviousSong();
-                } catch (MediaException e) {
-                    showErrorAlert("Can not play this song!");
-                }
+                audioHandler.playPreviousSong();
                 bindSongSlider();
             }
         });
