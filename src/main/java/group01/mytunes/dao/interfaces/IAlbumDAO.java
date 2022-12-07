@@ -4,6 +4,9 @@ import group01.mytunes.entities.Album;
 
 import java.util.List;
 
+/**
+ * Interface for AlbumDAO
+ */
 public interface IAlbumDAO {
 
     /**
