@@ -222,17 +222,20 @@ public class IndexController implements Initializable {
             dialog.setGraphic(null);
             dialog.setHeaderText(null);
             dialog.setTitle("Add artist");
-            dialog.setHeaderText("Add an artist");
             dialog.setContentText("Artist name:");
             var result = dialog.showAndWait();
-            result.ifPresent(artist -> indexDataModel.editArtist());
+            result.ifPresent(artist -> indexDataModel.addArtist(artist));
         });
+
+        // Edit artist
         menuEditArtist.setOnAction(event -> {
-            DropDownTextDialog<Artist> dialog = new DropDownTextDialog<>(listViewSongs.getScene().getWindow(), "Edit Artist", "New namne", indexDataModel.getArtistList());
+            DropDownTextDialog<Artist> dialog = new DropDownTextDialog<>(listViewSongs.getScene().getWindow(), "Edit Artist", "New name", indexDataModel.getArtistList());
             dialog.showAndWait().ifPresent(result ->
                     indexDataModel.editArtist(result.getFirst(), result.getSecond()));
             listViewSongs.refresh();
         });
+
+        // Delete artist
         menuDeleteArtist.setOnAction(event -> {
             Dialog<Artist> deleteArtistDialog = new ChoiceDialog<>(null, indexDataModel.getAllArtists());
             deleteArtistDialog.setGraphic(null);
@@ -251,16 +254,20 @@ public class IndexController implements Initializable {
 
         // Edit playlist
         menuEditPlaylist.setOnAction(event -> {
-            DropDownTextDialog<Playlist> dialog = new DropDownTextDialog<>(listViewPlayLists.getScene().getWindow(), "Edit Playlist", "New namne", indexDataModel.getPlaylistsObservableList());
-            dialog.showAndWait().ifPresent(result ->
-                    indexDataModel.editPlaylist(result.getFirst(), result.getSecond()));
+            DropDownTextDialog<Playlist> dialog = new DropDownTextDialog<>(
+                    listViewPlayLists.getScene().getWindow(),
+                    "Edit Playlist",
+                    "New name",
+                    indexDataModel.getPlaylistsObservableList()
+            );
+
+            dialog.showAndWait().ifPresent(result -> indexDataModel.editPlaylist(result.getFirst(), result.getSecond()));
         });
 
         /*
             Quit button
          */
         menuQuit.setOnAction(event -> System.exit(0));
-
     }
 
     private void initSliderSoundLevelSlider() {
