@@ -14,10 +14,10 @@
     <content>
         <GridPane hgap="5" prefHeight="70.0" prefWidth="406.0" vgap="5">
             <Label text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <TextField fx:id="titleTextField" prefHeight="26.0" prefWidth="247.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <TextField fx:id="inputTextField" prefHeight="26.0" prefWidth="247.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
             <Label GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <ComboBox fx:id="artistPicker" prefHeight="26.0" prefWidth="102.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="tComboBox" prefHeight="26.0" prefWidth="102.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          <columnConstraints>
             <ColumnConstraints />
             <ColumnConstraints />

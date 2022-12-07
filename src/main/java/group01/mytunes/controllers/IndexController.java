@@ -1,5 +1,6 @@
 package group01.mytunes.controllers;
 
+import group01.mytunes.dialogs.DropDownTextDialog;
 import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Playlist;
 import group01.mytunes.entities.PlaylistSong;
@@ -205,9 +206,14 @@ public class IndexController implements Initializable {
             dialog.setGraphic(null);
 
             Optional<String> result = dialog.showAndWait();
-            result.ifPresent(artist -> indexDataModel.editArtist());
+            result.ifPresent(artist -> indexDataModel.addArtist(artist));
         });
-        menuEditArtist.setOnAction(event -> indexDataModel.editArtist());
+        menuEditArtist.setOnAction(event -> {
+            DropDownTextDialog<Artist> dialog = new DropDownTextDialog<>(listViewSongs.getScene().getWindow(), "Edit Artist", "New namne", indexDataModel.getArtistList());
+            dialog.showAndWait().ifPresent(result ->
+                    indexDataModel.editArtist(result.getFirst(), result.getSecond()));
+            listViewSongs.refresh();
+        });
         menuDeleteArtist.setOnAction(event -> {
             Dialog<Artist> deleteArtistDialog = new ChoiceDialog<>(null, indexDataModel.getAllArtists());
             deleteArtistDialog.setGraphic(null);
