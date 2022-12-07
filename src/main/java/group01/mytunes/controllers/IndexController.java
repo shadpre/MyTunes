@@ -323,7 +323,7 @@ public class IndexController implements Initializable {
     }
 
     /**
-     * Handles button click when want to delete a plaulist.
+     * Handles button click when want to delete a playlist.
      */
     public void deleteSelectedPlaylistHandler() {
         Playlist selectedPlaylist = listViewPlayLists.getSelectionModel().getSelectedItem(); //gets selected item
@@ -401,7 +401,7 @@ public class IndexController implements Initializable {
     }
 
     /**
-     * Handles button click when want to add the selcted song to a playlist.
+     * Handles button click when want to add the selected song to a playlist.
      */
     public void insertSongToPlaylistHandler() {
         var selectedSong = listViewSongs.getSelectionModel().getSelectedItem();
