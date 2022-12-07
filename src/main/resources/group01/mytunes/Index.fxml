@@ -136,7 +136,11 @@
     <Label layoutX="12.0" layoutY="38.0" text="🔉" />
     <MenuBar layoutX="6.0" layoutY="4.0">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem fx:id="menuAddSong" mnemonicParsing="false" text="Add song" />
+            <Menu mnemonicParsing="false" text="Song">
+                <MenuItem fx:id="menuAddSong" mnemonicParsing="false" text="Add song" />
+                <MenuItem fx:id="menuEditSong" mnemonicParsing="false" text="Edit song" />
+                <MenuItem fx:id="menuDeleteSong" mnemonicParsing="false" text="Delete song" />
+            </Menu>
             <Menu mnemonicParsing="false" text="Artist">
                 <MenuItem fx:id="menuAddArtist" mnemonicParsing="false" text="Add artist" />
                 <MenuItem fx:id="menuEditArtist" mnemonicParsing="false" text="Edit artist" />

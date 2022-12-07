@@ -21,6 +21,7 @@ import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -52,7 +53,7 @@ public class IndexController implements Initializable {
     @FXML private Label lblCurrentSelectedPlaylist;
     @FXML private TextField txtFieldSearchbar;
     @FXML private MenuItem menuQuit;
-    @FXML private MenuItem menuAddSong;
+    @FXML private MenuItem menuAddSong, menuEditSong, menuDeleteSong;
     @FXML private MenuItem menuAddArtist, menuEditArtist, menuDeleteArtist;
     @FXML private MenuItem menuAddPlaylist, menuEditPlaylist;
     @FXML private ToggleButton shuffleToggleButton;
@@ -112,9 +113,9 @@ public class IndexController implements Initializable {
 
     private void initListViewSongs() {
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
-        tableColumnArtist.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Song, String>, ObservableValue<String>>) param -> {
-            return new SimpleStringProperty(indexDataModel.getArtistsForSong(param.getValue()));
-        });
+        tableColumnArtist.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Song, String>, ObservableValue<String>>)
+                param -> new SimpleStringProperty(indexDataModel.getArtistsForSong(param.getValue()))
+        );
 
         listViewSongs.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
@@ -127,48 +128,10 @@ public class IndexController implements Initializable {
                 } else {
                     nextSongStrategy.changeSong(songId);
                 }
+
                 playSong();
             }
         });
-        /*listViewSongs.setCellFactory(lv -> {
-            ListCell<Song> cell = new ListCell<>();
-
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem editSong = new MenuItem();
-            editSong.setText("Edit song");
-            editSong.setOnAction(event -> indexDataModel.editSong(cell.getItem()));
-
-            Menu addToPlaylist = new Menu("Add to playlist");
-
-
-            for(Playlist p : indexDataModel.getPlaylistsObservableList()) {
-                var menuItem = new MenuItem(p.getName());
-                addToPlaylist.getItems().add(menuItem);
-                menuItem.setOnAction(event -> indexDataModel.addSongToPlaylist(cell.getItem(), p, getSelectedPlaylist()));
-            }
-
-            contextMenu.getItems().addAll(editSong, addToPlaylist);
-
-            cell.emptyProperty().addListener(((observable, wasEmpty, isNowEmpty) -> {
-                if(isNowEmpty) cell.setContextMenu(null);
-                else cell.setContextMenu(contextMenu);
-            }));
-
-            StringBinding stringBinding = new StringBinding(){
-                {
-                    super.bind(cell.itemProperty().asString());
-                }
-                @Override
-                protected String computeValue() {
-                    if(cell.itemProperty().getValue() == null) return "";
-                    return cell.itemProperty().getValue().getTitle();
-                }
-            };
-
-            cell.textProperty().bind(stringBinding);
-
-            return cell;
-        });*/
     }
 
     private void initListViewPlaylistSong()  {
@@ -193,21 +156,43 @@ public class IndexController implements Initializable {
      * Initializes the buttons in the menu bar.
      */
     private void initMenuBar() {
-        menuQuit.setOnAction(event -> System.exit(0));
-
+        /*
+           Song tab
+         */
+        // Add song
         menuAddSong.setOnAction(event -> makeNewSongWindowOpen());
 
+        // Delete song
+        menuDeleteSong.setOnAction(event -> {
+            Dialog<Song> deleteSongDialog = new ChoiceDialog<>(null, indexDataModel.getSongInfoObservableList());
+            deleteSongDialog.setGraphic(null);
+            deleteSongDialog.setHeaderText(null);
+            deleteSongDialog.setTitle("Delete a song");
+            deleteSongDialog.setContentText("Delete song: ");
+            var result = deleteSongDialog.showAndWait();
+            result.ifPresent(selectedSong -> indexDataModel.deleteSong(selectedSong));
+        });
+
+        /*
+            Artist tab
+         */
+        // Add artist
         menuAddArtist.setOnAction(event -> {
             TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Add artist");
-            dialog.setHeaderText("Add an artist");
-            dialog.setContentText("Artist name:");
             dialog.setGraphic(null);
-
-            Optional<String> result = dialog.showAndWait();
+            dialog.setHeaderText(null);
+            dialog.setTitle("Add artist");
+            dialog.setContentText("Artist name:");
+            var result = dialog.showAndWait();
             result.ifPresent(artist -> indexDataModel.editArtist());
         });
-        menuEditArtist.setOnAction(event -> indexDataModel.editArtist());
+
+        // Edit artist
+        menuEditArtist.setOnAction(event -> {
+
+        });
+
+        // Delete artist
         menuDeleteArtist.setOnAction(event -> {
             Dialog<Artist> deleteArtistDialog = new ChoiceDialog<>(null, indexDataModel.getAllArtists());
             deleteArtistDialog.setGraphic(null);
@@ -215,13 +200,22 @@ public class IndexController implements Initializable {
             deleteArtistDialog.setContentText("Delete artist:");
             deleteArtistDialog.setTitle("Delete an artist");
             Optional<Artist> result = deleteArtistDialog.showAndWait();
-            result.ifPresent(artist -> {
-                indexDataModel.deleteArtist(artist);
-            });
+            result.ifPresent(artist -> indexDataModel.deleteArtist(artist));
         });
 
+        /*
+            Playlist tab
+         */
+        // Add playlist
         menuAddPlaylist.setOnAction(event -> newPlaylistHandler());
+
+        // Edit playlist
         menuEditPlaylist.setOnAction(event -> editPlaylistHandler());
+
+        /*
+            Quit button
+         */
+        menuQuit.setOnAction(event -> System.exit(0));
     }
 
     private void initSliderSoundLevelSlider() {
@@ -249,9 +243,7 @@ public class IndexController implements Initializable {
         audioHandler.playSong(songToPlay);
         bindSongSlider();
         updatePlayPauseButtons();
-        audioHandler.getMediaPlayer().setOnEndOfMedia(() -> {
-            playSong();
-        });
+        audioHandler.getMediaPlayer().setOnEndOfMedia(this::playSong);
     }
 
     public void editPlaylistHandler() {
