@@ -527,4 +527,11 @@ public class IndexController implements Initializable {
         alert.show();
     }
 
+    /**
+     * play next song in playlist when this btn is pressed
+     * @param actionEvent
+     */
+    public void nextSongHandler(ActionEvent actionEvent) {
+        playSong();
+    }
 }

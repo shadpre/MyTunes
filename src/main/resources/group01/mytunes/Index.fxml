@@ -138,7 +138,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <Button fx:id="btnPlayPause" mnemonicParsing="false" onAction="#playOrPauseSong" prefHeight="46.0" prefWidth="52.0" text="⪢" GridPane.columnIndex="2" />
-        <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="52.0" text="»" GridPane.columnIndex="4" />
+        <Button mnemonicParsing="false" onAction="#nextSongHandler" prefHeight="46.0" prefWidth="52.0" text="»" GridPane.columnIndex="4" />
         <Button fx:id="btnPreviousSong" mnemonicParsing="false" prefHeight="46.0" prefWidth="52.0" text="«" />
     </GridPane>
     <Slider fx:id="sliderSongTimeline" layoutX="428.0" layoutY="591.0" onMousePressed="#songStop" onMouseReleased="#continueSlider" prefHeight="14.0" prefWidth="521.0" />
