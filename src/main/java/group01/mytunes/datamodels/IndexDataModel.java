@@ -205,10 +205,6 @@ public class IndexDataModel {
         if(playlistToAddTo.getId() == selectedPlaylist.getId()) songPlaylistObservableList.add(playlistSong);
     }
 
-    public void editSong(Song song) {
-        System.out.println(song);
-    }
-
     /**
      * Deletes a song.
      * If  the song is in a playlist or album, it will also be deleted from those.
