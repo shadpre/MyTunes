@@ -27,6 +27,10 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
     private MediaPlayer mediaPlayer;
 
+    /**
+     * constructer
+     * @param songDAO
+     */
     public SingleFileAudioHandler(ISongDAO songDAO) {
         isPlaying = false;
         File dataDirectory = new File(DATA_DIR);
@@ -39,6 +43,11 @@ public class SingleFileAudioHandler implements IAudioHandler {
         time = 0.0;
     }
 
+    /**
+     * makes the mediaPlayer and plays the temparary file
+     * @param song
+     * @throws MediaException
+     */
     public void playSong(Song song) throws MediaException {
         System.out.println("Play:\n" +
                 song.getId() + "\n" +
@@ -68,6 +77,13 @@ public class SingleFileAudioHandler implements IAudioHandler {
         }
     }
 
+    /**
+     * makkes a temp file to be payed by getind song data as indput.
+     * then saves file to a specifik ditectury while its playing
+     * @param data
+     * @return
+     * @throws IOException
+     */
     private String saveTempFile(byte[] data) throws IOException {
         System.out.println(DATA_DIR);
         File tempFile = new File(DATA_DIR + "/MYTUNES.song");
@@ -79,6 +95,11 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
         return tempFile.getAbsoluteFile().toURI().toString();
     }
+
+    /**
+     * plays the previous song from the sonPlayed stak and removes the curent song
+     * @throws MediaException
+     */
     public void playPreviousSong() throws MediaException {
         try {
 
@@ -92,16 +113,29 @@ public class SingleFileAudioHandler implements IAudioHandler {
         }
     }
 
+    /**
+     * restarts the song in the mediaPlayer
+     */
     @Override
     public void restartSong() {
         mediaPlayer.stop();
         mediaPlayer.play();
     }
 
+    /**
+     * changes volume to the given parameter input
+     * @param volume
+     */
     public void changeVolume(double volume) {
         mediaPlayer.setVolume(volume);
     }
 
+    /**
+     * checks if a song is playing.
+     * @return true if its playing a song and flase i not
+     * if program is not playing a song it wil play.
+     * if progra is playing, it wil pause current song
+     */
     @Override
     public boolean playPause() {
         if(mediaPlayer == null) return false;
@@ -115,6 +149,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
         return isPlaying;
     }
+
 
     @Override
     public boolean isPlaying() {
@@ -131,16 +166,26 @@ public class SingleFileAudioHandler implements IAudioHandler {
         return mediaPlayer;
     }
 
+    /**
+     * sets the time for next time player plays a song
+     * @param songProgress
+     */
     public void setTime(double songProgress){
         this.time = songProgress; //sets the time for when the music start
         mediaPlayer.setStartTime(Duration.millis(time * 1000));
     }
 
+    /**
+     * Stops current song, and sets isPlaying bollean to false
+     */
     public void stop() { //stops music
         this.isPlaying = false;
         mediaPlayer.stop();
     }
 
+    /**
+     * starts song and sets is playing to true, after witch it wil st start time to 0 for next song start
+     */
     @Override
     public void start() {
         this.isPlaying = true;
