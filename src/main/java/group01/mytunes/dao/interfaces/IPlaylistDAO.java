@@ -4,6 +4,7 @@ import group01.mytunes.entities.Playlist;
 import group01.mytunes.entities.PlaylistSong;
 import group01.mytunes.entities.Song;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -52,8 +53,8 @@ public interface IPlaylistDAO {
      */
     List<PlaylistSong> getSongsInPlaylist(Playlist playlist);
 
-    void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls);
-    void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls);
+    void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls) throws SQLException;
+    void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls) throws SQLException;
 
 
 }

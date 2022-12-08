@@ -13,10 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
 
 public class IndexDataModel {
 
@@ -221,20 +219,41 @@ public class IndexDataModel {
         }
     }
 
-    public void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls){
+    /**
+     * Moves a song up in a playlist
+     * @param playlist The selected playlist
+     * @param pls The song to move
+     */
+    public void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls) {
         try {
             playlistDAO.moveSongUpInPlaylist(playlist, pls);
-        }
-        catch (Exception e){
-            e.printStackTrace();
+            int index = songPlaylistObservableList.indexOf(pls); // Index of the PlaylistSong object in observable list
+            Collections.swap(
+                songPlaylistObservableList,
+                index, // Swap index 1
+                index-1 // Swap index 2
+            );
+        } catch (SQLException e) {
+            System.out.println("Can not move song up!");
         }
     }
-    public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls){
+
+    /**
+     * Moves a song down in a playlist
+     * @param playlist The selected playlist
+     * @param pls The song to move
+     */
+    public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls) {
         try {
             playlistDAO.moveSongDownInPlaylist(playlist, pls);
-        }
-        catch (Exception e){
-            e.printStackTrace();
+            int index = songPlaylistObservableList.indexOf(pls); // Index of the PlaylistSong object in observable list
+            Collections.swap(
+                songPlaylistObservableList,
+                index, // Swap index 1
+                index+1 // Swap index 2
+            );
+        } catch (SQLException e) {
+            System.out.println("Can not move song down!");
         }
     }
 }

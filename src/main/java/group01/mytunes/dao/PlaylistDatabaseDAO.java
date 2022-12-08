@@ -1,5 +1,6 @@
 package group01.mytunes.dao;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import group01.mytunes.Main;
 import group01.mytunes.entities.Playlist;
 import group01.mytunes.entities.PlaylistSong;
@@ -180,7 +181,7 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
     }
 
     @Override
-    public void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls){
+    public void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls) throws SQLException {
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
             String query = "EXEC spMoveSongUpInPlaylist ?, ?;";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -188,16 +189,13 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
             statement.setInt(2, pls.getRelationId());
 
             statement.executeUpdate();
-
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw e;
         }
     }
 
     @Override
-    public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls){
+    public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls) throws SQLException {
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
             String query = "EXEC spMoveSongDownInPlaylist ?, ?;";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -205,11 +203,8 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
             statement.setInt(2, pls.getRelationId());
 
             statement.executeUpdate();
-
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw e;
         }
     }
 }
