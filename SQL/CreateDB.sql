@@ -378,7 +378,7 @@ AS
 
 	IF(@Position1 = 1)
 	BEGIN
-		RAISERROR ('Can not move',1,1);
+		RAISERROR ('Can not move',16,1);
 		RETURN 1
 	END
 
@@ -406,7 +406,7 @@ AS
 
 	IF(@Position1 = (SELECT MAX(Position) FROM Song_Playlist_Relation WHERE PlaylistId = @PlaylistId))
 	BEGIN
-		RAISERROR ('Can not move',1,1);
+		RAISERROR ('Can not move',16,1);
 		RETURN 1
 
 	END
