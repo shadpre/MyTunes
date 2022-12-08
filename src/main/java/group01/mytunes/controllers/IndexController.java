@@ -525,11 +525,11 @@ public class IndexController implements Initializable {
         audioHandler.stop();
 
         sliderSongTimeline.valueProperty().unbind();
-
-        audioHandler.setTime(sliderSongTimeline.getValue());
     }
 
     public void continueSlider(MouseEvent mouseEvent) { // resume music after drag
+        audioHandler.setTime(sliderSongTimeline.getValue());
+
         audioHandler.getMediaPlayer().setOnReady(() -> {
             var player = audioHandler.getMediaPlayer();
             sliderSongTimeline.maxProperty().bind(Bindings.createDoubleBinding( // sets song length
@@ -542,6 +542,8 @@ public class IndexController implements Initializable {
         });
 
         audioHandler.start();
+
+        System.out.println(sliderSongTimeline.getValue());
     }
 
     private void showErrorAlert(String errorMsg) {
