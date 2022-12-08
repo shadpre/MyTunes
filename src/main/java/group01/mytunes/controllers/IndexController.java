@@ -530,6 +530,12 @@ public class IndexController implements Initializable {
     public void continueSlider(MouseEvent mouseEvent) { // resume music after drag
         audioHandler.setTime(sliderSongTimeline.getValue());
 
+        var player = audioHandler.getMediaPlayer();
+
+        sliderSongTimeline.valueProperty().bind(Bindings.createDoubleBinding( // binds slider progress to mediaPlayer
+                () -> player.getCurrentTime().toSeconds(),
+                player.currentTimeProperty()));
+
         audioHandler.start();
 
         System.out.println(sliderSongTimeline.getValue());
