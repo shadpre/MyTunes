@@ -127,6 +127,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
      * @param volume
      */
     public void changeVolume(double volume) {
+        this.volume = volume;
         mediaPlayer.setVolume(volume);
     }
 
