@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane prefWidth="500" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+
+    <content>
+        <GridPane hgap="5" prefHeight="70.0" prefWidth="406.0" vgap="5">
+            <Label fx:id="lblForTextField" prefHeight="17.0" prefWidth="90.0" text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="inputTextField" prefHeight="25.0" prefWidth="454.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <Label GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <ComboBox fx:id="tComboBox" prefHeight="25.0" prefWidth="454.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="107.0" minWidth="20.0" />
+            <ColumnConstraints maxWidth="456.0" minWidth="368.0" prefWidth="447.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:id="addButton" buttonData="OK_DONE" text="Ok" />
+        <ButtonType buttonData="CANCEL_CLOSE" text="Cancel" />
+    </buttonTypes>
+
+</DialogPane>

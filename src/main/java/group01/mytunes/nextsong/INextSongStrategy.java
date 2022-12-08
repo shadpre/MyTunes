@@ -2,6 +2,9 @@ package group01.mytunes.nextsong;
 
 import group01.mytunes.entities.Song;
 
+/**
+ * Strategy interface for getting the next song to play.
+ */
 public interface INextSongStrategy {
 
     /**

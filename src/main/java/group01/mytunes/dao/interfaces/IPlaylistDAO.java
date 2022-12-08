@@ -37,8 +37,19 @@ public interface IPlaylistDAO {
      */
     void updatePlaylist(Playlist playlist, String newName);
 
+    /**
+     * Adds a song to the playlist.
+     * @param song The song to be added.
+     * @param playlist The playlist the song should be added to.
+     * @return The PlaylistSong object created.
+     */
     PlaylistSong addSongToPlaylist(Song song, Playlist playlist);
 
+    /**
+     * Gets a list of all the songs in a given playlist.
+     * @param playlist The playlist to get the songs from.
+     * @return A list of songs in the playlist,.
+     */
     List<PlaylistSong> getSongsInPlaylist(Playlist playlist);
 
     void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls);

@@ -1,8 +1,6 @@
 package group01.mytunes.datamodels;
 
 import group01.mytunes.entities.Artist;
-import group01.mytunes.dao.SongDatabaseDAO;
-import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Playlist;
 import group01.mytunes.entities.PlaylistSong;
 import group01.mytunes.entities.Song;
@@ -10,15 +8,11 @@ import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.exceptions.SQLDeleteException;
-import group01.mytunes.utility.MyTunesUtility;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import javax.swing.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,14 +93,15 @@ public class IndexDataModel {
 
     /**
      * Edits a playlist.
+     *
      * @param playlist The playlist wanted to be edited.
-     * @param newName The new name.
-     * @return True of edited. False if failed.
+     * @param newName  The new name.
      */
-    public boolean editPlaylist(Playlist playlist, String newName) {
-        if(newName == null) return false;
-        if(newName.isEmpty()) return false;
-        if(playlist.getName().equals(newName)) return false;
+    public void editPlaylist(Playlist playlist, String newName) {
+        if(newName == null) return;
+        if(newName.isEmpty()) return;
+        if(playlist == null) return;
+        if(playlist.getName().equals(newName)) return;
 
         playlistDAO.updatePlaylist(playlist, newName);
 
@@ -114,8 +109,6 @@ public class IndexDataModel {
         System.out.println(index);
         playlist.setName(newName);
         playlistsObservableList.set(index, playlist);
-
-        return true;
     }
 
     public boolean editSong(Song selectedSong, String newSongName) {
@@ -170,6 +163,10 @@ public class IndexDataModel {
         songObservableList.add(result);
     }
 
+    public List<Artist> getArtistList() {
+        return new ArrayList<Artist>(artistObservableMap.values());
+    }
+
     public void addArtist(String artistName) {
         if(artistName == null) return;
         if(artistName.isEmpty()) return;
@@ -177,7 +174,12 @@ public class IndexDataModel {
         artistDAO.createArtist(artistName);
     }
 
-    public void editArtist() {
+    public void editArtist(Artist artist, String newName) {
+        if (artist == null) return;
+
+        if (newName == null || newName.isEmpty()) return;
+
+        artistDAO.updateArtist(artist, newName);
     }
 
     public List<Artist> getAllArtists() {
@@ -194,10 +196,6 @@ public class IndexDataModel {
         if(playlistSong == null) return;
 
         if(playlistToAddTo.getId() == selectedPlaylist.getId()) songPlaylistObservableList.add(playlistSong);
-    }
-
-    public void editSong(Song song) {
-        System.out.println(song);
     }
 
     /**

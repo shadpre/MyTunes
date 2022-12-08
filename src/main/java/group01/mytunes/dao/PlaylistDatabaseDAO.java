@@ -162,7 +162,7 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
 
             while(resultSet.next()) {
                 resultList.add(new PlaylistSong(
-                        resultSet.getInt("sprId"),
+                        resultSet.getInt("rId"),
                             new Song(
                             resultSet.getInt("Id"),
                             resultSet.getString("Title"),
