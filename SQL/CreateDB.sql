@@ -66,7 +66,7 @@ CREATE TABLE Song_Playlist_Relation(
 
 GO
 Insert into Users ([Name]) Values('Default')
-
+GO
 DROP PROCEDURE IF EXISTS spNewArtist;
 DROP PROCEDURE IF EXISTS spGetAllArtists;
 DROP PROCEDURE IF EXISTS spGetArtistById;
@@ -211,6 +211,7 @@ GO
 --Songs
 
 DROP PROCEDURE IF EXISTS spNewSong;
+DROP PROCEDURE IF EXISTS spSetSongArtistReleation;
 DROP PROCEDURE IF EXISTS spGetAllSongInfo;
 DROP PROCEDURE IF EXISTS spGetSongById;
 DROP PROCEDURE IF EXISTS spUpdateSongTittle;
@@ -230,6 +231,14 @@ AS
     SELECT Id
 	FROM Songs
 	WHERE Id = SCOPE_IDENTITY()
+GO
+
+CREATE PROCEDURE spSetSongArtistReleation(
+@SongId INT,
+@ArtistId INT)
+AS
+	INSERT INTO Song_Artist_Relation (SongId, ArtistId)
+	VALUES (@SongId, @ArtistId)
 GO
 
 CREATE PROCEDURE spGetAllSongInfo
