@@ -1,11 +1,3 @@
-USE MyTunes;
-
---Stored procedures
---Artist
-
-GO
-Insert into Users ([Name]) Values('Default')
-GO
 DROP PROCEDURE IF EXISTS spNewArtist;
 DROP PROCEDURE IF EXISTS spGetAllArtists;
 DROP PROCEDURE IF EXISTS spGetArtistById;
@@ -254,6 +246,7 @@ AS
 			SELECT SongId
 			FROM Song_Playlist_Relation
 			WHERE PlaylistId = @PlaylistId))
+	Where Id = @PlaylistId
 
 	SELECT Id, Position FROM Song_Playlist_Relation
 	WHERE Id=SCOPE_IDENTITY()
@@ -279,6 +272,7 @@ AS
 			SELECT SongId
 			FROM Song_Playlist_Relation
 			WHERE PlaylistId = @PlaylistId))
+	Where Id = @PlaylistId
 
 	DROP TABLE IF EXISTS #TEMP;
 	CREATE TABLE #TEMP(
