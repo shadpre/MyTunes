@@ -21,11 +21,13 @@ import group01.mytunes.nextsong.NextSongLinearStrategy;
 import group01.mytunes.utility.MyTunesUtility;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaException;
 import javafx.util.Callback;
@@ -137,7 +139,13 @@ public class IndexController implements Initializable {
      * Adds mouse listener to be able to play a song.
      */
     private void initListViewSongs() {
+        listViewSongs.widthProperty().addListener((source, oldWidth, newWidth) -> {
+            TableHeaderRow header = (TableHeaderRow) listViewSongs.lookup("TableHeaderRow");
+            header.reorderingProperty().addListener((observable, oldValue, newValue) -> header.setReordering(false));
+        });
+
         listViewSongs.setItems(indexDataModel.getSongInfoObservableList());
+
         tableColumnArtist.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Song, String>, ObservableValue<String>>)
                 param -> new SimpleStringProperty(indexDataModel.getArtistsForSong(param.getValue()))
         );
