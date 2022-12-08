@@ -168,5 +168,8 @@
         </Menu>
     </MenuBar>
    <ToggleButton fx:id="shuffleToggleButton" layoutX="772.0" layoutY="554.0" mnemonicParsing="false" text="Shuffle" />
-   <Label fx:id="lblSongPlaying" alignment="CENTER_RIGHT" layoutX="17.0" layoutY="589.0" prefHeight="17.0" prefWidth="375.0" text="Now Playing: No song available" textAlignment="RIGHT" textOverrun="CLIP" />
+   <Label fx:id="lblSongPlaying" alignment="CENTER_RIGHT" layoutX="20.0" layoutY="585.0" prefHeight="17.0" prefWidth="375.0" text="Now Playing: No song available" textAlignment="RIGHT" textOverrun="CLIP">
+      <font>
+         <Font size="15.0" />
+      </font></Label>
 </AnchorPane>
