@@ -29,6 +29,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaException;
 import javafx.util.Callback;
 
@@ -41,10 +42,10 @@ import java.util.ResourceBundle;
  * Controller for Index.fxml
  */
 public class IndexController implements Initializable {
-
     private IndexDataModel indexDataModel;
     private IAudioHandler audioHandler;
 
+    @FXML private Label lblSongPlaying;
     @FXML private TextField txtFieldSearchbar;
     @FXML private Label lblCurrentSelectedPlaylist;
     @FXML private Label lblCurrentSongTime, lblSongLength;
@@ -107,6 +108,8 @@ public class IndexController implements Initializable {
                 .then("No playlist selected")
                 .otherwise(indexDataModel.getSelectedPlaylistObservable().asString())
         );
+
+        lblSongPlaying.setText("Now Playing: No song available");
 
         System.out.println("Controller initialized");
     }
@@ -306,10 +309,13 @@ public class IndexController implements Initializable {
             audioHandler.playSong(songToPlay);
             bindSongSlider();
             updatePlayPauseButtons();
+            lblSongPlaying.setText("Now Playing: " + songToPlay.getTitle());
+
 
             audioHandler.getMediaPlayer().setOnEndOfMedia(this::playSong);
         } catch(MediaException me) {
             showErrorAlert("Can not play this song!");
+            lblSongPlaying.setText("Now Playing: No song available");
         }
     }
 
