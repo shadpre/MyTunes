@@ -224,7 +224,7 @@ public class IndexDataModel {
      * @param playlist The selected playlist
      * @param pls The song to move
      */
-    public void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls) {
+    public void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls) throws SQLException {
         try {
             playlistDAO.moveSongUpInPlaylist(playlist, pls);
             int index = songPlaylistObservableList.indexOf(pls); // Index of the PlaylistSong object in observable list
@@ -235,6 +235,7 @@ public class IndexDataModel {
             );
         } catch (SQLException e) {
             System.out.println("Can not move song up!");
+            throw e;
         }
     }
 
@@ -243,7 +244,7 @@ public class IndexDataModel {
      * @param playlist The selected playlist
      * @param pls The song to move
      */
-    public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls) {
+    public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls) throws SQLException {
         try {
             playlistDAO.moveSongDownInPlaylist(playlist, pls);
             int index = songPlaylistObservableList.indexOf(pls); // Index of the PlaylistSong object in observable list
@@ -254,6 +255,7 @@ public class IndexDataModel {
             );
         } catch (SQLException e) {
             System.out.println("Can not move song down!");
+            throw e;
         }
     }
 }
