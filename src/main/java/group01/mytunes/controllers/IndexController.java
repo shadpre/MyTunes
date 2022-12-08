@@ -301,7 +301,7 @@ public class IndexController implements Initializable {
     }
 
     /**
-     * Plays the next song.
+     * Plays the next song. and display the song tittle
      */
     private void playSong() {
         try {
