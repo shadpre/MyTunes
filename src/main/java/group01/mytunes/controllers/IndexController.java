@@ -33,6 +33,7 @@ import javafx.scene.media.MediaException;
 import javafx.util.Callback;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -494,11 +495,21 @@ public class IndexController implements Initializable {
     }
 
     public void moveSongDownInPlaylist() {
-        indexDataModel.moveSongDownInPlaylist(getSelectedPlaylist(),listViewPlaylistSongs.getSelectionModel().getSelectedItem());
+        try {
+            indexDataModel.moveSongDownInPlaylist(getSelectedPlaylist(),listViewPlaylistSongs.getSelectionModel().getSelectedItem());
+            int selectedIndex = listViewPlaylistSongs.getSelectionModel().getSelectedIndex();
+            listViewPlaylistSongs.getSelectionModel().select(selectedIndex + 1);
+        } catch (SQLException e) {
+        }
     }
 
     public void moveSongUpInPlaylist() {
-        indexDataModel.moveSongUpInPlaylist(getSelectedPlaylist(),listViewPlaylistSongs.getSelectionModel().getSelectedItem());
+        try {
+            indexDataModel.moveSongUpInPlaylist(getSelectedPlaylist(),listViewPlaylistSongs.getSelectionModel().getSelectedItem());
+            int selectedIndex = listViewPlaylistSongs.getSelectionModel().getSelectedIndex();
+            listViewPlaylistSongs.getSelectionModel().select(selectedIndex - 1);
+        } catch (SQLException e) {
+        }
     }
 
     /**
