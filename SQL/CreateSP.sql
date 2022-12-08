@@ -1,3 +1,5 @@
+USE MyTunes;
+
 --Stored procedures
 --Artist
 

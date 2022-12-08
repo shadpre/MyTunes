@@ -207,7 +207,7 @@ public class IndexDataModel {
 
             List<PlaylistSong> toDelete = new ArrayList<>();
             for(PlaylistSong p : songPlaylistObservableList) {
-                if(p.getSong().getId() == song.getId()) toDelete.add(p);
+                if(p.getId() == song.getId()) toDelete.add(p);
             }
 
             songPlaylistObservableList.removeAll(toDelete);

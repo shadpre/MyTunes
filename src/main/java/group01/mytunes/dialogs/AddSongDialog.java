@@ -13,6 +13,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Window;
@@ -35,6 +37,9 @@ public class AddSongDialog extends Dialog<Song> {
     private Button filePickerButton;
 
     @FXML
+    private ButtonType cancelButton;
+
+    @FXML
     private TextField titleTextField;
 
     @FXML
@@ -44,6 +49,8 @@ public class AddSongDialog extends Dialog<Song> {
     private IAlbumDAO albumDAO;
     private ObservableList<Artist> artistObservableList;
     private ObservableList<Album> albumObservableList;
+
+    private int durationInSeconds = 0;
 
     public AddSongDialog(Window owner) {
         try {
@@ -65,7 +72,18 @@ public class AddSongDialog extends Dialog<Song> {
                     System.out.println(selectedFile.getAbsoluteFile());
                     lblFieldFilePath.setText(String.valueOf(selectedFile));
                 }
+
+                if(titleTextField.getText().isEmpty()) {
+                    String fileName = selectedFile.getName();
+                    titleTextField.setText(fileName.substring(0, fileName.lastIndexOf('.')));
+                }
+
+                Media media = new Media(selectedSongFile.getAbsoluteFile().toURI().toString());
+                MediaPlayer mp = new MediaPlayer(media);
+
+                mp.setOnReady(() -> durationInSeconds = (int) (Math.round(mp.getTotalDuration().toSeconds())));
             });
+
 
             artistDAO = new ArtistDatabaseDAO();
             albumDAO = new AlbumDatabaseDAO();
@@ -84,6 +102,7 @@ public class AddSongDialog extends Dialog<Song> {
             setDialogPane(pane);
 
             setResultConverter(buttonType -> {
+                if(buttonType.equals(cancelButton)) return null;
                 if(selectedSongFile == null) return null;
                 if(titleTextField.getText().isEmpty()) return null;
                 if(artistPicker.getItems().isEmpty()) return null;
@@ -96,7 +115,7 @@ public class AddSongDialog extends Dialog<Song> {
 
                 if(data == null) return null;
 
-                return new Song( -1, titleTextField.getText(), data, 0);
+                return new Song( -1, titleTextField.getText(), data, durationInSeconds);
             });
 
             setOnShowing(dialogEvent -> Platform.runLater(() -> titleTextField.requestFocus()));

@@ -52,4 +52,12 @@ public class Song {
     public String toString() {
         return getTitle();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song other = (Song) o;
+        return this.id == other.getId();
+    }
 }

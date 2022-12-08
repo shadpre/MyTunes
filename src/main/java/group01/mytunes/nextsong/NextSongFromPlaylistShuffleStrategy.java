@@ -41,7 +41,7 @@ public class NextSongFromPlaylistShuffleStrategy implements INextSongStrategy {
         if(songList.size() == 0) return null;
         if(nextSongToPlay > songList.size() - 1) nextSongToPlay = getRandomSongIndex();
 
-        Song toReturn = songList.get(nextSongToPlay).getSong();
+        Song toReturn = songList.get(nextSongToPlay);
 
         nextSongToPlay = getRandomSongIndex();
 
