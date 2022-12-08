@@ -35,7 +35,7 @@
 
     <buttonTypes>
         <ButtonType fx:id="addButton" buttonData="OK_DONE" text="Add song" />
-        <ButtonType buttonData="CANCEL_CLOSE" text="Cancel" />
+        <ButtonType fx:id="cancelButton" buttonData="CANCEL_CLOSE" text="Cancel" />
     </buttonTypes>
 
 </DialogPane>
