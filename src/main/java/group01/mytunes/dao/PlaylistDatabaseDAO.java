@@ -136,7 +136,8 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
             if(res.next()) {
                 return new PlaylistSong(
                         res.getInt(1),
-                        song
+                        song,
+                        res.getInt("Position")
                 );
             }
         } catch (SQLException e) {
@@ -167,12 +168,47 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
                             resultSet.getString("Title"),
                             null,
                             resultSet.getInt("Playtime")
-                        )
+                        ),
+                        resultSet.getInt("Position")
                 ));
             }
 
             return resultList;
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls){
+        try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "EXEC spMoveSongUpInPlaylist ?, ?;";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, playlist.getId());
+            statement.setInt(2, pls.getRelationId());
+
+            statement.executeUpdate();
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls){
+        try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "EXEC spMoveSongDownInPlaylist ?, ?;";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, playlist.getId());
+            statement.setInt(2, pls.getRelationId());
+
+            statement.executeUpdate();
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

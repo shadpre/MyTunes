@@ -4,10 +4,13 @@ public class PlaylistSong {
 
     private int relationId;
     private Song song;
+    private int position;
 
-    public PlaylistSong(int relationId, Song song) {
+
+    public PlaylistSong(int relationId, Song song, int position) {
         this.relationId = relationId;
         this.song = song;
+        this.position = position;
     }
 
     public int getRelationId() {

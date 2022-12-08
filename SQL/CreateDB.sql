@@ -65,6 +65,7 @@ CREATE TABLE Song_Playlist_Relation(
 --Artist
 
 GO
+Insert into Users ([Name]) Values('Default')
 
 DROP PROCEDURE IF EXISTS spNewArtist;
 DROP PROCEDURE IF EXISTS spGetAllArtists;
@@ -281,7 +282,8 @@ GO
 DROP PROCEDURE IF EXISTS spAddSongToPlaylist;
 DROP PROCEDURE IF EXISTS spRemoveSongFromPlaylist;
 DROP PROCEDURE IF EXISTS spGetAllSongsInPlaylist;
-DROP PROCEDURE IF EXISTS spSwapSongsInPlaylist;
+DROP PROCEDURE IF EXISTS spMoveSongUpInPlaylist;
+DROP PROCEDURE IF EXISTS spMoveSongDownInPlaylist;
 
 GO
 
@@ -305,7 +307,7 @@ AS
 			FROM Song_Playlist_Relation
 			WHERE PlaylistId = @PlaylistId))
 
-	SELECT Id FROM Song_Playlist_Relation
+	SELECT Id, Position FROM Song_Playlist_Relation
 	WHERE Id=SCOPE_IDENTITY()
 GO
 
@@ -364,20 +366,60 @@ AS
 	DROP TABLE IF EXISTS #TEMP
 GO
 
-CREATE PROCEDURE spSwapSongsInPlaylist(
+CREATE PROCEDURE spMoveSongUpInPlaylist(
 @PlaylistId INT,
-@SongId1 INT,
-@Position1 INT,
-@SongId2 INT,
-@Position2 INT)
+@Id1 INT)
 AS
+	DECLARE @Position1 INT;
+	DECLARE @Id2 INT;
+	DECLARE @Position2 INT;
+
+	SET @Position1 = (SELECT Position FROM Song_Playlist_Relation WHERE Id = @Id1)
+
+	IF(@Position1 = 1)
+	BEGIN
+		RAISERROR ('Can not move',1,1);
+		RETURN 1
+	END
+
+	SET @Position2 = @Position1 - 1
+	SET @Id2 = (SELECT Id FROM Song_Playlist_Relation WHERE Position = @Position2 AND PlaylistId = @PlaylistId)
+
 	UPDATE Song_Playlist_Relation
 	SET Position = @Position1
-	WHERE SongId = @SongId2 and PlaylistId = @PlaylistId
+	WHERE Id = @Id2
 
 	UPDATE Song_Playlist_Relation
 	SET Position = @Position2
-	WHERE SongId = @SongId1 and PlaylistId = @PlaylistId
+	WHERE Id = @Id1
+GO
+
+CREATE PROCEDURE spMoveSongDownInPlaylist(
+@PlaylistId INT,
+@Id1 INT)
+AS
+	DECLARE @Position1 INT;
+	DECLARE @Id2 INT;
+	DECLARE @Position2 INT;
+
+	SET @Position1 = (SELECT Position FROM Song_Playlist_Relation WHERE Id = @Id1)
+
+	IF(@Position1 = (SELECT MAX(Position) FROM Song_Playlist_Relation WHERE PlaylistId = @PlaylistId))
+	BEGIN
+		RAISERROR ('Can not move',1,1);
+		RETURN 1
+
+	END
+	SET @Position2 = @Position1 + 1
+	SET @Id2 = (SELECT Id FROM Song_Playlist_Relation WHERE Position = @Position2 AND PlaylistId = @PlaylistId)
+
+	UPDATE Song_Playlist_Relation
+	SET Position = @Position1
+	WHERE Id = @Id2
+
+	UPDATE Song_Playlist_Relation
+	SET Position = @Position2
+	WHERE Id = @Id1
 GO
 
 
@@ -393,6 +435,7 @@ GO
 DROP PROCEDURE IF EXISTS spHashSongData;
 
 GO
+
 
 CREATE PROCEDURE spHashSongData (
 @SongId INT)
