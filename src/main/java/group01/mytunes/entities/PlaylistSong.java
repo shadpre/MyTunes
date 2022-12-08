@@ -1,15 +1,12 @@
 package group01.mytunes.entities;
 
-public class PlaylistSong {
-
+public class PlaylistSong extends Song {
     private int relationId;
-    private Song song;
     private int position;
 
-
     public PlaylistSong(int relationId, Song song, int position) {
+        super(song.getId(), song.getTitle(), song.getData(), song.getPlaytime());
         this.relationId = relationId;
-        this.song = song;
         this.position = position;
     }
 
@@ -21,16 +18,8 @@ public class PlaylistSong {
         this.relationId = relationId;
     }
 
-    public Song getSong() {
-        return song;
-    }
-
-    public void setSong(Song song) {
-        this.song = song;
-    }
-
     @Override
     public String toString() {
-        return getSong().toString();
+        return super.toString();
     }
 }

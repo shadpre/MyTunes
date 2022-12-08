@@ -27,7 +27,7 @@ public class NextSongFromPlaylistLinearStrategy implements INextSongStrategy {
 
         PlaylistSong songToPlay = songList.get(playingNowIndex);
 
-        return songToPlay.getSong();
+        return songToPlay;
     }
 
     @Override
