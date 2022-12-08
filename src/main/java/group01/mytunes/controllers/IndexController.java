@@ -493,10 +493,16 @@ public class IndexController implements Initializable {
         });
     }
 
+    /**
+     * Move song down in playlist with a datamodel function
+     */
     public void moveSongDownInPlaylist() {
         indexDataModel.moveSongDownInPlaylist(getSelectedPlaylist(),listViewPlaylistSongs.getSelectionModel().getSelectedItem());
     }
 
+    /**
+     * Move song up in playlist with a datamodel function
+     */
     public void moveSongUpInPlaylist() {
         indexDataModel.moveSongUpInPlaylist(getSelectedPlaylist(),listViewPlaylistSongs.getSelectionModel().getSelectedItem());
     }
