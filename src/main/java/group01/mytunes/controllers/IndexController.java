@@ -62,6 +62,7 @@ public class IndexController implements Initializable {
      */
     @FXML private MenuItem menuAddSong, menuEditSong, menuDeleteSong;
     @FXML private MenuItem menuAddArtist, menuEditArtist, menuDeleteArtist;
+    @FXML private MenuItem menuAddAlbum, menuEditAlbum, menuDeleteAlbum;
     @FXML private MenuItem menuAddPlaylist, menuEditPlaylist;
     @FXML private MenuItem menuQuit;
 

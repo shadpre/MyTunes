@@ -159,6 +159,11 @@
                 <MenuItem fx:id="menuEditArtist" mnemonicParsing="false" text="Edit artist" />
                 <MenuItem fx:id="menuDeleteArtist" mnemonicParsing="false" text="Delete artist" />
             </Menu>
+            <Menu mnemonicParsing="false" text="Album">
+                <MenuItem fx:id="menuAddAlbum" mnemonicParsing="false" text="Add Album" />
+                <MenuItem fx:id="menuEditAlbum" mnemonicParsing="false" text="Edit Album" />
+                <MenuItem fx:id="menuDeleteAlbum" mnemonicParsing="false" text="Delete Album" />
+            </Menu>
             <Menu mnemonicParsing="false" text="Playlist">
                 <MenuItem fx:id="menuAddPlaylist" mnemonicParsing="false" text="Add playlist" />
                 <MenuItem fx:id="menuEditPlaylist" mnemonicParsing="false" text="Edit playlist" />
