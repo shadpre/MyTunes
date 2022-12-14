@@ -1,10 +1,9 @@
 package group01.mytunes.controllers;
 
+import group01.mytunes.dao.AlbumDatabaseDAO;
+import group01.mytunes.dao.interfaces.IAlbumDAO;
 import group01.mytunes.dialogs.DropDownTextDialog;
-import group01.mytunes.entities.Artist;
-import group01.mytunes.entities.Playlist;
-import group01.mytunes.entities.PlaylistSong;
-import group01.mytunes.entities.Song;
+import group01.mytunes.entities.*;
 import group01.mytunes.audio.IAudioHandler;
 import group01.mytunes.audio.SingleFileAudioHandler;
 import group01.mytunes.dao.ArtistDatabaseDAO;
@@ -85,8 +84,9 @@ public class IndexController implements Initializable {
         ISongDAO songDAO = new SongDatabaseDAO();
         IPlaylistDAO playlistDAO = new PlaylistDatabaseDAO();
         IArtistDAO artistDAO = new ArtistDatabaseDAO();
+        IAlbumDAO albumDAO = new AlbumDatabaseDAO();
 
-        this.indexDataModel = new IndexDataModel(playlistDAO, songDAO, artistDAO);
+        this.indexDataModel = new IndexDataModel(playlistDAO, songDAO, artistDAO, albumDAO);
 
         audioHandler = new SingleFileAudioHandler(songDAO);
 
@@ -247,6 +247,27 @@ public class IndexController implements Initializable {
             deleteArtistDialog.setTitle("Delete an artist");
             Optional<Artist> result = deleteArtistDialog.showAndWait();
             result.ifPresent(artist -> indexDataModel.deleteArtist(artist));
+        });
+
+        //Add Album
+        menuAddAlbum.setOnAction(event -> {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setGraphic(null);
+            dialog.setHeaderText(null);
+            dialog.setTitle("Add Album");
+            dialog.setContentText("Album name:");
+            var result = dialog.showAndWait();
+            result.ifPresent(album -> indexDataModel.addAlbum(album));
+        });
+
+        // Edit artist
+        menuEditAlbum.setOnAction(event -> {
+            //TODO Edit an Album
+        });
+
+        //Delete Album
+        menuDeleteAlbum.setOnAction(event -> {
+            //TODO Delete an Album
         });
 
         /*

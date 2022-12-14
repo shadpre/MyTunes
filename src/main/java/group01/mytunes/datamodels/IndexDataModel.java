@@ -1,9 +1,8 @@
 package group01.mytunes.datamodels;
 
-import group01.mytunes.entities.Artist;
-import group01.mytunes.entities.Playlist;
-import group01.mytunes.entities.PlaylistSong;
-import group01.mytunes.entities.Song;
+import group01.mytunes.dao.AlbumDatabaseDAO;
+import group01.mytunes.dao.interfaces.IAlbumDAO;
+import group01.mytunes.entities.*;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
@@ -22,6 +21,7 @@ public class IndexDataModel {
     private ISongDAO songDAO;
 
     private IArtistDAO artistDAO;
+    private IAlbumDAO albumDAO;
 
     private ObservableMap<Integer, Artist> artistObservableMap;
     private ObservableList<Playlist> playlistsObservableList;
@@ -33,10 +33,12 @@ public class IndexDataModel {
     private SimpleObjectProperty<Playlist> selectedPlaylistObservable;
 
 
-    public IndexDataModel(IPlaylistDAO playlistDAO, ISongDAO songDAO, IArtistDAO artistDAO) {
+    public IndexDataModel(IPlaylistDAO playlistDAO, ISongDAO songDAO, IArtistDAO artistDAO, IAlbumDAO albumDAO) {
         this.playlistDAO = playlistDAO;
         this.songDAO = songDAO;
         this.artistDAO = artistDAO;
+        this.albumDAO = albumDAO;
+
         initArtistObservableMap();
         playlistsObservableList = FXCollections.observableArrayList(playlistDAO.getPlaylists());
 
@@ -257,5 +259,13 @@ public class IndexDataModel {
             System.out.println("Can not move song down!");
             throw e;
         }
+    }
+
+    public void addAlbum(String album) {
+        if(album == null) return;
+        if(album.isEmpty()) return;
+
+        //TODO add to db. Program crashes once reaches createAlbum
+        albumDAO.createAlbum(album);
     }
 }
