@@ -261,6 +261,10 @@ public class IndexDataModel {
         }
     }
 
+    /**
+     * gives given String to DO class for it to be added to DB
+     * @param album given string from controller
+     */
     public void addAlbum(String album) {
         if(album == null) return;
         if(album.isEmpty()) return;
