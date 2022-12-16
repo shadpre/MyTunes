@@ -210,6 +210,14 @@ public class IndexDataModel {
         artistDAO.updateArtist(artist, newName);
     }
 
+    public void editAlbum(Album album, String newName) {
+        if (album == null) return;
+
+        if (newName == null || newName.isEmpty()) return;
+
+        albumDAO.updateAlbum(album, newName);
+    }
+
     public List<Artist> getAllArtists() {
         return artistDAO.getArtists();
     }

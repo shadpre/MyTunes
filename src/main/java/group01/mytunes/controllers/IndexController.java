@@ -263,9 +263,12 @@ public class IndexController implements Initializable {
             result.ifPresent(album -> indexDataModel.addAlbum(album));
         });
 
-        // Edit artist
+        // Edit album
         menuEditAlbum.setOnAction(event -> {
-            //TODO Edit an Album
+            DropDownTextDialog<Album> dialog = new DropDownTextDialog<>(listViewSongs.getScene().getWindow(), "Edit Album","New name:","New name", indexDataModel.getAlbumList());
+            dialog.showAndWait().ifPresent(result ->
+                    indexDataModel.editAlbum(result.getFirst(), result.getSecond()));
+            listViewSongs.refresh();
         });
 
         //Delete Album
