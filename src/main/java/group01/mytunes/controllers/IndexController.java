@@ -208,6 +208,16 @@ public class IndexController implements Initializable {
         // Add song
         menuAddSong.setOnAction(event -> makeNewSongWindowOpen());
 
+        menuEditSong.setOnAction(event -> {
+            Dialog<Song> deleteArtistDialog = new ChoiceDialog<>(null, indexDataModel.getSongInfoObservableList());
+            deleteArtistDialog.setGraphic(null);
+            deleteArtistDialog.setHeaderText(null);
+            deleteArtistDialog.setContentText("Delete Song:");
+            deleteArtistDialog.setTitle("Delete an Song");
+            Optional<Song> result = deleteArtistDialog.showAndWait();
+            result.ifPresent(song -> indexDataModel.deleteSong(song));
+        });
+
         // Delete song
         menuDeleteSong.setOnAction(event -> {
             Dialog<Song> deleteSongDialog = new ChoiceDialog<>(null, indexDataModel.getSongInfoObservableList());
@@ -280,8 +290,6 @@ public class IndexController implements Initializable {
             deleteArtistDialog.setTitle("Delete an album");
             Optional<Album> result = deleteArtistDialog.showAndWait();
             result.ifPresent(album -> indexDataModel.deleteAlbum(album));
-
-            //TODO Delete an Album
         });
 
         /*
