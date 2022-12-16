@@ -57,4 +57,6 @@ public interface ISongDAO {
      * @return A list of the artists related to the song.
      */
     List<Integer> getArtistsToSong(int id);
+
+    List<Integer> getAlbumToSong(int id);
 }

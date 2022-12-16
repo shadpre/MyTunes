@@ -54,7 +54,7 @@ public class IndexController implements Initializable {
     @FXML private ListView<PlaylistSong> listViewPlaylistSongs;
     @FXML private ListView<Playlist> listViewPlayLists;
     @FXML private TableView<Song> listViewSongs;
-    @FXML private TableColumn tableColumnTitle, tableColumnArtist;
+    @FXML private TableColumn tableColumnTitle, tableColumnArtist, tableColumnAlbum;
 
     /*
         Menu Bar
@@ -153,6 +153,9 @@ public class IndexController implements Initializable {
 
         tableColumnArtist.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Song, String>, ObservableValue<String>>)
                 param -> new SimpleStringProperty(indexDataModel.getArtistsForSong(param.getValue()))
+        );
+        tableColumnAlbum.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Song, String>, ObservableValue<String>>)
+                        param -> new SimpleStringProperty(indexDataModel.getAlbumForSong(param.getValue()))
         );
 
         listViewSongs.setOnMouseClicked(event -> {

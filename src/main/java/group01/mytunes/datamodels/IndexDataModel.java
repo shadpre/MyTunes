@@ -1,6 +1,5 @@
 package group01.mytunes.datamodels;
 
-import group01.mytunes.dao.AlbumDatabaseDAO;
 import group01.mytunes.dao.interfaces.IAlbumDAO;
 import group01.mytunes.entities.*;
 import group01.mytunes.dao.interfaces.IArtistDAO;
@@ -24,9 +23,10 @@ public class IndexDataModel {
     private IAlbumDAO albumDAO;
 
     private ObservableMap<Integer, Artist> artistObservableMap;
+    private ObservableMap<Integer, Album> albumObservableMap;
     private ObservableList<Playlist> playlistsObservableList;
-
     private List<Song> songList;
+    private List<Album> albumList;
     private ObservableList<Song> songObservableList;
     private ObservableList<PlaylistSong> songPlaylistObservableList;
 
@@ -40,6 +40,7 @@ public class IndexDataModel {
         this.albumDAO = albumDAO;
 
         initArtistObservableMap();
+        initAlbumObservableMap();
         playlistsObservableList = FXCollections.observableArrayList(playlistDAO.getPlaylists());
 
         songList = songDAO.getAllSongInfo();
@@ -57,6 +58,15 @@ public class IndexDataModel {
         artistObservableMap = FXCollections.observableMap(tempMap);
     }
 
+    private void initAlbumObservableMap(){
+        var albums = albumDAO.getAlbums();
+        Map<Integer, Album> tempAlbums = new HashMap<>();
+        for (Album a : albums) {
+            tempAlbums.put(a.getId(), a);
+        }
+        albumObservableMap = FXCollections.observableMap(tempAlbums);
+    }
+
     public String getArtistsForSong(Song song) {
         var artistToSong = songDAO.getArtistsToSong(song.getId());
 
@@ -69,6 +79,20 @@ public class IndexDataModel {
         }
 
         return artists.toString();
+    }
+
+    public String getAlbumForSong(Song song){
+        var albumToSong = songDAO.getAlbumToSong(song.getId());
+
+        if (albumToSong.size() == 0) return "";
+
+        StringBuilder album = new StringBuilder();
+
+        for (int v : albumToSong) {
+            album.append(albumObservableMap.get(v) + "");
+        }
+
+        return album.toString();
     }
 
     public ObservableList<Playlist> getPlaylistsObservableList() {
@@ -165,6 +189,10 @@ public class IndexDataModel {
 
     public List<Artist> getArtistList() {
         return new ArrayList<Artist>(artistObservableMap.values());
+    }
+
+    public ArrayList<Album> getAlbumList() {
+        return new ArrayList<Album>(albumObservableMap.values());
     }
 
     public void addArtist(String artistName) {

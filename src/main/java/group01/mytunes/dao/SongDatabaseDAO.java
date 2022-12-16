@@ -173,4 +173,32 @@ public class SongDatabaseDAO implements ISongDAO {
 
         return artistID;
     }
+    public List<Integer> getAlbumToSong(int id) {
+
+        List<Integer> albumID = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+
+            String sql = "SELECT * FROM Song_album_relation WHERE [Songid] = ?";
+
+            //Connnect prepared stametnt to sql
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            stmt.executeQuery();
+
+            //get the ID from DB
+            ResultSet rs = stmt.getResultSet();
+
+            while (rs.next()) {
+                albumID.add(rs.getInt("AlbumId"));
+            }
+
+
+        } catch (SQLException e) {
+
+        }
+
+        return albumID;
+    }
 }
