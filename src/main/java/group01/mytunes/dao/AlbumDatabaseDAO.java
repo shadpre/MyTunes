@@ -72,11 +72,7 @@ public class AlbumDatabaseDAO implements IAlbumDAO {
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, id);
 
-            var affectedRows = statement.executeUpdate();
-
-            if(affectedRows != 1) {
-                throw new SQLDeleteException();
-            }
+            statement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();

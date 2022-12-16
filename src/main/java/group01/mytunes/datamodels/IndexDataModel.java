@@ -226,6 +226,14 @@ public class IndexDataModel {
         artistDAO.deleteArtist(artist);
     }
 
+    public List<Album> getAllAlbums() {
+        return albumDAO.getAlbums();
+    }
+
+    public void deleteAlbum(Album album) {
+        albumDAO.deleteAlbum(album.getId());
+    }
+
     public void addSongToPlaylist(Song selectedSong, Playlist playlistToAddTo, Playlist selectedPlaylist) {
         var playlistSong = playlistDAO.addSongToPlaylist(selectedSong, playlistToAddTo);
 

@@ -273,6 +273,14 @@ public class IndexController implements Initializable {
 
         //Delete Album
         menuDeleteAlbum.setOnAction(event -> {
+            Dialog<Album> deleteArtistDialog = new ChoiceDialog<>(null, indexDataModel.getAllAlbums());
+            deleteArtistDialog.setGraphic(null);
+            deleteArtistDialog.setHeaderText(null);
+            deleteArtistDialog.setContentText("Delete album:");
+            deleteArtistDialog.setTitle("Delete an album");
+            Optional<Album> result = deleteArtistDialog.showAndWait();
+            result.ifPresent(album -> indexDataModel.deleteAlbum(album));
+
             //TODO Delete an Album
         });
 
