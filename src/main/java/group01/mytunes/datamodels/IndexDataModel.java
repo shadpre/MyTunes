@@ -1,9 +1,7 @@
 package group01.mytunes.datamodels;
 
-import group01.mytunes.entities.Artist;
-import group01.mytunes.entities.Playlist;
-import group01.mytunes.entities.PlaylistSong;
-import group01.mytunes.entities.Song;
+import group01.mytunes.dao.interfaces.IAlbumDAO;
+import group01.mytunes.entities.*;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
@@ -22,22 +20,27 @@ public class IndexDataModel {
     private ISongDAO songDAO;
 
     private IArtistDAO artistDAO;
+    private IAlbumDAO albumDAO;
 
     private ObservableMap<Integer, Artist> artistObservableMap;
+    private ObservableMap<Integer, Album> albumObservableMap;
     private ObservableList<Playlist> playlistsObservableList;
-
     private List<Song> songList;
+    private List<Album> albumList;
     private ObservableList<Song> songObservableList;
     private ObservableList<PlaylistSong> songPlaylistObservableList;
 
     private SimpleObjectProperty<Playlist> selectedPlaylistObservable;
 
 
-    public IndexDataModel(IPlaylistDAO playlistDAO, ISongDAO songDAO, IArtistDAO artistDAO) {
+    public IndexDataModel(IPlaylistDAO playlistDAO, ISongDAO songDAO, IArtistDAO artistDAO, IAlbumDAO albumDAO) {
         this.playlistDAO = playlistDAO;
         this.songDAO = songDAO;
         this.artistDAO = artistDAO;
+        this.albumDAO = albumDAO;
+
         initArtistObservableMap();
+        initAlbumObservableMap();
         playlistsObservableList = FXCollections.observableArrayList(playlistDAO.getPlaylists());
 
         songList = songDAO.getAllSongInfo();
@@ -55,6 +58,15 @@ public class IndexDataModel {
         artistObservableMap = FXCollections.observableMap(tempMap);
     }
 
+    private void initAlbumObservableMap(){
+        var albums = albumDAO.getAlbums();
+        Map<Integer, Album> tempAlbums = new HashMap<>();
+        for (Album a : albums) {
+            tempAlbums.put(a.getId(), a);
+        }
+        albumObservableMap = FXCollections.observableMap(tempAlbums);
+    }
+
     public String getArtistsForSong(Song song) {
         var artistToSong = songDAO.getArtistsToSong(song.getId());
 
@@ -67,6 +79,20 @@ public class IndexDataModel {
         }
 
         return artists.toString();
+    }
+
+    public String getAlbumForSong(Song song){
+        var albumToSong = songDAO.getAlbumToSong(song.getId());
+
+        if (albumToSong.size() == 0) return "";
+
+        StringBuilder album = new StringBuilder();
+
+        for (int v : albumToSong) {
+            album.append(albumObservableMap.get(v) + "");
+        }
+
+        return album.toString();
     }
 
     public ObservableList<Playlist> getPlaylistsObservableList() {
@@ -165,6 +191,10 @@ public class IndexDataModel {
         return new ArrayList<Artist>(artistObservableMap.values());
     }
 
+    public ArrayList<Album> getAlbumList() {
+        return new ArrayList<Album>(albumObservableMap.values());
+    }
+
     public void addArtist(String artistName) {
         if(artistName == null) return;
         if(artistName.isEmpty()) return;
@@ -180,12 +210,28 @@ public class IndexDataModel {
         artistDAO.updateArtist(artist, newName);
     }
 
+    public void editAlbum(Album album, String newName) {
+        if (album == null) return;
+
+        if (newName == null || newName.isEmpty()) return;
+
+        albumDAO.updateAlbum(album, newName);
+    }
+
     public List<Artist> getAllArtists() {
         return artistDAO.getArtists();
     }
 
     public void deleteArtist(Artist artist) {
         artistDAO.deleteArtist(artist);
+    }
+
+    public List<Album> getAllAlbums() {
+        return albumDAO.getAlbums();
+    }
+
+    public void deleteAlbum(Album album) {
+        albumDAO.deleteAlbum(album.getId());
     }
 
     public void addSongToPlaylist(Song selectedSong, Playlist playlistToAddTo, Playlist selectedPlaylist) {
@@ -257,5 +303,17 @@ public class IndexDataModel {
             System.out.println("Can not move song down!");
             throw e;
         }
+    }
+
+    /**
+     * gives given String to DO class for it to be added to DB
+     * @param album given string from controller
+     */
+    public void addAlbum(String album) {
+        if(album == null) return;
+        if(album.isEmpty()) return;
+
+        //TODO add to db. Program crashes once reaches createAlbum
+        albumDAO.createAlbum(album);
     }
 }
