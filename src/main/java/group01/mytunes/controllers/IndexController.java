@@ -3,6 +3,7 @@ package group01.mytunes.controllers;
 import group01.mytunes.dao.AlbumDatabaseDAO;
 import group01.mytunes.dao.interfaces.IAlbumDAO;
 import group01.mytunes.dialogs.DropDownTextDialog;
+import group01.mytunes.dialogs.EditSongDialog;
 import group01.mytunes.entities.*;
 import group01.mytunes.audio.IAudioHandler;
 import group01.mytunes.audio.SingleFileAudioHandler;
@@ -18,6 +19,7 @@ import group01.mytunes.nextsong.INextSongStrategy;
 import group01.mytunes.nextsong.NextSongFromPlaylistLinearStrategy;
 import group01.mytunes.nextsong.NextSongLinearStrategy;
 import group01.mytunes.utility.MyTunesUtility;
+import group01.mytunes.utility.Triple;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -34,6 +36,7 @@ import javafx.util.Callback;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -67,6 +70,11 @@ public class IndexController implements Initializable {
 
     private INextSongStrategy nextSongStrategy;
 
+    ISongDAO songDAO;
+    IPlaylistDAO playlistDAO;
+    IArtistDAO artistDAO;
+    IAlbumDAO albumDAO;
+
     /**
      * Initializes everything needed by the controller.
      * Runs when the controller is created.
@@ -81,10 +89,10 @@ public class IndexController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        ISongDAO songDAO = new SongDatabaseDAO();
-        IPlaylistDAO playlistDAO = new PlaylistDatabaseDAO();
-        IArtistDAO artistDAO = new ArtistDatabaseDAO();
-        IAlbumDAO albumDAO = new AlbumDatabaseDAO();
+        songDAO = new SongDatabaseDAO();
+        playlistDAO = new PlaylistDatabaseDAO();
+        artistDAO = new ArtistDatabaseDAO();
+        albumDAO = new AlbumDatabaseDAO();
 
         this.indexDataModel = new IndexDataModel(playlistDAO, songDAO, artistDAO, albumDAO);
 
@@ -413,15 +421,15 @@ public class IndexController implements Initializable {
         Song selectedSong = listViewSongs.getSelectionModel().getSelectedItem();
         if(selectedSong == null) return;
 
-        TextInputDialog dialog = new TextInputDialog(selectedSong.getTitle());
-        dialog.setTitle("Edit Song");
-        dialog.setHeaderText("Edit Song");
-        dialog.setContentText("New Song name:");
-        dialog.setGraphic(null);
+        Triple<Song, List<Integer>, List<Integer>> selected = new Triple<>( // song, artists, albums
+            selectedSong,
+            songDAO.getArtistsToSong(selectedSong.getId()),
+            songDAO.getAlbumToSong(selectedSong.getId())
+        );
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(newName -> {
-            indexDataModel.editSong(selectedSong, newName);
+        EditSongDialog dialog = new EditSongDialog(listViewSongs.getScene().getWindow(), selected, indexDataModel.getArtistList(), indexDataModel.getAlbumList());
+        dialog.showAndWait().ifPresent(x -> {
+            indexDataModel.editSong(selected, x);
         });
     }
 

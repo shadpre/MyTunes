@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane prefWidth="500" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+
+    <content>
+        <GridPane hgap="5" vgap="5">
+            <Label text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="titleTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <Label text="Artist:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <ComboBox fx:id="artistPicker" promptText="Pick an artist" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="Albums:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <ComboBox fx:id="albumPicker" promptText="Pick an album" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:id="addButton" buttonData="OK_DONE" text="Edit song" />
+        <ButtonType fx:id="cancelButton" buttonData="CANCEL_CLOSE" text="Cancel" />
+    </buttonTypes>
+
+</DialogPane>

@@ -136,19 +136,6 @@ public class IndexDataModel {
         playlistsObservableList.set(index, playlist);
     }
 
-    public boolean editSong(Song selectedSong, String newSongName) {
-        if(newSongName == null) return false;
-        if(newSongName.isEmpty()) return false;
-        if(selectedSong.getTitle().equals(newSongName)) return false;
-
-        songDAO.updateSong(selectedSong, newSongName);
-
-        songObservableList.clear();
-        songObservableList.addAll(FXCollections.observableArrayList(songDAO.getAllSongInfo()));
-
-        return true;
-    }
-
     /**
      * Deletes a playlist.
      * @param playlist The playlist to be deleted.
@@ -170,7 +157,6 @@ public class IndexDataModel {
         var result = playlistDAO.getSongsInPlaylist(playlist);
         songPlaylistObservableList.setAll(result);
         selectedPlaylistObservable.setValue(playlist);
-
     }
 
     public void searchForSong(String query) {
@@ -316,5 +302,43 @@ public class IndexDataModel {
 
         //TODO add to db. Program crashes once reaches createAlbum
         albumDAO.createAlbum(album);
+    }
+
+    public boolean editSongName(Song selectedSong, String newSongName) {
+        if(newSongName == null) return false;
+        if(newSongName.isEmpty()) return false;
+        if(selectedSong.getTitle().equals(newSongName)) return false;
+
+        songDAO.updateSong(selectedSong, newSongName);
+
+        songObservableList.clear();
+        songObservableList.addAll(FXCollections.observableArrayList(songDAO.getAllSongInfo()));
+
+        return true;
+    }
+
+    public void editSong(Triple<Song, List<Integer>, List<Integer>> oldSongData, Triple<String, Artist, Album> newSongData) {
+        /*
+         Edit name
+         */
+        if(!oldSongData.getFirst().getTitle().equals(newSongData.getFirst())) {
+            editSongName(oldSongData.getFirst(), newSongData.getFirst());
+        }
+
+        /*
+         Edit artist
+         */
+        // New artist
+        // TODO: Set new artist
+        if(oldSongData.getSecond().size() != 0 && oldSongData.getSecond().get(0) != newSongData.getSecond().getId()) {
+        }
+        // Remove artist
+        // TODO: Remove artist
+
+        /*
+         Edit album
+         */
+        // TODO: Set new album
+        // TODO: Remove album
     }
 }
