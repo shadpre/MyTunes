@@ -7,6 +7,7 @@ import group01.mytunes.dao.AlbumDatabaseDAO;
 import group01.mytunes.dao.ArtistDatabaseDAO;
 import group01.mytunes.dao.interfaces.IAlbumDAO;
 import group01.mytunes.dao.interfaces.IArtistDAO;
+import group01.mytunes.utility.Triple;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class AddSongDialog extends Dialog<Song> {
+public class AddSongDialog extends Dialog<Triple<Song, Artist, Album>> {
 
     private File selectedSongFile;
 
@@ -69,7 +70,6 @@ public class AddSongDialog extends Dialog<Song> {
 
                 if (selectedFile != null) {
                     selectedSongFile = selectedFile;
-                    System.out.println(selectedFile.getAbsoluteFile());
                     lblFieldFilePath.setText(String.valueOf(selectedFile));
                 }
 
@@ -115,7 +115,11 @@ public class AddSongDialog extends Dialog<Song> {
 
                 if(data == null) return null;
 
-                return new Song( -1, titleTextField.getText(), data, durationInSeconds);
+                return new Triple<>(
+                    new Song( -1, titleTextField.getText(), data, durationInSeconds),
+                    artistPicker.getValue(),
+                    albumPicker.getValue()
+                );
             });
 
             setOnShowing(dialogEvent -> Platform.runLater(() -> titleTextField.requestFocus()));

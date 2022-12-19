@@ -1,6 +1,7 @@
 package group01.mytunes.dao.interfaces;
 
 import group01.mytunes.entities.Album;
+import group01.mytunes.entities.Song;
 
 import java.util.List;
 
@@ -34,4 +35,6 @@ public interface IAlbumDAO {
      * @param newName The new name of the album.
      */
     void updateAlbum(Album album, String newName);
+
+    void addSongToAlbum(Song first, Album third);
 }

@@ -111,8 +111,6 @@ public class IndexController implements Initializable {
         );
 
         lblSongPlaying.setText("Now Playing: No song available");
-
-        System.out.println("Controller initialized");
     }
 
     /**
@@ -121,8 +119,6 @@ public class IndexController implements Initializable {
     private void initShuffleToggleButton() {
         shuffleToggleButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             // TODO: Needs to be implemented!
-            System.out.println("Old: " + oldValue);
-            System.out.println("New: " + newValue);
         }));
     }
 
@@ -434,7 +430,7 @@ public class IndexController implements Initializable {
      */
     public void makeNewSongWindowOpen() {
         AddSongDialog dialog = new AddSongDialog(listViewSongs.getScene().getWindow());
-        dialog.showAndWait().ifPresent(song -> indexDataModel.addSong(song));
+        dialog.showAndWait().ifPresent(x -> indexDataModel.addSong(x));
     }
 
     /**
@@ -587,8 +583,6 @@ public class IndexController implements Initializable {
                 player.currentTimeProperty()));
 
         audioHandler.start();
-
-        System.out.println(sliderSongTimeline.getValue());
     }
 
     private void showErrorAlert(String errorMsg) {

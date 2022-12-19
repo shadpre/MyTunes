@@ -13,8 +13,9 @@ DROP PROCEDURE IF EXISTS spNewAlbum;
 DROP PROCEDURE IF EXISTS spGetAllAlbums;
 DROP PROCEDURE IF EXISTS spUpdateAlbum;
 DROP PROCEDURE IF EXISTS spDeleteAlbum;
+DROP PROCEDURE IF EXISTS spSetSongAlbumRelation;
 DROP PROCEDURE IF EXISTS spNewSong;
-DROP PROCEDURE IF EXISTS spSetSongArtistReleation;
+DROP PROCEDURE IF EXISTS spSetSongArtistRelation;
 DROP PROCEDURE IF EXISTS spGetAllSongInfo;
 DROP PROCEDURE IF EXISTS spGetSongById;
 DROP PROCEDURE IF EXISTS spUpdateSongTittle;
@@ -111,7 +112,7 @@ GO
 	@SongId INT - Sangens ID
 	@ArtistId INT - Artistens ID
 */
-CREATE PROCEDURE spSetSongArtistReleation(
+CREATE PROCEDURE spSetSongArtistRelation(
 @SongId INT,
 @ArtistId INT)
 AS
@@ -510,6 +511,20 @@ AS
 
 	DELETE Albums
 	WHERE Id = @Id
+GO
+
+/*
+	Tilføjer relation mellem sang og album
+
+	Params:
+	@SongId INT - Song ID
+	@AlbumId INT - Album ID
+*/
+CREATE PROCEDURE spSetSongAlbumRelation(
+	@SongId INT,
+	@AlbumId int)
+AS
+	INSERT INTO Song_Album_Relation ([SongId], [AlbumId]) VALUES (@SongId, @AlbumId)
 GO
 
 /*

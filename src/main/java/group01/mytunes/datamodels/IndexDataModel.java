@@ -6,6 +6,7 @@ import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.dao.interfaces.IPlaylistDAO;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.exceptions.SQLDeleteException;
+import group01.mytunes.utility.Triple;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -177,11 +178,13 @@ public class IndexDataModel {
         songObservableList.setAll(filtered);
     }
 
-    public void addSong(Song song) {
-        var result = songDAO.createSong(song);
+    public void addSong(Triple<Song, Artist, Album> data) {
+        var result = songDAO.createSong(data.getFirst());
         if(result == null) return;
 
-        System.out.println(result.getId());
+        artistDAO.addSongToArtist(data.getFirst(), data.getSecond());
+
+        albumDAO.addSongToAlbum(data.getFirst(), data.getThird());
 
         songList.add(result);
         songObservableList.add(result);
@@ -280,7 +283,6 @@ public class IndexDataModel {
                 index-1 // Swap index 2
             );
         } catch (SQLException e) {
-            System.out.println("Can not move song up!");
             throw e;
         }
     }
@@ -300,7 +302,6 @@ public class IndexDataModel {
                 index+1 // Swap index 2
             );
         } catch (SQLException e) {
-            System.out.println("Can not move song down!");
             throw e;
         }
     }

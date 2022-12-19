@@ -1,6 +1,7 @@
 package group01.mytunes.dao.interfaces;
 
 import group01.mytunes.entities.Artist;
+import group01.mytunes.entities.Song;
 
 import java.util.List;
 
@@ -41,5 +42,12 @@ public interface IArtistDAO {
      * @param newName The new name of the artist.
      */
     void updateArtist(Artist artist, String newName);
+
+    /**
+     * Adds a song to an album.
+     * @param song The song to add.
+     * @param artist The artist of the song.
+     */
+    void addSongToArtist(Song song, Artist artist);
 
 }

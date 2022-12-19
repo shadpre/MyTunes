@@ -3,6 +3,8 @@ package group01.mytunes.dao;
 import group01.mytunes.entities.Album;
 import group01.mytunes.dao.interfaces.IAlbumDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
+import group01.mytunes.entities.Artist;
+import group01.mytunes.entities.Song;
 import group01.mytunes.exceptions.SQLDeleteException;
 
 import java.sql.Connection;
@@ -102,6 +104,24 @@ public class AlbumDatabaseDAO implements IAlbumDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLDeleteException();
+        }
+    }
+
+    @Override
+    public void addSongToAlbum(Song song, Album album) {
+        if(song == null) return;
+        if(album == null) return;
+
+        try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "exec spSetSongAlbumRelation ?, ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, song.getId());
+            statement.setInt(2, album.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

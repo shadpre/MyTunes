@@ -49,11 +49,6 @@ public class SingleFileAudioHandler implements IAudioHandler {
      * @throws MediaException
      */
     public void playSong(Song song) throws MediaException {
-        System.out.println("Play:\n" +
-                song.getId() + "\n" +
-                song.getTitle() + "\n"
-        );
-
         if(mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer = null;
@@ -63,7 +58,6 @@ public class SingleFileAudioHandler implements IAudioHandler {
 
         try {
             String path = saveTempFile(songData);
-            System.out.println("Returned:" + path);
             media = new Media(path);
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setVolume(volume);
@@ -85,9 +79,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
      * @throws IOException
      */
     private String saveTempFile(byte[] data) throws IOException {
-        System.out.println(DATA_DIR);
         File tempFile = new File(DATA_DIR + "/MYTUNES.song");
-        System.out.println("temp file" + tempFile.getAbsolutePath());
 
         FileOutputStream fos = new FileOutputStream(tempFile);
         fos.write(data);
@@ -108,8 +100,8 @@ public class SingleFileAudioHandler implements IAudioHandler {
             if (song != null) {
                 playSong(song);
             }
-        } catch (EmptyStackException e){
-            System.out.println("No Previous Song");
+        } catch (EmptyStackException e) {
+            //System.out.println("No Previous Song");
         }
     }
 
