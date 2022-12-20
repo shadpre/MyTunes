@@ -1,3 +1,5 @@
+USE MyTunes;
+
 --Fjerner eksiterende procedurer, hvis de eksiterer.
 DROP PROCEDURE IF EXISTS spNewArtist;
 DROP PROCEDURE IF EXISTS spGetAllArtists;

@@ -59,6 +59,8 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         primaryStage.setTitle("MyTunes");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
+
     }
 }
