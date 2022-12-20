@@ -595,13 +595,14 @@ GO
 CREATE PROCEDURE spDeleteArtist(
 @Id INT)
 AS
+	SET NOCOUNT ON
 	DELETE Song_Artist_Relation
 	WHERE ArtistId = @Id
 
+	SET NOCOUNT OFF
 	DELETE Artists
 	WHERE Id = @Id
 
-	SELECT @@ROWCOUNT
 GO
 
 /*
