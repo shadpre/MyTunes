@@ -13,9 +13,8 @@ DROP PROCEDURE IF EXISTS spNewAlbum;
 DROP PROCEDURE IF EXISTS spGetAllAlbums;
 DROP PROCEDURE IF EXISTS spUpdateAlbum;
 DROP PROCEDURE IF EXISTS spDeleteAlbum;
-DROP PROCEDURE IF EXISTS spSetSongAlbumRelation;
 DROP PROCEDURE IF EXISTS spNewSong;
-DROP PROCEDURE IF EXISTS spSetSongArtistRelation;
+DROP PROCEDURE IF EXISTS spSetSongArtistReleation;
 DROP PROCEDURE IF EXISTS spGetAllSongInfo;
 DROP PROCEDURE IF EXISTS spGetSongById;
 DROP PROCEDURE IF EXISTS spUpdateSongTittle;
@@ -27,6 +26,13 @@ DROP PROCEDURE IF EXISTS spGetAllSongsInPlaylist;
 DROP PROCEDURE IF EXISTS spMoveSongUpInPlaylist;
 DROP PROCEDURE IF EXISTS spMoveSongDownInPlaylist;
 DROP PROCEDURE IF EXISTS spHashSongData;
+DROP PROCEDURE IF EXISTS spGetAllArtistOnSong;
+DROP PROCEDURE IF EXISTS spGetAllAlbumOnSong;
+DROP PROCEDURE IF EXISTS spRemoveSongArtistRelation;
+DROP PROCEDURE IF EXISTS spUpdateArtistOnSong;
+DROP PROCEDURE IF EXISTS spRemoveSongAlbumRelation;
+DROP PROCEDURE IF EXISTS spUpdateAlbumOnSong;
+DROP PROCEDURE IF EXISTS spSetSongAlbumReleation;
 GO
 
 --Opretter de forskellige procedurer til brug for CRUD
@@ -112,12 +118,27 @@ GO
 	@SongId INT - Sangens ID
 	@ArtistId INT - Artistens ID
 */
-CREATE PROCEDURE spSetSongArtistRelation(
+CREATE PROCEDURE spSetSongArtistReleation(
 @SongId INT,
 @ArtistId INT)
 AS
 	INSERT INTO Song_Artist_Relation (SongId, ArtistId)
 	VALUES (@SongId, @ArtistId)
+GO
+
+/*
+	Opretter en ny relation mellem sang og album
+
+	Params:
+	@SongId INT - Sangens ID
+	@AlbumId INT - Album ID
+*/
+CREATE PROCEDURE spSetSongAlbumReleation(
+@SongId INT,
+@AlbumId INT)
+AS
+	INSERT INTO Song_Album_Relation (SongId, AlbumId)
+	VALUES (@SongId, @AlbumId)
 GO
 
 /*
@@ -158,10 +179,44 @@ AS
 GO
 
 --Read
+/*
+	Liste over Artist ID for alle artister på en given sang
+
+	Params:
+	@SongId INT - Sangens ID
+
+	Returns
+	Id INT - relationens ID
+	SongId - Sangens ID
+	ArtistId - Artistens ID
+*/
+CREATE PROCEDURE spGetAllArtistOnSong(
+@SongId INT)
+AS
+	SELECT * FROM Song_Artist_Relation
+	WHERE SongId = @SongId
+GO
 
 /*
-	Liste over alle artister
+	Liste over Albub ID for alle artister på en given sang
 
+	Params:
+	@SongId INT - Sangens ID
+
+	Returns
+	Id INT - relationens ID
+	SongId - Sangens ID
+	AlbumId - Albummets ID
+*/
+CREATE PROCEDURE spGetAllAlbumOnSong(
+@SongId INT)
+AS
+	SELECT * FROM Song_Album_Relation
+	WHERE SongId = @SongId
+GO
+/*
+	Liste over alle artister
+	
 	Returns:
 	Id INT - ID på artisten
 	Name NVARCHAR(255) - Navn på artisten
@@ -194,7 +249,7 @@ GO
 
 /*
 	Info på en given artist
-
+	
 	Params:
 	@Id INT - ID på artisten.
 
@@ -275,8 +330,8 @@ CREATE PROCEDURE spGetAllSongsInPlaylist(
 AS
     SELECT song.Id, song.Title, song.Playtime, relation.Id As rId, relation.Position Position
     FROM [Songs] AS song
-    INNER JOIN
-	[Song_Playlist_Relation] AS relation
+    INNER JOIN 
+	[Song_Playlist_Relation] AS relation 
 	ON song.Id = relation.SongId
     WHERE relation.PlaylistId = @PlaylistId
     ORDER BY relation.Position
@@ -306,11 +361,49 @@ GO
 --Update
 
 /*
-	Opdaterer en artists navn.
+	Ændrer en artist på en sang
 
 	Params:
+	@NArtistId INT - Det nye Artist ID
+	@SongId INT - Sang ID
+	@OArtistId INT - Det gamle Artist ID
+*/
+CREATE PROCEDURE spUpdateArtistOnSong(
+@NArtistId INT,
+@SongId INT,
+@OArtistId INT)
+AS
+	UPDATE Song_Artist_Relation
+	SET ArtistId = @NArtistId
+	WHERE SongId = @SongId and ArtistId = @OArtistId
+GO
+
+--Update
+
+/*
+	Ændrer et Album på en sang
+
+	Params:
+	@NArtistId INT - Det nye Artist ID
+	@SongId INT - Sang ID
+	@OArtistId INT - Det gamle Artist ID
+*/
+CREATE PROCEDURE spUpdateAlbumOnSong(
+@NAlbumId INT,
+@SongId INT,
+@OAlbumId INT)
+AS
+	UPDATE Song_Album_Relation
+	SET AlbumId = @NAlbumId
+	WHERE SongId = @SongId and AlbumId = @OAlbumId
+GO
+
+/*
+	Opdaterer en artists navn.
+	
+	Params:
 	@Id INT - Artist ID
-	@Name NVARCHAR(255) - Det nye navn
+	@Name NVARCHAR(255) - Det nye navn	
 */
 CREATE PROCEDURE spUpdateArtistById(
 @Id INT,
@@ -463,6 +556,37 @@ GO
 
 --Delete
 /*
+	Fjerner en relation mellem en sang og et Album
+
+	Params;
+	@SongId INT - Sangens ID
+	@AlbumId INT - Album ID
+*/
+CREATE PROCEDURE spRemoveSongAlbumRelation(
+@SongId INT,
+@AlbumId INT
+)
+AS
+	DELETE FROM Song_Album_Relation 
+	WHERE SongId=@SongId AND AlbumId = @AlbumId
+GO
+
+/*
+	Fjerner en relation mellem en sang og en artist
+
+	Params;
+	@SongId INT - Sangens ID
+	@ArtistId INT - Artistens ID
+*/
+CREATE PROCEDURE spRemoveSongArtistRelation(
+@SongId INT,
+@ArtistId INT
+)
+AS
+	DELETE FROM Song_Artist_Relation 
+	WHERE SongId=@SongId AND ArtistId = @ArtistId
+GO
+/*
 	Sletter en artist og relationer til sange som den artist har
 
 	Params:
@@ -511,20 +635,6 @@ AS
 
 	DELETE Albums
 	WHERE Id = @Id
-GO
-
-/*
-	Tilføjer relation mellem sang og album
-
-	Params:
-	@SongId INT - Song ID
-	@AlbumId INT - Album ID
-*/
-CREATE PROCEDURE spSetSongAlbumRelation(
-	@SongId INT,
-	@AlbumId int)
-AS
-	INSERT INTO Song_Album_Relation ([SongId], [AlbumId]) VALUES (@SongId, @AlbumId)
 GO
 
 /*

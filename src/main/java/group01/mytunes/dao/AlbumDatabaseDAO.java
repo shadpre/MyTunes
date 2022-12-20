@@ -113,7 +113,7 @@ public class AlbumDatabaseDAO implements IAlbumDAO {
         if(album == null) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "exec spSetSongAlbumRelation ?, ?";
+            String query = "exec spSetSongAlbumReleation ?, ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, song.getId());

@@ -144,7 +144,7 @@ public class ArtistDatabaseDAO implements IArtistDAO {
         if(artist == null) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "exec spSetSongArtistRelation ?, ?";
+            String query = "exec spSetSongArtistReleation ?, ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, song.getId());
@@ -162,7 +162,7 @@ public class ArtistDatabaseDAO implements IArtistDAO {
         if(album == null) return;
 
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "INSERT INTO [Song_album_relation] ([SongId], [AlbumId]) VALUES (?, ?);";
+            String query = "EXEC spSetSongAlbumReleation ?;?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, song.getId());

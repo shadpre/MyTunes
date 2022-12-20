@@ -150,7 +150,7 @@ public class SongDatabaseDAO implements ISongDAO {
 
         try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
 
-            String sql = "SELECT * FROM Song_artist_relation WHERE [Songid] = ?";
+            String sql = "EXEC spGetAllArtistOnSong ?";
 
             //Connnect prepared stametnt to sql
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -178,7 +178,7 @@ public class SongDatabaseDAO implements ISongDAO {
 
         try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
 
-            String sql = "SELECT * FROM Song_album_relation WHERE [Songid] = ?";
+            String sql = "EXEC spGetAllAlbumOnSong ?";
 
             //Connect prepared stametnt to sql
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -202,7 +202,7 @@ public class SongDatabaseDAO implements ISongDAO {
     @Override
     public void removeSongArtistRelation(int songId, int artistId) {
         try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "DELETE FROM [Song_Artist_Relation] WHERE [SongId]=? AND [ArtistId]=?;"; //sets song tittle
+            String query = "EXEC spRemoveSongArtistRelation ?,?;"; //sets song tittle
 
             PreparedStatement statement = connection.prepareStatement(query);
 
@@ -220,7 +220,7 @@ public class SongDatabaseDAO implements ISongDAO {
     @Override
     public void changeArtistOnSong(int songId, int oldArtistId, int newArtistId) {
         try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "UPDATE [Song_Artist_Relation] SET [ArtistId]=? WHERE [SongId]=? AND [ArtistId]=?;"; //sets song tittle
+            String query = "EXEC spUpdateArtistOnSong ?,?,?;"; //sets song tittle
 
             PreparedStatement statement = connection.prepareStatement(query);
 
@@ -238,7 +238,7 @@ public class SongDatabaseDAO implements ISongDAO {
     @Override
     public void removeSongAlbumRelation(int songId, int albumId) {
         try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "DELETE FROM [Song_Album_Relation] WHERE [SongId]=? AND [AlbumId]=?;"; //sets song tittle
+            String query = "EXEC spRemoveSongAlbumRelation ?,?"; //sets song tittle
 
             PreparedStatement statement = connection.prepareStatement(query);
 
@@ -255,7 +255,7 @@ public class SongDatabaseDAO implements ISongDAO {
     @Override
     public void changeAlbumOnSong(int songId, int oldAlbumId, int newAlbumId) {
         try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
-            String query = "UPDATE [Song_Album_Relation] SET [AlbumId]=? WHERE [SongId]=? AND [AlbumId]=?;"; //sets song tittle
+            String query = "EXEC spUpdateAlbumOnSong ?,?,?"; //sets song tittle
 
             PreparedStatement statement = connection.prepareStatement(query);
 
