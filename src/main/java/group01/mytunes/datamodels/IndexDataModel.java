@@ -354,4 +354,9 @@ public class IndexDataModel {
             songDAO.changeAlbumOnSong(oldSongData.getFirst().getId(), oldSongData.getThird().get(0), newSongData.getThird().getId());
         }
     }
+
+    public void removeFromPlaylist(Playlist selectedPlaylist, PlaylistSong selectedItem) throws SQLException{
+        playlistDAO.removeSongFromPlaylist(selectedPlaylist, selectedItem);
+        songPlaylistObservableList.remove(selectedItem);
+    }
 }

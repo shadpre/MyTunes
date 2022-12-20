@@ -195,6 +195,19 @@ public class PlaylistDatabaseDAO implements IPlaylistDAO {
     }
 
     @Override
+    public void removeSongFromPlaylist(Playlist selectedPlaylist, PlaylistSong selectedItem) throws SQLException {
+        try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "EXEC spRemoveSongFromPlaylist ?;";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, selectedItem.getRelationId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    @Override
     public void moveSongDownInPlaylist(Playlist playlist, PlaylistSong pls) throws SQLException {
         try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
             String query = "EXEC spMoveSongDownInPlaylist ?, ?;";

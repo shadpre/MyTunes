@@ -618,6 +618,9 @@ public class IndexController implements Initializable {
     }
 
     public void removeSongFromPlaylistHandler(ActionEvent actionEvent) {
-        System.out.println("removed a song rom playlist");
+        try {
+            indexDataModel.removeFromPlaylist(getSelectedPlaylist(),listViewPlaylistSongs.getSelectionModel().getSelectedItem());
+        } catch (SQLException e) {
+        }
     }
 }
