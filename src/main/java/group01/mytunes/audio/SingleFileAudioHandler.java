@@ -8,6 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -18,7 +19,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
     private boolean isPlaying ;
     private double time;
 
-    private static final String DATA_DIR = System.getenv("APPDATA") + "/MyTunes/songs";
+    private static final String DATA_DIR = Paths.get(System.getenv("APPDATA") + "MyTunes", "songs").toString();
     private double volume = 0.1;
 
     private Stack<Song> songsPlayed;
@@ -72,14 +73,12 @@ public class SingleFileAudioHandler implements IAudioHandler {
     }
 
     /**
-     * makkes a temp file to be payed by getind song data as indput.
-     * then saves file to a specifik ditectury while its playing
-     * @param data
-     * @return
-     * @throws IOException
+     * Makes a temp file to be played by getting song data as input.
+     * @param data The data to be saved.
+     * @return The path to the saved file.
      */
     private String saveTempFile(byte[] data) throws IOException {
-        File tempFile = new File(DATA_DIR + "/MYTUNES.song");
+        File tempFile = new File(Paths.get(DATA_DIR, "MYTUNES.song").toString());
 
         FileOutputStream fos = new FileOutputStream(tempFile);
         fos.write(data);
@@ -89,8 +88,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
     }
 
     /**
-     * plays the previous song from the sonPlayed stak and removes the curent song
-     * @throws MediaException
+     * Plays the previous song from the songPlayed stack and removes the current song
      */
     public void playPreviousSong() throws MediaException {
         try {
@@ -106,7 +104,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
     }
 
     /**
-     * restarts the song in the mediaPlayer
+     * Restarts the song in the mediaPlayer
      */
     @Override
     public void restartSong() {
@@ -115,7 +113,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
     }
 
     /**
-     * changes volume to the given parameter input
+     * Changes volume to the given parameter input
      * @param volume
      */
     public void changeVolume(double volume) {
@@ -124,10 +122,10 @@ public class SingleFileAudioHandler implements IAudioHandler {
     }
 
     /**
-     * checks if a song is playing.
-     * @return true if its playing a song and flase i not
+     * Checks if a song is playing.
+     * @return true if it is playing a song and false i not
      * if program is not playing a song it wil play.
-     * if progra is playing, it wil pause current song
+     * if program is playing, it will pause current song
      */
     @Override
     public boolean playPause() {
@@ -160,7 +158,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
     }
 
     /**
-     * sets the time for next time player plays a song
+     * Sets the time for next time player plays a song
      * @param songProgress
      */
     public void setTime(double songProgress){
@@ -169,7 +167,7 @@ public class SingleFileAudioHandler implements IAudioHandler {
     }
 
     /**
-     * Stops current song, and sets isPlaying bollean to false
+     * Stops current song, and sets isPlaying boolean to false
      */
     public void stop() { //stops music
         this.isPlaying = false;
