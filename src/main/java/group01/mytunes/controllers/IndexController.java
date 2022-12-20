@@ -263,7 +263,11 @@ public class IndexController implements Initializable {
             deleteArtistDialog.setContentText("Delete artist:");
             deleteArtistDialog.setTitle("Delete an artist");
             Optional<Artist> result = deleteArtistDialog.showAndWait();
-            result.ifPresent(artist -> indexDataModel.deleteArtist(artist));
+            result.ifPresent(artist -> {
+                indexDataModel.deleteArtist(artist);
+                listViewSongs.refresh();
+                listViewPlaylistSongs.refresh();
+            });
         });
 
         //Add Album
@@ -431,6 +435,7 @@ public class IndexController implements Initializable {
         dialog.showAndWait().ifPresent(x -> {
             indexDataModel.editSong(selected, x);
             listViewSongs.refresh();
+            listViewPlaylistSongs.refresh();
         });
     }
 

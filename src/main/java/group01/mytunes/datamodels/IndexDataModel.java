@@ -188,7 +188,8 @@ public class IndexDataModel {
         if(artistName == null) return;
         if(artistName.isEmpty()) return;
 
-        artistDAO.createArtist(artistName);
+        var artist = artistDAO.createArtist(artistName);
+        artistObservableMap.put(artist.getId(), artist);
     }
 
     public void editArtist(Artist artist, String newName) {
