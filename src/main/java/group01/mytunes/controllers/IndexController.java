@@ -616,4 +616,8 @@ public class IndexController implements Initializable {
     public void nextSongHandler(ActionEvent actionEvent) {
         playSong();
     }
+
+    public void removeSongFromPlaylistHandler(ActionEvent actionEvent) {
+        System.out.println("removed a song rom playlist");
+    }
 }
