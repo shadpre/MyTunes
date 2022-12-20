@@ -617,10 +617,14 @@ public class IndexController implements Initializable {
         playSong();
     }
 
+    /**
+     * runs datamodel code to remove song from playlist and handles an error
+     */
     public void removeSongFromPlaylistHandler(ActionEvent actionEvent) {
         try {
-            indexDataModel.removeFromPlaylist(getSelectedPlaylist(),listViewPlaylistSongs.getSelectionModel().getSelectedItem());
+            indexDataModel.removeFromPlaylist(listViewPlaylistSongs.getSelectionModel().getSelectedItem());
         } catch (SQLException e) {
+            showErrorAlert(String.valueOf(e));
         }
     }
 }

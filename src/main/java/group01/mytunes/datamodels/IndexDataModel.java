@@ -355,8 +355,13 @@ public class IndexDataModel {
         }
     }
 
-    public void removeFromPlaylist(Playlist selectedPlaylist, PlaylistSong selectedItem) throws SQLException{
-        playlistDAO.removeSongFromPlaylist(selectedPlaylist, selectedItem);
+    /**
+     * Remove dong from playlist
+     * @param selectedItem is the selected song
+     * @throws SQLException as an error
+     */
+    public void removeFromPlaylist(PlaylistSong selectedItem) throws SQLException{
+        playlistDAO.removeSongFromPlaylist(selectedItem);
         songPlaylistObservableList.remove(selectedItem);
     }
 }

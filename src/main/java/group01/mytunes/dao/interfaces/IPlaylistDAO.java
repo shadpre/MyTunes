@@ -57,5 +57,5 @@ public interface IPlaylistDAO {
     void moveSongUpInPlaylist(Playlist playlist, PlaylistSong pls) throws SQLException;
 
 
-    void removeSongFromPlaylist(Playlist selectedPlaylist, PlaylistSong selectedItem) throws SQLException;
+    void removeSongFromPlaylist(PlaylistSong selectedItem) throws SQLException;
 }
