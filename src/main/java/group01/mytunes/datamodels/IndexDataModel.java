@@ -328,17 +328,29 @@ public class IndexDataModel {
         /*
          Edit artist
          */
-        // New artist
-        // TODO: Set new artist
-        if(oldSongData.getSecond().size() != 0 && oldSongData.getSecond().get(0) != newSongData.getSecond().getId()) {
+        if(newSongData.getSecond() == null && oldSongData.getSecond().size() != 0) {
+            // Remove artist
+            songDAO.removeSongArtistRelation(oldSongData.getFirst().getId(), oldSongData.getSecond().get(0));
+        } else if(oldSongData.getSecond().size() == 0 && newSongData.getSecond() != null) {
+            // New artist
+            artistDAO.addSongToArtist(oldSongData.getFirst(), newSongData.getSecond());
+        } else if(oldSongData.getSecond().get(0) != newSongData.getSecond().getId()) {
+            // Change artist
+            songDAO.changeArtistOnSong(oldSongData.getFirst().getId(), oldSongData.getSecond().get(0), newSongData.getSecond().getId());
         }
-        // Remove artist
-        // TODO: Remove artist
 
         /*
          Edit album
          */
-        // TODO: Set new album
-        // TODO: Remove album
+        if(newSongData.getThird() == null && oldSongData.getThird().size() != 0) {
+            // Remove album
+            songDAO.removeSongAlbumRelation(oldSongData.getFirst().getId(), oldSongData.getThird().get(0));
+        } else if(oldSongData.getThird().size() == 0 && newSongData.getThird() != null) {
+            // New album
+            artistDAO.addSongToAlbum(oldSongData.getFirst(), newSongData.getThird());
+        } else if(oldSongData.getThird().get(0) != newSongData.getThird().getId()) {
+            // Change album
+            songDAO.changeAlbumOnSong(oldSongData.getFirst().getId(), oldSongData.getThird().get(0), newSongData.getThird().getId());
+        }
     }
 }

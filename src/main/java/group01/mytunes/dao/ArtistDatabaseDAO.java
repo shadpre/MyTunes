@@ -1,5 +1,6 @@
 package group01.mytunes.dao;
 
+import group01.mytunes.entities.Album;
 import group01.mytunes.entities.Artist;
 import group01.mytunes.dao.interfaces.IArtistDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
@@ -148,6 +149,24 @@ public class ArtistDatabaseDAO implements IArtistDAO {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, song.getId());
             statement.setInt(2, artist.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void addSongToAlbum(Song song, Album album) {
+        if(song == null) return;
+        if(album == null) return;
+
+        try(Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "INSERT INTO [Song_album_relation] ([SongId], [AlbumId]) VALUES (?, ?);";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, song.getId());
+            statement.setInt(2, album.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {

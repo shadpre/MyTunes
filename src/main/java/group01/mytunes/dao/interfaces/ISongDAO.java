@@ -59,4 +59,12 @@ public interface ISongDAO {
     List<Integer> getArtistsToSong(int id);
 
     List<Integer> getAlbumToSong(int id);
+
+    void removeSongArtistRelation(int songId, int artistId);
+
+    void changeArtistOnSong(int songId, int oldArtistId, int newArtistId);
+
+    void removeSongAlbumRelation(int songId, int albumId);
+
+    void changeAlbumOnSong(int songId, int oldAlbumId, int newAlbumId);
 }

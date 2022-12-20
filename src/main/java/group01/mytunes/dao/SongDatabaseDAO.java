@@ -1,6 +1,5 @@
 package group01.mytunes.dao;
 
-import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Song;
 import group01.mytunes.dao.interfaces.ISongDAO;
 import group01.mytunes.database.DatabaseConnectionHandler;
@@ -181,7 +180,7 @@ public class SongDatabaseDAO implements ISongDAO {
 
             String sql = "SELECT * FROM Song_album_relation WHERE [Songid] = ?";
 
-            //Connnect prepared stametnt to sql
+            //Connect prepared stametnt to sql
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, id);
 
@@ -193,12 +192,81 @@ public class SongDatabaseDAO implements ISongDAO {
             while (rs.next()) {
                 albumID.add(rs.getInt("AlbumId"));
             }
-
-
         } catch (SQLException e) {
 
         }
 
         return albumID;
+    }
+
+    @Override
+    public void removeSongArtistRelation(int songId, int artistId) {
+        try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "DELETE FROM [Song_Artist_Relation] WHERE [SongId]=? AND [ArtistId]=?;"; //sets song tittle
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, songId);
+            statement.setInt(2, artistId);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLUpdateException();
+        }
+    }
+
+    @Override
+    public void changeArtistOnSong(int songId, int oldArtistId, int newArtistId) {
+        try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "UPDATE [Song_Artist_Relation] SET [ArtistId]=? WHERE [SongId]=? AND [ArtistId]=?;"; //sets song tittle
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, newArtistId);
+            statement.setInt(2, songId);
+            statement.setInt(3, oldArtistId);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLUpdateException();
+        }
+    }
+
+    @Override
+    public void removeSongAlbumRelation(int songId, int albumId) {
+        try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "DELETE FROM [Song_Album_Relation] WHERE [SongId]=? AND [AlbumId]=?;"; //sets song tittle
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, songId);
+            statement.setInt(2, albumId);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLUpdateException();
+        }
+    }
+
+    @Override
+    public void changeAlbumOnSong(int songId, int oldAlbumId, int newAlbumId) {
+        try (Connection connection = DatabaseConnectionHandler.getInstance().getConnection()) {
+            String query = "UPDATE [Song_Album_Relation] SET [AlbumId]=? WHERE [SongId]=? AND [AlbumId]=?;"; //sets song tittle
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, newAlbumId);
+            statement.setInt(2, songId);
+            statement.setInt(3, oldAlbumId);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLUpdateException();
+        }
     }
 }

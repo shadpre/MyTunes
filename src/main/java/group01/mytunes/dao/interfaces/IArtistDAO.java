@@ -1,5 +1,6 @@
 package group01.mytunes.dao.interfaces;
 
+import group01.mytunes.entities.Album;
 import group01.mytunes.entities.Artist;
 import group01.mytunes.entities.Song;
 
@@ -50,4 +51,5 @@ public interface IArtistDAO {
      */
     void addSongToArtist(Song song, Artist artist);
 
+    void addSongToAlbum(Song song, Album album);
 }
