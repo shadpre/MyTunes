@@ -600,6 +600,8 @@ AS
 
 	DELETE Artists
 	WHERE Id = @Id
+
+	SELECT @@ROWCOUNT
 GO
 
 /*
