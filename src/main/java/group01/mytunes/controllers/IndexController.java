@@ -430,6 +430,7 @@ public class IndexController implements Initializable {
         EditSongDialog dialog = new EditSongDialog(listViewSongs.getScene().getWindow(), selected, indexDataModel.getArtistList(), indexDataModel.getAlbumList());
         dialog.showAndWait().ifPresent(x -> {
             indexDataModel.editSong(selected, x);
+            listViewSongs.refresh();
         });
     }
 
