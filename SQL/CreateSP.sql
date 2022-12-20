@@ -1,5 +1,3 @@
-USE MyTunes;
-
 --Fjerner eksiterende procedurer, hvis de eksiterer.
 DROP PROCEDURE IF EXISTS spNewArtist;
 DROP PROCEDURE IF EXISTS spGetAllArtists;
@@ -218,7 +216,7 @@ AS
 GO
 /*
 	Liste over alle artister
-	
+
 	Returns:
 	Id INT - ID på artisten
 	Name NVARCHAR(255) - Navn på artisten
@@ -251,7 +249,7 @@ GO
 
 /*
 	Info på en given artist
-	
+
 	Params:
 	@Id INT - ID på artisten.
 
@@ -332,8 +330,8 @@ CREATE PROCEDURE spGetAllSongsInPlaylist(
 AS
     SELECT song.Id, song.Title, song.Playtime, relation.Id As rId, relation.Position Position
     FROM [Songs] AS song
-    INNER JOIN 
-	[Song_Playlist_Relation] AS relation 
+    INNER JOIN
+	[Song_Playlist_Relation] AS relation
 	ON song.Id = relation.SongId
     WHERE relation.PlaylistId = @PlaylistId
     ORDER BY relation.Position
@@ -402,10 +400,10 @@ GO
 
 /*
 	Opdaterer en artists navn.
-	
+
 	Params:
 	@Id INT - Artist ID
-	@Name NVARCHAR(255) - Det nye navn	
+	@Name NVARCHAR(255) - Det nye navn
 */
 CREATE PROCEDURE spUpdateArtistById(
 @Id INT,
@@ -569,7 +567,7 @@ CREATE PROCEDURE spRemoveSongAlbumRelation(
 @AlbumId INT
 )
 AS
-	DELETE FROM Song_Album_Relation 
+	DELETE FROM Song_Album_Relation
 	WHERE SongId=@SongId AND AlbumId = @AlbumId
 GO
 
@@ -585,7 +583,7 @@ CREATE PROCEDURE spRemoveSongArtistRelation(
 @ArtistId INT
 )
 AS
-	DELETE FROM Song_Artist_Relation 
+	DELETE FROM Song_Artist_Relation
 	WHERE SongId=@SongId AND ArtistId = @ArtistId
 GO
 /*
@@ -675,12 +673,14 @@ GO
 
 	Params:
 	@Id INT - Song_Playlist_Relation ID
-	@PlaylistId INT - Playlist ID
+
 */
 CREATE PROCEDURE spRemoveSongFromPlaylist(
-@Id INT,
-@PlaylistId INT)
+@Id INT
+)
 AS
+	DECLARE @PlaylistId INT;
+
 	SET @PlaylistId = (
 		SELECT PlaylistId
 		FROM Song_Playlist_Relation
