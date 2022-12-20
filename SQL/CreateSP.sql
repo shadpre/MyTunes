@@ -616,9 +616,11 @@ CREATE PROCEDURE spDeletePlaylistById(
 @Id INT,
 @UserID INT)
 AS
+	SET NOCOUNT ON
 	DELETE FROM Song_Playlist_Relation
 	WHERE PlaylistId = @Id
 
+	SET NOCOUNT OFF
 	DELETE FROM Playlists
 	WHERE Id = @Id
 	AND UserID = @UserID
@@ -633,9 +635,11 @@ GO
 CREATE PROCEDURE spDeleteAlbum(
 @Id INT)
 AS
+	SET NOCOUNT ON
     DELETE Song_Album_Relation
     WHERE AlbumId = @Id
 
+	SET NOCOUNT OFF
 	DELETE Albums
 	WHERE Id = @Id
 GO
@@ -649,6 +653,7 @@ GO
 CREATE PROCEDURE spDeleteSong(
 @Id INT)
 AS
+	SET NOCOUNT ON
 	DELETE Song_Album_Relation
 	WHERE SongId = @Id
 
@@ -658,6 +663,7 @@ AS
 	DELETE Song_Playlist_Relation
 	WHERE SongId = @Id
 
+	SET NOCOUNT OFF
 	DELETE Songs
 	WHERE Id = @Id
 GO
